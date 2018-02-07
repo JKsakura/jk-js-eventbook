@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scaleable=no, maximum-scale=1">
+        <title>JavaScript Handbook</title>
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <script src="//cdn.ckeditor.com/4.8.0/standard/ckeditor.js"></script>
+    </head>
+    <body>
+        <div class="wrap">
+            <div class="new-form-container form-module">
+                <form id="new-form" class="new-form">
+                    <div class="form-field">
+                        <input type="text" placeholder="Title" id="add-title" required>
+                    </div>
+                    <div class="form-field">
+                        <span class="select-menu" id="add-category">
+                            <select required>
+                                <option value="Category">Category</option>
+                                <option value="JavaScript">JavaScript</option>
+                                <option value="jQuery">jQuery</option>
+                            </select>
+                        </span>
+                    </div>
+                    <div class="form-field">
+                        <textarea placeholder="Introduction" id="add-introduction"></textarea>
+                    </div>
+                    <div class="form-field">
+                        <textarea name="syntax" placeholder="Syntax" id="add-syntax" class="syntax-editor"></textarea>
+                    </div>
+                    <div class="form-field">
+                        <textarea name="description" placeholder="Description" id="add-description" class="description-editor"></textarea>
+                    </div>
+                    <div class="form-field">
+                        <button type="submit" value="Add New">Add New</button>
+                    </div>
+                </form>
+            </div>
+            <ul id="noteList">
+                <li class="list-item">
+                    <div class="item-top">
+                        <div class="item-header">
+                            <h4 class="item-title">Lorem Ipsum</h4>
+                            <h5 class="item-category">Lorem Ipsum</h5>
+                        </div>
+                        <div class="item-introduction">
+                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                        </div>
+                    </div>
+                    <div class="item-bottom">
+                        <div class="item-syntax">
+                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                        </div>
+                        <div class="item-description">
+                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        
+    <script src="//cdn.ckeditor.com/4.8.0/standard/ckeditor.js"></script>
+    <script type="text/javascript" src="js/script.js"></script>
+    </body>
+</html>

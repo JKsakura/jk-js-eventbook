@@ -59,6 +59,12 @@ html, body {
     color: #000; 
 }
 
+h1 {}
+h2 {}
+h3 {}
+h4 { font: normal 20px/1.5 sans-serif; }
+h5 {}
+h6 {}
 .wrap { 
     width: 1100px; 
     max-width: 100%; 
@@ -105,7 +111,7 @@ form {
             font-size: 14px; 
             background-color: transparent; 
             border: 0; 
-            padding: 0 20px; 
+            padding: 0 10px; 
             box-sizing: border-box;
             color: #777;
         }
@@ -148,5 +154,38 @@ form {
 #new-form {
     #add-syntax {
         height: 120px;
+    }
+}
+
+#noteList { margin: 50px 0;
+    .list-item { padding: 5px 20px; border: solid 1px #eee;
+        .item-top {
+            .item-header {
+                display: inline-block;
+                vertical-align: middle;
+                width: 20%;
+                .item-title {
+                    font-size: 18px;
+                    letter-spacing: 0.5px;
+                    font-weight: 300;
+                    margin-bottom: 5px;
+                }
+                .item-category {
+                    color: #999;
+                    font-size: 11px;
+                    font-weight: 500;
+                    text-transform: uppercase;
+                }
+            }
+            .item-introduction {
+                display: inline-block; 
+                vertical-align: middle;
+                width: 80%;
+                margin-left: -5px;
+            }
+        }
+        .item-bottom {
+            display: none;
+        }
     }
 }

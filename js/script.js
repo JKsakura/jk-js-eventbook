@@ -16,7 +16,6 @@ formEl.addEventListener("submit", function(e) {
     noteID ++;
 }, false);
 
-
 // ================================================
 //    DECLARE A NEW NOTE OBJECT
 // ================================================
@@ -54,10 +53,15 @@ function displayNote(note) {
     var itemSyntax = document.createElement("div");
     var itemDescription = document.createElement("div");
     var itemHeader = document.createElement("div");
+    var itembtns = document.createElement("div");
+    var itemEdit = document.createElement("div");
+    var itemDelete = document.createElement("div");
+    var itemEditBtn = document.createElement("button");
+    var itemDeleteBtn = document.createElement("button");
     
     listItem.setAttribute("id", "list-item"+noteID);
     
-    listItem.className = "list-item";
+    listItem.className = "list-item list-group-item list-group-item-action";
     itemHeader.className = "item-header";
     itemTop.className = "item-top";
     itemBottom.className = "item-bottom";
@@ -67,12 +71,19 @@ function displayNote(note) {
     itemIntroduction.className = "item-introduction";
     itemSyntax.className = "item-syntax";
     itemDescription.className = "item-description";
+    itembtns.className = "item-btns";
+    itemEdit.className = "item-btn";
+    itemDelete.className = "item-btn";
+    itemEditBtn.className = "btn btn-primary btn-sm edit-btn";
+    itemDeleteBtn.className = "btn btn-danger btn-sm delete-btn";
     
     itemTitle.textContent = note.title;
     itemCategory.textContent = note.category;
     itemIntroduction.textContent = note.introduction;
     itemSyntax.textContent = note.syntax;
     itemDescription.textContent = note.description;
+    itemEditBtn.textContent = "Edit";
+    itemDeleteBtn.textContent = "Delete";
     
     /* =========== Item Top ============ */
     // Item Header
@@ -83,9 +94,15 @@ function displayNote(note) {
     /* =========== Item Bottom ============ */
         itemBottom.appendChild(itemSyntax); // Item Syntax
         itemBottom.appendChild(itemDescription); // Item Description
+    /* =========== Item Buttons ============ */
+        itemEdit.appendChild(itemEditBtn);
+        itemDelete.appendChild(itemDeleteBtn);
+        itembtns.appendChild(itemEdit);
+        itembtns.appendChild(itemDelete);
     /* =========== List Item ============ */
     listItem.appendChild(itemTop);
     listItem.appendChild(itemBottom);
+    listItem.appendChild(itembtns);
     
     list.appendChild(listItem);
 }

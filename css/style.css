@@ -19,34 +19,48 @@ h4 { font: normal 20px/1.5 sans-serif; }
 
 .wrap { width: 1100px; max-width: 100%; margin: 0 auto; padding: 0 20px; -webkit-box-sizing: border-box; box-sizing: border-box; }
 
-form input[type=text], form input[type=email], form input[type=password] { width: 100%; height: 35px; line-height: 35px; border: solid 1px #ddd; border-radius: 3px; padding: 0 10px; font-size: 14px; color: #555; -webkit-box-sizing: border-box; box-sizing: border-box; }
+form .form-field { margin-bottom: 20px; }
 
-form textarea { width: 100%; height: 200px; border: solid 1px #ddd; padding: 10px; font-size: 14px; -webkit-box-sizing: border-box; box-sizing: border-box; }
+form .form-field:last-child { margin-bottom: 0; }
 
-form .select-menu { position: relative; display: block; width: 100%; overflow: hidden; border: solid 1px #ddd; border-radius: 3px; -webkit-box-sizing: border-box; box-sizing: border-box; }
+button, input[type=submit], .btn { text-transform: uppercase; letter-spacing: 0.6px; }
 
-form .select-menu select { display: block; width: 120%; height: 35px; line-height: 35px; font-size: 14px; background-color: transparent; border: 0; padding: 0 10px; -webkit-box-sizing: border-box; box-sizing: border-box; color: #777; }
+.section-title { margin-bottom: 20px; text-align: center; text-transform: uppercase; }
 
-form .select-menu::before { content: ''; position: absolute; top: 50%; right: 10px; width: 8px; height: 8px; margin-top: -8px; border-right: solid 2px #999; border-bottom: solid 2px #999; -webkit-transform: rotate(45deg); -ms-transform: rotate(45deg); transform: rotate(45deg); }
+#new-form .form-field { text-align: center; }
 
-form button, form input[type=submit] { width: 100%; max-width: 150px; height: 35px; line-height: 35px; background-color: #20a714; font-size: 14px; color: #fff; letter-spacing: 2px; text-transform: uppercase; border: 0; border-radius: 3px; font-weight: 300; }
+#new-form .form-field:first-child { width: 49%; float: left; }
 
-form .form-field.form-field { margin-top: 20px; }
+#new-form .form-field:nth-of-type(2) { width: 49%; float: right; }
 
-#new-form #add-syntax { height: 120px; }
+#new-form #add-syntax { height: 100px; }
+
+#new-form #add-description { height: 150; }
+
+#new-form .btn { width: 200px; margin: 0 auto; }
 
 #noteList { margin: 50px 0; }
 
-#noteList .list-item { padding: 5px 20px; border: solid 1px #eee; }
+#noteList .list-item { position: relative; padding: 5px 15px; border: solid 1px #eee; overflow: hidden; }
 
-#noteList .list-item .item-top .item-header { display: inline-block; vertical-align: middle; width: 20%; }
+#noteList .list-item .item-top .item-header { display: inline-block; vertical-align: middle; width: 20%; margin-right: 5%; }
 
 #noteList .list-item .item-top .item-header .item-title { font-size: 18px; letter-spacing: 0.5px; font-weight: 300; margin-bottom: 5px; }
 
 #noteList .list-item .item-top .item-header .item-category { color: #999; font-size: 11px; font-weight: 500; text-transform: uppercase; }
 
-#noteList .list-item .item-top .item-introduction { display: inline-block; vertical-align: middle; width: 80%; margin-left: -5px; }
+#noteList .list-item .item-top .item-introduction { display: inline-block; vertical-align: middle; width: 75%; margin-left: -5px; }
 
 #noteList .list-item .item-bottom { display: none; }
+
+#noteList .list-item .item-btns { position: absolute; top: 0; right: 0; width: 160px; height: 100%; background-color: rgba(0, 0, 0, 0.7); text-align: center; }
+
+#noteList .list-item .item-btns::before { content: ''; display: inline-block; width: 0; height: 100%; vertical-align: middle; }
+
+#noteList .list-item .item-btns .item-btn { display: inline-block; vertical-align: middle; }
+
+#noteList .list-item .item-btns .item-btn + .item-btn { margin-left: 5px; }
+
+#noteList .list-item .item-btns.active { right: 0; }
 
 /*# sourceMappingURL=style.css.map */

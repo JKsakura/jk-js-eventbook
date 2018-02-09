@@ -5,12 +5,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scaleable=no, maximum-scale=1">
         <title>JavaScript Handbook</title>
         <link rel="stylesheet" type="text/css" href="css/style.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         <script src="//cdn.ckeditor.com/4.8.0/standard/ckeditor.js"></script>
     </head>
     <body>
         <div class="wrap">
             <ul id="noteList">
-                <li class="list-item">
+                <li class="list-item list-group-item list-group-item-action" id="note0">
                     <div class="item-top">
                         <div class="item-header">
                             <p class="item-title">Lorem Ipsum</p>
@@ -30,16 +31,27 @@
                             <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
                         </div>
                     </div>
+                    <div class="item-btns">
+                        <div class="item-btn">
+                            <button class="btn btn-primary btn-sm edit-btn" id="noteEdit0">Edit</button>
+                        </div>
+                        <div class="item-btn">
+                            <button class="btn btn-danger btn-sm delete-btn" id="noteDelete0">Delete</button>
+                        </div>
+                    </div>
                 </li>
             </ul>
             <div class="new-form-container form-module">
+                <div class="section-title">
+                    <h4>Add a New Note</h4>
+                </div>
                 <form id="new-form" class="new-form">
                     <div class="form-field">
-                        <input type="text" placeholder="Title" id="add-title" required>
+                        <input type="text" class="form-control" placeholder="Title" id="add-title" required>
                     </div>
                     <div class="form-field">
-                        <span class="select-menu" id="add-category">
-                            <select required>
+                        <span class="select-menu">
+                            <select id="add-category" class="form-control" required>
                                 <option value="Category">Category</option>
                                 <option value="JavaScript">JavaScript</option>
                                 <option value="jQuery">jQuery</option>
@@ -47,16 +59,16 @@
                         </span>
                     </div>
                     <div class="form-field">
-                        <textarea placeholder="Introduction" id="add-introduction"></textarea>
+                        <textarea class="form-control" name="introduction" placeholder="Introduction" id="add-introduction"></textarea>
                     </div>
                     <div class="form-field">
-                        <textarea name="syntax" placeholder="Syntax" id="add-syntax" class="syntax-editor"></textarea>
+                        <textarea class="form-control" name="syntax" placeholder="Syntax" id="add-syntax" class="syntax-editor"></textarea>
                     </div>
                     <div class="form-field">
-                        <textarea name="description" placeholder="Description" id="add-description" class="description-editor"></textarea>
+                        <textarea class="form-control" name="description" placeholder="Description" id="add-description" class="description-editor"></textarea>
                     </div>
                     <div class="form-field">
-                        <button type="submit" value="Add New">Add New</button>
+                        <button type="submit" value="Add New" class="btn btn-success">Add New</button>
                     </div>
                 </form>
             </div>

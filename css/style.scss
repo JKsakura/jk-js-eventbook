@@ -67,6 +67,20 @@ h4 {
 }
 h5 {}
 h6 {}
+
+.icon-btn {
+    font-size: 24px;
+    display: inline-block; 
+    vertical-align: middle;
+    background-color: transparent;
+    border: 0;
+    color: #000;
+    cursor: pointer;
+    &:hover {
+        color: #28a745;
+    }
+    svg { pointer-events: none; }
+}
 .wrap { 
     width: 1100px; 
     max-width: 100%; 

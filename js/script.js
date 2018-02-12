@@ -1,5 +1,6 @@
 var formEl = document.getElementById("new-form");
 var noteList = document.getElementById("noteList");
+var noteEditBtn = document.getElementById("note-edit-btn");
 var notes = [];
 var noteID = 0;
 
@@ -20,6 +21,11 @@ formEl.addEventListener("submit", function(e) {
 noteList.addEventListener("click", function(e) {
     deleteNote(e.target);
 }, false);
+
+noteEditBtn.addEventListener("click", function(e) {
+    editFieldTrigger(e.target);
+}, false);
+
 // ================================================
 //    DECLARE A NEW NOTE OBJECT
 // ================================================
@@ -84,11 +90,11 @@ function displayNote(note) {
     itemTop.className = "item-top";
     itemBottom.className = "item-bottom";
     itemHeader.className = "item-header";
-    itemTitle.className = "item-title";
-    itemCategory.className = "item-category";
-    itemIntroduction.className = "item-introduction";
-    itemSyntax.className = "item-syntax";
-    itemDescription.className = "item-description";
+    itemTitle.className = "item-title note-field-text";
+    itemCategory.className = "item-category note-field-select";
+    itemIntroduction.className = "item-introduction note-field-text";
+    itemSyntax.className = "item-syntax note-field-text";
+    itemDescription.className = "item-description note-field-text";
     itembtns.className = "item-btns";
     itemDelete.className = "item-btn delete-btn";
     itemDeleteBtn.className = "fas fa-trash-alt";
@@ -122,3 +128,24 @@ function displayNote(note) {
 // CALL THE FANCY WYSIWYG EDITOR
 //CKEDITOR.replace( 'add-syntax' );
 //CKEDITOR.replace( 'add-description' );
+function editFieldTrigger(e) {
+    var targetID = e.dataset.targetField;
+    var targetEl = document.getElementById(targetID);
+    var textField, selectField;
+    textField = document.getElementsByClassName("note-field-text");
+    selectField = document.getElementsByClassName("note-field-select");
+    for(var i=0; i<textField.length; i++) {
+        textField[i].setAttribute("contenteditable", true);
+    }
+    for(var i=0; i<selectField.length; i++) {
+        var selectContent;
+        var fieldVal = selectField[i].textContent;
+        console.log(fieldVal);
+        selectContent = "<select class=\"form-control\">";
+        selectContent += "<option value=\"Category\""+(fieldVal==="Category"?" checked":"")+">Category</option>";
+        selectContent += "<option value=\"Category\""+(fieldVal==="JavaScript"?" checked":"")+">JavaScript</option>";
+        selectContent += "<option value=\"Category\""+(fieldVal==="jQuery"?" checked":"")+">jQuery</option>";
+        selectContent += "</select>";
+        selectField[i].innerHTML = selectContent;
+    }
+}

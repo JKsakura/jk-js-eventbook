@@ -1,4 +1,5 @@
 var formEl = document.getElementById("new-form");
+var noteList = document.getElementById("noteList");
 var notes = [];
 var noteID = 0;
 
@@ -16,6 +17,9 @@ formEl.addEventListener("submit", function(e) {
     noteID ++;
 }, false);
 
+noteList.addEventListener("click", function(e) {
+    deleteNote(e.target);
+}, false);
 // ================================================
 //    DECLARE A NEW NOTE OBJECT
 // ================================================
@@ -34,8 +38,23 @@ function note(id, title, category, introduction, syntax, description) {
 
 function addNote(id, title, category, introduction, syntax, description) {
     var newNote = new note(id, title, category, introduction, syntax, description);
-    notes.push(newNote);
+    notes[noteID] = newNote;
     displayNote(newNote);
+}
+
+// ================================================
+//    DELETE A NEW NOTE BASED ON THE ID   
+// ================================================
+function deleteNote(e) {
+    if(e.classList.contains("delete-btn")) {
+        var targetID = e.getAttribute("id").slice(10);
+        var targetItem = document.getElementById("note"+targetID);
+        console.log(targetID);
+        console.log(targetItem);
+        noteList.removeChild(targetItem);
+        notes[targetID] = '';
+        console.log(notes);
+    }
 }
 
 // ================================================
@@ -54,12 +73,11 @@ function displayNote(note) {
     var itemDescription = document.createElement("div");
     var itemHeader = document.createElement("div");
     var itembtns = document.createElement("div");
-    var itemEdit = document.createElement("div");
-    var itemDelete = document.createElement("div");
-    var itemEditBtn = document.createElement("button");
-    var itemDeleteBtn = document.createElement("button");
+    var itemDelete = document.createElement("button");
+    var itemDeleteBtn = document.createElement("i");
     
-    listItem.setAttribute("id", "list-item"+noteID);
+    listItem.setAttribute("id", "note"+noteID);
+    itemDelete.setAttribute("id", "noteDelete"+noteID);
     
     listItem.className = "list-item list-group-item list-group-item-action";
     itemHeader.className = "item-header";
@@ -72,18 +90,14 @@ function displayNote(note) {
     itemSyntax.className = "item-syntax";
     itemDescription.className = "item-description";
     itembtns.className = "item-btns";
-    itemEdit.className = "item-btn";
-    itemDelete.className = "item-btn";
-    itemEditBtn.className = "btn btn-primary btn-sm edit-btn";
-    itemDeleteBtn.className = "btn btn-danger btn-sm delete-btn";
+    itemDelete.className = "item-btn delete-btn";
+    itemDeleteBtn.className = "fas fa-trash-alt";
     
     itemTitle.textContent = note.title;
     itemCategory.textContent = note.category;
     itemIntroduction.textContent = note.introduction;
     itemSyntax.textContent = note.syntax;
     itemDescription.textContent = note.description;
-    itemEditBtn.textContent = "Edit";
-    itemDeleteBtn.textContent = "Delete";
     
     /* =========== Item Top ============ */
     // Item Header
@@ -95,9 +109,7 @@ function displayNote(note) {
         itemBottom.appendChild(itemSyntax); // Item Syntax
         itemBottom.appendChild(itemDescription); // Item Description
     /* =========== Item Buttons ============ */
-        itemEdit.appendChild(itemEditBtn);
         itemDelete.appendChild(itemDeleteBtn);
-        itembtns.appendChild(itemEdit);
         itembtns.appendChild(itemDelete);
     /* =========== List Item ============ */
     listItem.appendChild(itemTop);

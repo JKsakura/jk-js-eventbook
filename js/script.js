@@ -142,9 +142,9 @@ function editFieldTrigger(e) {
         var fieldVal = selectField[i].textContent;
         console.log(fieldVal);
         selectContent = "<select class=\"form-control\">";
-        selectContent += "<option value=\"Category\""+(fieldVal==="Category"?" checked":"")+">Category</option>";
-        selectContent += "<option value=\"Category\""+(fieldVal==="JavaScript"?" checked":"")+">JavaScript</option>";
-        selectContent += "<option value=\"Category\""+(fieldVal==="jQuery"?" checked":"")+">jQuery</option>";
+        selectContent += "<option value=\"Category\""+(fieldVal==="Category"?" selected":"")+">Category</option>";
+        selectContent += "<option value=\"JavaScript\""+(fieldVal==="JavaScript"?" selected":"")+">JavaScript</option>";
+        selectContent += "<option value=\"jQuery\""+(fieldVal==="jQuery"?" selected":"")+">jQuery</option>";
         selectContent += "</select>";
         selectField[i].innerHTML = selectContent;
     }

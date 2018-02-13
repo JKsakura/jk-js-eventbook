@@ -150,6 +150,10 @@ button, input[type=submit], .btn {
                     letter-spacing: 0.5px;
                     font-weight: 300;
                     margin-bottom: 5px;
+                    &[contenteditable=true] { 
+                        border: solid 1px #999;
+                        padding: 5px 9px;
+                    }
                 }
                 .item-category {
                     color: #999;
@@ -163,6 +167,10 @@ button, input[type=submit], .btn {
                 vertical-align: middle;
                 width: 75%;
                 margin-left: -5px;
+                &[contenteditable=true] { 
+                    border: solid 1px #999;
+                    padding: 5px 9px;
+                }
             }
         }
         .item-bottom {

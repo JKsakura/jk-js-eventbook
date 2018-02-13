@@ -69,17 +69,20 @@ h5 {}
 h6 {}
 
 .icon-btn {
-    font-size: 24px;
     display: inline-block; 
     vertical-align: middle;
     background-color: transparent;
     border: 0;
     color: #000;
     cursor: pointer;
+    padding: 0;
+    font-size: 24px;
     &:hover {
         color: #28a745;
     }
-    svg { pointer-events: none; }
+    svg {
+        pointer-events: none; 
+    }
 }
 .wrap { 
     width: 1100px; 
@@ -106,111 +109,125 @@ button, input[type=submit], .btn {
     text-align: center;
     text-transform: uppercase;
 }
-#new-form {
-    max-width: 700px;
-    margin: 30px auto;
-    .form-field {
-        text-align: center;
-        &:first-child {
-            width: 49%;
-            float: left;
-        }
-        &:nth-of-type(2) {
-            width: 49%;
-            float: right;
-        }
-    }
-    #add-syntax {
-        height: 100px;
-    }
-    #add-description {
-        height: 150;
-    }
-    .btn { 
-        width: 200px; 
+/* ============================ */
+/* NOTES MODUKE
+/* ============================ */
+#notes-module {
+    margin: 50px 0;
+    #note-done-btn { display: none; }
+    .notes-wrapper {
+        max-width: 700px;
         margin: 0 auto;
     }
-}
+    .notes-form {
+        margin: 50px 0;
+    }
+    #new-form {
+        .form-field {
+            text-align: center;
+            &:first-child {
+                width: 49%;
+                float: left;
+            }
+            &:nth-of-type(2) {
+                width: 49%;
+                float: right;
+            }
+        }
+        #add-syntax {
+            height: 100px;
+        }
+        #add-description {
+            height: 150;
+        }
+        .btn { 
+            width: 200px; 
+            margin: 0 auto;
+        }
+    }
 
-#noteList { 
-    margin: 50px 0;
-    .list-item { 
-        position: relative; 
-        padding: 5px 15px; 
-        border: solid 1px #eee;
-        overflow: hidden;
-        .item-top {
-            .item-header {
-                display: inline-block;
-                vertical-align: middle;
-                width: 20%;
-                margin-right: 5%;
-                .item-title {
-                    font-size: 18px;
-                    letter-spacing: 0.5px;
-                    font-weight: 300;
-                    margin-bottom: 5px;
+    #noteList {
+        &:not(:empty) {
+            padding: 50px 0;
+        }
+        .list-item {
+            position: relative; 
+            padding: 5px 15px; 
+            border: solid 1px #eee;
+            overflow: hidden;
+            .item-top {
+                .item-header {
+                    display: inline-block;
+                    vertical-align: middle;
+                    width: 20%;
+                    margin-right: 5%;
+                    .item-title {
+                        font-size: 18px;
+                        letter-spacing: 0.5px;
+                        font-weight: 300;
+                        margin-bottom: 5px;
+                        &[contenteditable=true] { 
+                            border: solid 1px #999;
+                            padding: 5px 9px;
+                        }
+                    }
+                    .item-category {
+                        color: #999;
+                        font-size: 11px;
+                        font-weight: 500;
+                        text-transform: uppercase;
+                    }
+                }
+                .item-introduction {
+                    display: inline-block; 
+                    vertical-align: middle;
+                    width: 75%;
+                    margin-left: -5px;
                     &[contenteditable=true] { 
                         border: solid 1px #999;
                         padding: 5px 9px;
                     }
                 }
-                .item-category {
-                    color: #999;
-                    font-size: 11px;
-                    font-weight: 500;
-                    text-transform: uppercase;
-                }
             }
-            .item-introduction {
-                display: inline-block; 
-                vertical-align: middle;
-                width: 75%;
-                margin-left: -5px;
-                &[contenteditable=true] { 
-                    border: solid 1px #999;
-                    padding: 5px 9px;
-                }
+            .item-bottom {
+                display: none;
             }
-        }
-        .item-bottom {
-            display: none;
-        }
-        .item-btns {
-            position: absolute; 
-            top: 0;
-            right: 0;
-            width: 50px;
-            height: 100%;
-            //background-color: #f8f9fa;
-            background-color: rgba(0,0,0,0.7);
-            text-align: center;
-            font-size: 0;
-            &::before {
-                content: '';
-                display: inline-block;
-                width: 0;
-                height: 100%;
-                vertical-align: middle;
-            }
-            .item-btn {
-                font-size: 20px;
-                display: inline-block; 
-                vertical-align: middle;
-                background-color: transparent;
-                border: 0;
-                color: #fff;
-                cursor: pointer;
-                &:hover {
-                    color: #ff2f2f;
-                }
-                svg { pointer-events: none; }
-            }
-            &:hover {
-                
-            }
-            &.active {
+            .item-btns {
+                position: absolute; 
+                top: 0;
                 right: 0;
+                width: 50px;
+                height: 100%;
+                //background-color: #f8f9fa;
+                background-color: rgba(0,0,0,0.7);
+                text-align: center;
+                font-size: 0;
+                &::before {
+                    content: '';
+                    display: inline-block;
+                    width: 0;
+                    height: 100%;
+                    vertical-align: middle;
+                }
+                .item-btn {
+                    font-size: 20px;
+                    display: inline-block; 
+                    vertical-align: middle;
+                    background-color: transparent;
+                    border: 0;
+                    color: #fff;
+                    cursor: pointer;
+                    &:hover {
+                        color: #ff2f2f;
+                    }
+                    svg { pointer-events: none; }
+                }
+                &:hover {
+
+                }
+                &.active {
+                    right: 0;
+                }
             }
         }
     }

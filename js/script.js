@@ -1,8 +1,19 @@
+//var requestURL = "../notes.json";
+//var request = new XMLHttpRequest();
+//request.open('GET', requestURL);
+//request.responseType = 'json';
+//request.send();
+//request.onload = function() {
+//    var notes = request.response;
+//    console.table(notes);
+//}
+
 noteManagement();
 
 function noteManagement() {
     var noteEditBtn = document.getElementById("note-edit-btn");
     var noteDoneBtn = document.getElementById("note-done-btn");
+    var itemBtns = document.getElementsByClassName("item-btns");
     var formEl = document.getElementById("new-form");
     var noteList = document.getElementById("noteList");
     var notes = [];
@@ -39,6 +50,9 @@ function noteManagement() {
             var target = e.target;
             target.style.display = "none";
             noteDoneBtn.style.display = "block";
+            for(var i=0; i<itemBtns.length; i++) {
+                itemBtns[i].style.display = "block";
+            }
             editFieldTrigger(target);
         }, false);
     }
@@ -47,6 +61,9 @@ function noteManagement() {
             var target = e.target;
             target.style.display = "none";
             noteEditBtn.style.display = "block";
+            for(var i=0; i<itemBtns.length; i++) {
+                itemBtns[i].style.display = "none";
+            }
             doneEditTrigger(e);
         }, false);
     }
@@ -192,26 +209,19 @@ function noteManagement() {
             var itemChildren = item[i].childNodes;
             
             for(var j=0; j<itemChildren.length; j++) {
-                console.log(itemChildren[j].className);
                 if(itemChildren[j].className == "item-title note-field-text") {
                     notes[itemID].title = itemChildren[j].textContent;
-                    console.log('title');
                 } else if(itemChildren[j].className == "item-category note-field-select") {
                     notes[itemID].category = itemChildren[j].textContent;
-                    console.log('category');
                 } else if(itemChildren[j].className == "item-introduction note-field-text") {
                     notes[itemID].introduction = itemChildren[j].textContent;
-                    console.log('introduction');
                 } else if(itemChildren[j].className == "item-syntax note-field-text") {
                     notes[itemID].syntax = itemChildren[j].textContent;
-                    console.log('syntax');
                 } else if(itemChildren[j].className == "item-description note-field-text") {
                     notes[itemID].description = itemChildren[j].textContent;
-                    console.log('description');
                 }
             }
         }
-        console.table(notes);
         return;
     }
 }

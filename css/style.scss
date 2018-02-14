@@ -54,6 +54,20 @@ $color_secondary: #20a714;
     transform: $transform;
 }
 
+@mixin min($b) {
+    @if unitless($b) { $b: $b + px; }
+    @media screen and (min-width: $b) { @content; }
+}
+@mixin max($b) {
+    @if unitless($b) { $b: $b + px; }
+    @media screen and (max-width: $b) { @content; }
+}
+@mixin range($min, $max) {
+    @if unitless($min) { $min: $min + px; }
+    @if unitless($max) { $max: $max + px; }
+    @media screen and (min-width: $min) and (max-width: $max) { @content; }
+}
+
 html, body { 
     font: normal 16px/1.2 sans-serif; 
     color: #000; 
@@ -152,7 +166,7 @@ button, input[type=submit], .btn {
         }
         .list-item {
             position: relative; 
-            padding: 5px 15px; 
+            padding: 10px 15px; 
             border: solid 1px #eee;
             overflow: hidden;
             .item-top {
@@ -160,7 +174,7 @@ button, input[type=submit], .btn {
                     display: inline-block;
                     vertical-align: middle;
                     width: 20%;
-                    margin-right: 5%;
+                    margin-right: 20px;
                     .item-title {
                         font-size: 18px;
                         letter-spacing: 0.5px;
@@ -169,6 +183,9 @@ button, input[type=submit], .btn {
                         &[contenteditable=true] { 
                             border: solid 1px #999;
                             padding: 5px 9px;
+                            @include max(768) {
+                                margin: 15px 0 10px;
+                            }
                         }
                     }
                     .item-category {
@@ -176,16 +193,32 @@ button, input[type=submit], .btn {
                         font-size: 11px;
                         font-weight: 500;
                         text-transform: uppercase;
+                        select {
+                            @include max(768) {
+                                margin-bottom: 10px;
+                            }
+                        }
+                    }
+                    @include max(768) {
+                        display: block;
+                        width: 100%;
+                        margin-right: 0;
                     }
                 }
                 .item-introduction {
                     display: inline-block; 
                     vertical-align: middle;
-                    width: 75%;
-                    margin-left: -5px;
-                    &[contenteditable=true] { 
+                    width: calc(80% - 74px);
+                    &[contenteditable=true] {
+                        height: 100%;
+                        min-height: 60px;
                         border: solid 1px #999;
                         padding: 5px 9px;
+                    }
+                    @include max(768px) {
+                        display: block;
+                        width: 100%;
+                        margin-left: 0;
                     }
                 }
             }
@@ -193,6 +226,7 @@ button, input[type=submit], .btn {
                 display: none;
             }
             .item-btns {
+                display: none;
                 position: absolute; 
                 top: 0;
                 right: 0;
@@ -227,6 +261,12 @@ button, input[type=submit], .btn {
                 }
                 &.active {
                     right: 0;
+                }
+                @include max(768) {
+                    position: relative;
+                    width: 100%;
+                    padding: 5px 0;
+                    margin: 10px 0 20px;
                 }
             }
         }

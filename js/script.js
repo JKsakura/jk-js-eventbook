@@ -85,6 +85,7 @@ function noteManagement() {
     function addNote(id, title, category, introduction, syntax, description) {
         var newNote = new note(id, title, category, introduction, syntax, description);
         notes[noteID] = newNote;
+        console.table(notes);
         displayNote(newNote);
     }
 
@@ -168,8 +169,8 @@ function noteManagement() {
     }
 
     // CALL THE FANCY WYSIWYG EDITOR
-    // CKEDITOR.replace( 'add-syntax' );
-    // CKEDITOR.replace( 'add-description' );
+    CKEDITOR.replace( 'add-syntax' );
+    CKEDITOR.replace( 'add-description' );
     /* ============================================================== */
     /* EDITE NOTES FUNCTION */
     /* ============================================================== */

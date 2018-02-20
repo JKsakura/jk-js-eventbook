@@ -12,13 +12,13 @@ noteManagement();
 function noteManagement() {
     // Declare CKEditor WYSIWYG Fields
     var syntaxEditor, descriptionEditor
-    syntaxEditor = CKEDITOR.replace('add-syntax');
-    descriptionEditor = CKEDITOR.replace('add-description');
+//    syntaxEditor = CKEDITOR.replace('.add-syntax');
+//    descriptionEditor = CKEDITOR.replace('add-description');
     
     // Declare Local Note Vars
     var noteEditBtn = $("#note-edit-btn");
     var noteDoneBtn = $("#note-done-btn");
-    var itemBtns = $(".item-btns");
+    var itemBtns;
     var formEl = $("#new-form");
     var noteList = $("#noteList");
     var notes = [];
@@ -52,8 +52,11 @@ function noteManagement() {
             title = $("#add-title").val();
             category = $("#add-category").val();
             introduction = $("#add-introduction").val();
-            syntax = syntaxEditor.activeFilter.editor.getData();
-            description = descriptionEditor.activeFilter.editor.getData();
+            syntax = $("#add-syntax").val();
+            description = $("#add-description").val();
+
+//            syntax = syntaxEditor.activeFilter.editor.getData();
+//            description = descriptionEditor.activeFilter.editor.getData();
             
             // Create A New Note
             addNote(id, title, category, introduction, syntax, description);
@@ -65,27 +68,30 @@ function noteManagement() {
     function deleting() {
         $(noteList).on("click", function(e) {
             deleteNote(e.target);
-        }, false);
+        });
     }
     function editing() {
         $(noteEditBtn).on("click", function(e) {
             var target = e.target;
-            target.hide();
-            noteDoneBtn.show();
-            itemBtns.show();
-            
-            editFieldTrigger(target);
-        }, false);
+            var targetID = target.dataset.targetField;
+            if(!$("#"+targetID).is(":empty")) {
+                $(target).hide();
+                $(noteDoneBtn).show();
+                $(itemBtns).show();
+
+                editFieldTrigger(target);
+            }
+        });
     }
     function done() {
         $(noteDoneBtn).on("click", function(e) {
             var target = e.target;
-            target.hide();
-            noteEditBtn.show();
-            itemBtns.hide();
+            $(target).hide();
+            $(noteEditBtn).show();
+            $(itemBtns).hide();
             
             doneEditTrigger(e);
-        }, false);
+        });
     }
     /* ============================================================== */
     /*    ADD A NEW NOTE ELEMENT WITH PARAMETERS */
@@ -94,8 +100,6 @@ function noteManagement() {
         var newNote = new note(id, title, category, introduction, syntax, description);
         notes[noteID] = newNote;
         
-        console.table(notes);
-        
         displayNote(newNote);
     }
 
@@ -103,80 +107,72 @@ function noteManagement() {
     /* DELETE A NEW NOTE BASED ON THE ID */ 
     /* ============================================================== */
     function deleteNote(e) {
-        if(e.hasClass("delete-btn")) {
-            var targetID = e.attr("id").slice(10);
-            var targetItem = $(targetID);
+        if($(e).hasClass("delete-btn")) {
+            var targetID = $(e).attr("id").slice(10);
             var r = confirm("Are You Sure You Want to Delete This Item?");
             if( r === true ) {
-                $("note"+targetItem).remove();
+                $("#note"+targetID).remove();
                 notes[targetID] = '';
             } else {
                 return false;
             }
         }
+        console.table(notes);
     }
 
     /* ============================================================== */
     /* DISPLAY THE ELEMENT WITH NEW DOM STRUCTURE */   
     /* ============================================================== */
     function displayNote(note) {
-        var list, listItem, listItem, itemTop, itemBottom, itemHeader, itemTitle, itemCategory, itemIntroduction, itemSyntax, itemDescription, itemHeader, itembtns, itemDelete, itemDeleteBtn;
+        var list, listItem, itemTop, itemBottom, itemHeader, itemTitle, itemCategory, itemIntroduction, itemSyntax, itemDescription, itembtns, itemDelete, itemDeleteBtn;
         list = $("#noteList");
+        // Create New Element
         listItem = document.createElement("li");
-        itemTop = document.createElement("div");
-        itemBottom = document.createElement("div");
-        itemHeader = document.createElement("div");
-        itemTitle = document.createElement("p");
-        itemCategory = document.createElement("h5");
-        itemIntroduction = document.createElement("p");
-        itemSyntax = document.createElement("div");
-        itemDescription = document.createElement("div");
-        itemHeader = document.createElement("div");
-        itembtns = document.createElement("div");
-        itemDelete = document.createElement("button");
-        itemDeleteBtn = document.createElement("i");
         
-        $(listItem).attr("id", "note"+noteID);
-        $(itemDelete).attr("id", "noteDelete"+noteID);
-
-        $(listItem).addClass("list-item list-group-item list-group-item-action");
-        $(itemHeader).addClass("item-header");
-        $(itemTop).addClass("item-top");
-        $(itemBottom).addClass("item-bottom");
-        $(itemHeader).addClass("item-header");
-        $(itemTitle).addClass("item-title note-field-text");
-        $(itemCategory).addClass("item-category note-field-select");
-        $(itemIntroduction).addClass("item-introduction note-field-text");
-        $(itemSyntax).addClass("item-syntax note-field-text");
-        $(itemDescription).addClass("item-description note-field-text");
-        $(itembtns).addClass("item-btns");
-        $(itemDelete).addClass("item-btn delete-btn");
-        $(itemDeleteBtn).addClass("fas fa-trash-alt");
-
-        $(itemTitle).text(note.title);
-        $(itemCategory).text(note.category);
-        $(itemIntroduction).text(note.introduction);
-        $(itemSyntax).text(note.syntax);
-        $(itemDescription).text(note.description);
-
+        // Define ID
+        var itemId = "note"+noteID;
+        var deleteId = "noteDelete"+noteID;
+        
+        // Define Classes
+        var itemClass = "list-item list-group-item list-group-item-action";
+        var headerClass = "item-header";
+        var topClass = "item-top";
+        var bottomClass = "item-bottom";
+        var TitleClass = "item-title note-field-text";
+        var categoryClass = "item-category note-field-select";
+        var introductionClass = "item-introduction note-field-area";
+        var syntaxClass = "item-syntax note-field-area";
+        var descriptionClass = "item-description note-field-area";
+        var btnsClass = "item-btns";
+        var deleteClass = "item-btn delete-btn";
+        var deleteBtnClass = "fas fa-trash-alt";
         /* =========== Item Top ============ */
         // Item Header
-            $(itemHeader).append(itemTitle); // Item Title
-            $(itemHeader).append(itemCategory); // Item Category
-            $(itemTop).append(itemHeader);
-            $(itemTop).append(itemIntroduction); // Item Introductio
+        itemTitle = "<p class=\""+TitleClass+"\">"+note.title+"</p>";
+        itemCategory = "<h5 class=\""+categoryClass+"\">"+note.category+"</h5>";
+        itemHeader = "<div class=\""+headerClass+"\">"+itemTitle+itemCategory+"</div>";
+        // Item Introduction
+        itemIntroduction = "<p class=\""+introductionClass+"\">"+note.introduction+"</p>";
+        
+        itemTop = "<div class=\""+topClass+"\">"+itemHeader+itemIntroduction+"</div>";
+        
         /* =========== Item Bottom ============ */
-            $(itemBottom).append(itemSyntax); // Item Syntax
-            $(itemBottom).append(itemDescription); // Item Description
+        itemSyntax = "<div class=\""+syntaxClass+"\">"+note.syntax+"</div>";
+        itemDescription = "<div class=\""+descriptionClass+"\">"+note.description+"</div>";
+        
+        itemBottom = "<div class=\""+bottomClass+"\">"+itemSyntax+itemDescription+"</div>";
+        
         /* =========== Item Buttons ============ */
-            $(itemDelete).append(itemDeleteBtn);
-            $(itembtns).append(itemDelete);
+        itemDeleteBtn = "<i class=\""+deleteBtnClass+"\"></i>";
+        itemDelete = "<button id=\""+deleteId+"\" class=\""+deleteClass+"\">"+itemDeleteBtn+"</button>";
+        
+        itembtns = "<div class=\""+btnsClass+"\">"+itemDelete+"</div>";
+        
         /* =========== List Item ============ */
-        $(listItem).append(itemTop);
-        $(listItem).append(itemBottom);
-        $(listItem).append(itembtns);
+        listItem = "<li id=\""+itemId+"\" class=\""+itemClass+"\">"+itemTop+itemBottom+itembtns+"</li>";
 
         $(list).append(listItem);
+        itemBtns = $(".item-btns");
     }
 
     /* ============================================================== */
@@ -184,53 +180,57 @@ function noteManagement() {
     /* ============================================================== */
     function editFieldTrigger(e) {
         var targetID = e.dataset.targetField;
-        var targetEl = $(targetID);
         var textField, selectField;
         textField = $(".note-field-text");
+        areaField = $(".note-field-area");
         selectField =$(".note-field-select");
         
-        textField.attr("contenteditable", true);
+        //textField.attr("contenteditable", true);
+        $(textField).each(function() {
+            var filedVal = $(this).text();
+            var content;
+            content = "<input type=\"text\" class=\"form-control\" value=\""+filedVal+"\">";
+            $(this).html(content);
+        });
+        
+        $(areaField).each(function() {
+            var filedVal = $(this).text();
+            var content;
+            content = "<textarea class=\"form-control\">"+filedVal+"</textarea>";
+            $(this).html(content);
+        });
         
         $(selectField).each(function() {
-            var fieldVal = this.text();
-            selectContent = "<select class=\"form-control\">";
-            selectContent += "<option value=\"Category\""+(fieldVal==="Category"?" selected=\"selected\"":"")+">Category</option>";
-            selectContent += "<option value=\"JavaScript\""+(fieldVal==="JavaScript"?" selected=\"selected\"":"")+">JavaScript</option>";
-            selectContent += "<option value=\"jQuery\""+(fieldVal==="jQuery"?" selected=\"selected\"":"")+">jQuery</option>";
-            selectContent += "</select>";
-            $(this).innerHTML = selectContent;
+            var fieldVal = $(this).text();
+            var content;
+            content = "<select class=\"form-control\">";
+            content += "<option value=\"Category\""+(fieldVal==="Category"?" selected=\"selected\"":"")+">Category</option>";
+            content += "<option value=\"JavaScript\""+(fieldVal==="JavaScript"?" selected=\"selected\"":"")+">JavaScript</option>";
+            content += "<option value=\"jQuery\""+(fieldVal==="jQuery"?" selected=\"selected\"":"")+">jQuery</option>";
+            content += "</select>";
+            $(this).html(content);
         });
     }
     
     function doneEditTrigger(e) {
         var textField = $(".note-field-text");
+        var areaField = $(".note-field-area");
         var selectField =$(".note-field-select");
         var item = noteList.childNodes;
         
-        textField.attr("contenteditable", false);
-        
-        selectField.each(function() {
-            this.text() = $(this).childNodes[0].value;
+        $(textField).each(function() {
+            var fieldVal = $(this).find("input").val();
+            $(this).text(fieldVal);
         });
         
-        for(var i=0; i<item.length; i++) {
-            var itemID = item[i].getAttribute("id").slice(4);
-            var itemChildren = item[i].childNodes;
-            
-            for(var j=0; j<itemChildren.length; j++) {
-                if(itemChildren[j].className == "item-title note-field-text") {
-                    notes[itemID].title = itemChildren[j].textContent;
-                } else if(itemChildren[j].className == "item-category note-field-select") {
-                    notes[itemID].category = itemChildren[j].textContent;
-                } else if(itemChildren[j].className == "item-introduction note-field-text") {
-                    notes[itemID].introduction = itemChildren[j].textContent;
-                } else if(itemChildren[j].className == "item-syntax note-field-text") {
-                    notes[itemID].syntax = itemChildren[j].textContent;
-                } else if(itemChildren[j].className == "item-description note-field-text") {
-                    notes[itemID].description = itemChildren[j].textContent;
-                }
-            }
-        }
-        return;
+        $(areaField).each(function() {
+            var fieldVal = $(this).find("textarea").val();
+            $(this).text(fieldVal);
+        });
+        
+        $(selectField).each(function() {
+            var fieldVal = $(this).find("select").val();
+            $(this).text(fieldVal);
+        });
     }
 }

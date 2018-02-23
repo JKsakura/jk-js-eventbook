@@ -21,43 +21,44 @@
                     <div class="wrap">
                         <div class="notes-wrapper">
                             <div class="notes-header">
-                                <button class="edit-btn icon-btn" id="note-edit-btn" data-target-field="noteList"><i class="far fa-edit"></i></button>
+                                <button class="btn btn-primary" id="note-manage-btn" data-target-field="noteList"><i class="fas fa-edit"></i>Manage</button>
                                 <button class="btn btn-success" id="note-done-btn">Done</button>
+                                <button class="btn btn-primary" id="note-add-btn"><i class="fas fa-plus-circle"></i>Add Note</button>
                             </div>
                             <div class="notes-body">
                                 <ul id="noteList"></ul>
                             </div>
-                            <div class="new-form-container notes-form">
-                            <div class="section-title">
-                                <h4>Add a New Note</h4>
+                            <div id="note-form" class="new-form-container notes-form">
+                                <div class="section-title">
+                                    <h4>Add a New Note</h4>
+                                </div>
+                                <form id="new-form" class="new-form">
+                                    <div class="form-field">
+                                        <input type="text" class="form-control" placeholder="Title" id="add-title" required>
+                                    </div>
+                                    <div class="form-field">
+                                        <span class="select-menu">
+                                            <select id="add-category" class="form-control" required>
+                                                <option value="Category">Category</option>
+                                                <option value="JavaScript">JavaScript</option>
+                                                <option value="jQuery">jQuery</option>
+                                            </select>
+                                        </span>
+                                    </div>
+                                    <div class="form-field">
+                                        <textarea class="form-control" name="introduction" placeholder="Introduction" id="add-introduction"></textarea>
+                                    </div>
+                                    <div class="form-field">
+                                        <textarea class="form-control" name="syntax" placeholder="Syntax" id="add-syntax" class="syntax-editor"></textarea>
+                                    </div>
+                                    <div class="form-field">
+                                        <textarea class="form-control" name="description" placeholder="Description" id="add-description" class="description-editor"></textarea>
+                                    </div>
+                                    <div class="form-field">
+                                        <button type="submit" value="Add New" class="btn btn-success">Add New</button>
+                                    </div>
+                                </form>
                             </div>
-                            <form id="new-form" class="new-form">
-                                <div class="form-field">
-                                    <input type="text" class="form-control" placeholder="Title" id="add-title" required>
-                                </div>
-                                <div class="form-field">
-                                    <span class="select-menu">
-                                        <select id="add-category" class="form-control" required>
-                                            <option value="Category">Category</option>
-                                            <option value="JavaScript">JavaScript</option>
-                                            <option value="jQuery">jQuery</option>
-                                        </select>
-                                    </span>
-                                </div>
-                                <div class="form-field">
-                                    <textarea class="form-control" name="introduction" placeholder="Introduction" id="add-introduction"></textarea>
-                                </div>
-                                <div class="form-field">
-                                    <textarea class="form-control" name="syntax" placeholder="Syntax" id="add-syntax" class="syntax-editor"></textarea>
-                                </div>
-                                <div class="form-field">
-                                    <textarea class="form-control" name="description" placeholder="Description" id="add-description" class="description-editor"></textarea>
-                                </div>
-                                <div class="form-field">
-                                    <button type="submit" value="Add New" class="btn btn-success">Add New</button>
-                                </div>
-                            </form>
-                        </div>
                         </div>
                     </div>
                 </div>

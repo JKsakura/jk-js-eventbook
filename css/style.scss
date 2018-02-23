@@ -48,12 +48,6 @@ $color_secondary: #20a714;
     height: $h;
 }
 
-@mixin transform($transform) {
-    -webkit-transform: $transform;
-    -ms-transform: $transform;
-    transform: $transform;
-}
-
 @mixin min($b) {
     @if unitless($b) { $b: $b + px; }
     @media screen and (min-width: $b) { @content; }
@@ -81,6 +75,13 @@ h4 {
 }
 h5 {}
 h6 {}
+.wrap { 
+    width: 1100px; 
+    max-width: 100%; 
+    margin: 0 auto; 
+    padding: 0 20px;
+    box-sizing: border-box;
+}
 
 .icon-btn {
     display: inline-block; 
@@ -98,14 +99,6 @@ h6 {}
         pointer-events: none; 
     }
 }
-.wrap { 
-    width: 1100px; 
-    max-width: 100%; 
-    margin: 0 auto; 
-    padding: 0 20px;
-    box-sizing: border-box;
-}
-
 form {
     .form-field {
         margin-bottom: 20px;
@@ -124,40 +117,53 @@ button, input[type=submit], .btn {
     text-transform: uppercase;
 }
 /* ============================ */
+/* CREATE NEW NOTE FORM
+/* ============================ */
+#note-form {
+    display: none;
+}
+#new-form {
+    .form-field {
+        text-align: center;
+        &:first-child {
+            width: 49%;
+            float: left;
+        }
+        &:nth-of-type(2) {
+            width: 49%;
+            float: right;
+        }
+    }
+    #add-syntax {
+        height: 100px;
+    }
+    #add-description {
+        height: 150;
+    }
+    .btn { 
+        width: 200px; 
+        margin: 0 auto;
+    }
+}
+/* ============================ */
 /* NOTES MODUKE
 /* ============================ */
 #notes-module {
     margin: 50px 0;
     #note-done-btn { display: none; }
+    .notes-header {
+        .btn {
+            svg {
+                margin-right: 5px;
+            }
+        }
+    }
     .notes-wrapper {
         max-width: 700px;
         margin: 0 auto;
     }
     .notes-form {
         margin: 50px 0;
-    }
-    #new-form {
-        .form-field {
-            text-align: center;
-            &:first-child {
-                width: 49%;
-                float: left;
-            }
-            &:nth-of-type(2) {
-                width: 49%;
-                float: right;
-            }
-        }
-        #add-syntax {
-            height: 100px;
-        }
-        #add-description {
-            height: 150;
-        }
-        .btn { 
-            width: 200px; 
-            margin: 0 auto;
-        }
     }
 
     #noteList {
@@ -226,16 +232,16 @@ button, input[type=submit], .btn {
                 display: none;
             }
             .item-btns {
-                display: none;
                 position: absolute; 
                 top: 0;
-                right: 0;
-                width: 50px;
+                right: -100%;
+                width: 90px;
                 height: 100%;
                 //background-color: #f8f9fa;
                 background-color: rgba(0,0,0,0.7);
                 text-align: center;
                 font-size: 0;
+                transition: right 0.15s;
                 &::before {
                     content: '';
                     display: inline-block;
@@ -244,20 +250,30 @@ button, input[type=submit], .btn {
                     vertical-align: middle;
                 }
                 .item-btn {
-                    font-size: 20px;
+                    width: 25px;
                     display: inline-block; 
                     vertical-align: middle;
+                    padding: 0;
                     background-color: transparent;
                     border: 0;
-                    color: #fff;
                     cursor: pointer;
-                    &:hover {
-                        color: #ff2f2f;
-                    }
+                    color: #fff;
+                    font-size: 20px;
+                    text-align: center;
                     svg { pointer-events: none; }
-                }
-                &:hover {
-
+                    & + .item-btn {
+                        margin-left: 15px;
+                    }
+                    &.edit-btn {
+                        &:hover {
+                            color: #1983ff;
+                        }
+                    }
+                    &.delete-btn {
+                        &:hover {
+                            color: #ff2f2f;
+                        }
+                    }
                 }
                 &.active {
                     right: 0;

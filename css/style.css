@@ -36,19 +36,19 @@ button, input[type=submit], .btn { text-transform: uppercase; letter-spacing: 0.
 /* ============================ */
 /* CREATE NEW NOTE FORM
 /* ============================ */
-#note-form { display: none; }
+#note-form-container { display: none; }
 
-#new-form .form-field { text-align: center; }
+#note-form .form-field { text-align: center; }
 
-#new-form .form-field:first-child { width: 49%; float: left; }
+#note-form .form-field:first-child { width: 49%; float: left; }
 
-#new-form .form-field:nth-of-type(2) { width: 49%; float: right; }
+#note-form .form-field:nth-of-type(2) { width: 49%; float: right; }
 
-#new-form #add-syntax { height: 100px; }
+#note-form #add-syntax { height: 100px; }
 
-#new-form #add-description { height: 150; }
+#note-form #add-description { height: 150; }
 
-#new-form .btn { width: 200px; margin: 0 auto; }
+#note-form .btn { width: 200px; margin: 0 auto; }
 
 /* ============================ */
 /* NOTES MODUKE
@@ -104,7 +104,5 @@ button, input[type=submit], .btn { text-transform: uppercase; letter-spacing: 0.
 #notes-module #noteList .list-item .item-btns .item-btn.delete-btn:hover { color: #ff2f2f; }
 
 #notes-module #noteList .list-item .item-btns.active { right: 0; }
-
-@media screen and (max-width: 768px) { #notes-module #noteList .list-item .item-btns { position: relative; width: 100%; padding: 5px 0; margin: 10px 0 20px; } }
 
 /*# sourceMappingURL=style.css.map */

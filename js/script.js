@@ -24,6 +24,7 @@ manageBtn = $("#note-manage-btn");
 formEl = $("#note-form");
 noteList = $("#noteList");
 doneBtn = $("#note-done-btn");
+formSubmitBtn = $("#form-submit");
 notes = [];
 noteID = 0;
 
@@ -152,6 +153,7 @@ function addNote(id, title, category, introduction, syntax, description) {
     var newNote = new note(id, title, category, introduction, syntax, description);
     notes[noteID] = newNote;
     console.log(notes);
+    
     displayNote(newNote);
 }
 
@@ -231,9 +233,10 @@ function displayNote(note) {
 
     /* =========== List Item ============ */
     listItem = "<li id=\""+itemId+"\" class=\""+itemClass+"\">"+itemTop+itemBottom+itembtns+"</li>";
-    console.log($("#"+note.id).length);
-    if( $("#"+note.id).length > 0 ) {
-        $(itemId).html(listItem);
+    
+    if( $("#"+itemId).length > 0 ) {
+        $("#"+itemId).html(itemTop+itemBottom+itembtns);
+        $("#"+itemId).find(".item-btns").addClass("active");
     } else {
         $(noteList).append(listItem);
     }
@@ -245,56 +248,58 @@ function displayNote(note) {
 // TRIGGER THE SUBMIT FUNCTION WHEN FORM SUBMITS
 function initialForm(e) {
     var target = e.target;
-    var id, title, category, introduction, syntax, description;
+    var id, targetID, title, category, introduction, syntax, description;
     formTitle = $("#add-title");
     formCategory = $("#add-category");
     formIntroduction = $("#add-introduction");
     formSyntax = syntaxEditor.activeFilter.editor;
     formDescription = descriptionEditor.activeFilter.editor;
     
-    title = $(formTitle).val('');
-    category = $(formCategory).val('Category');
-    introduction = $(formIntroduction).val('');
-    syntax = formSyntax.setData('');
-    description = formDescription.setData('');
-    
-    // UPDATE THE CURRENT ITEM'S VALUES WHEN EDITING FINISHES
     if( $(target).hasClass("edit-btn") ) {
         id = $(target).attr("id").slice(8);
+        targetID = $(target).attr("id");
         title = $(formTitle).val(notes[id].title);
         category = $(formCategory).val(notes[id].category);
         introduction = $(formIntroduction).val(notes[id].introduction);
         syntax =formSyntax.setData(notes[id].syntax);
         description = formDescription.setData(notes[id].description);
-        
-        $(formEl).on("submit", function(e) {
+        formSubmitBtn.text("Update Note");
+        $(formEl).unbind("submit").on("submit", function(e) {
             e.preventDefault();
             title = $(formTitle).val();
             category = $(formCategory).val();
             introduction = $(formIntroduction).val();
             syntax =formSyntax.getData();
             description = formDescription.getData();
-            
-            // Create A New Note
-            addNote(id, title, category, introduction, syntax, description);
+             
+            // Update The Current Note
+            editNote(id, title, category, introduction, syntax, description);
         });
-    // ADD A NEW ITEM WITH NEW VALUES WHEN ADDING FINISHES
+        
     } else if( $(target).hasClass("add-btn") ) {
-        $(formEl).on("submit", function(e) {
+        title = $(formTitle).val('');
+        category = $(formCategory).val('Category');
+        introduction = $(formIntroduction).val('');
+        syntax = formSyntax.setData('');
+        description = formDescription.setData('');
+        formSubmitBtn.text("Add Note");
+        $(formEl).unbind("submit").submit(function(e) {
             e.preventDefault();
             id = noteID;
-            title = $("#add-title").val();
-            category = $("#add-category").val();
-            introduction = $("#add-introduction").val();
-            syntax = syntaxEditor.activeFilter.editor.getData();
-            description = descriptionEditor.activeFilter.editor.getData();
-
+            title = $(formTitle).val();
+            category = $(formCategory).val();
+            introduction = $(formIntroduction).val();
+            syntax =formSyntax.getData();
+            description = formDescription.getData();
+            // ADD A NEW ITEM WITH NEW VALUES WHEN ADDING FINISHES
+            
             // Create A New Note
             addNote(id, title, category, introduction, syntax, description);
             // Increase Note ID
             noteID ++;
 
             manageBtnToggle.showBtn();
+            console.log('work2');
         });
     }
     // SHOW THE FORM AFTER IT HAS BEEN ASSIGNED VALUES

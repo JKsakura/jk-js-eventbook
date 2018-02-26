@@ -82,9 +82,11 @@ function noteBody() {
     $(noteList).on("click", function(e) {
         var target = e.target;
         if( $(target).hasClass("delete-btn") ) {
-            deleteNote(e);
+            deleteNote(target);
         } else if( $(target).hasClass("edit-btn") ) {
             initialForm(e);
+        } else if( $(target).hasClass("item-top") ) {
+            $(target).parent().find(".item-bottom").stop().slideToggle(150);
         }
     });
 }
@@ -152,7 +154,7 @@ var doneBtnToggle = {
 function addNote(id, title, category, introduction, syntax, description) {
     var newNote = new note(id, title, category, introduction, syntax, description);
     notes[noteID] = newNote;
-    console.log(notes);
+    //console.table(notes);
     
     displayNote(newNote);
 }
@@ -164,6 +166,7 @@ function deleteNote(e) {
     if( r === true ) {
         $("#note"+targetID).remove();
         notes[targetID] = '';
+        //console.table(notes);
     } else {
         return false;
     }
@@ -177,6 +180,7 @@ function editNote(id, title, category, introduction, syntax, description) {
     notes[id].syntax = syntax;
     notes[id].description = description;
 
+    //console.table(notes);
     displayNote(notes[id]);
 }
 
@@ -299,7 +303,7 @@ function initialForm(e) {
             noteID ++;
 
             manageBtnToggle.showBtn();
-            console.log('work2');
+            //console.log('work2');
         });
     }
     // SHOW THE FORM AFTER IT HAS BEEN ASSIGNED VALUES

@@ -53,6 +53,9 @@ function noteHeader() {
         var target = e.target;
         formToggle.toggleForm(300);
         initialForm(e);
+        manageBtnToggle.hideBtn();
+        addBtnToggle.hideBtn();
+        doneBtnToggle.showBtn();
     });
 
     $(manageBtn).on("click", function() {
@@ -68,8 +71,9 @@ function noteHeader() {
         var itemBtn = $(".item-btns");
         $(itemBtn).removeClass("active");
         doneBtnToggle.hideBtn();
-        manageBtnToggle.showBtn();
+        manageBtnToggle.toggleBtn();
         addBtnToggle.showBtn();
+        formToggle.hideForm();
     });
     
     manageBtnToggle.toggleBtn();
@@ -129,7 +133,7 @@ var manageBtnToggle = {
         $(manageBtn).hide();
     },
     toggleBtn: function() {
-        if( $(noteList).empty() ) {
+        if( $(noteList).is(":empty") ) {
             $(manageBtn).hide();
         } else {
             $(manageBtn).show();
@@ -301,8 +305,6 @@ function initialForm(e) {
             addNote(id, title, category, introduction, syntax, description);
             // Increase Note ID
             noteID ++;
-
-            manageBtnToggle.showBtn();
             //console.log('work2');
         });
     }

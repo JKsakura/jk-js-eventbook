@@ -26,7 +26,16 @@
                                 <button class="done-btn btn btn-success" id="note-done-btn">Done</button>
                             </div>
                             <div class="notes-body">
-                                <ul id="noteList"></ul>
+                                <ul id="noteList">
+                                    <li class="category-javascript">
+                                        <h3>JavaScript</h3>
+                                        <ul></ul>
+                                    </li>
+                                    <li class="category-jquery">
+                                        <h3>jQuery</h3>
+                                        <ul></ul>
+                                    </li>
+                                </ul>
                             </div>
                             <div id="note-form-container" class="new-form-container notes-form">
                                 <div class="section-title">
@@ -39,9 +48,9 @@
                                     <div class="form-field">
                                         <span class="select-menu">
                                             <select id="add-category" class="form-control" required>
-                                                <option value="Category">Category</option>
-                                                <option value="JavaScript">JavaScript</option>
-                                                <option value="jQuery">jQuery</option>
+                                                <option value="">Category</option>
+                                                <option value="javascript">JavaScript</option>
+                                                <option value="jquery">jQuery</option>
                                             </select>
                                         </span>
                                     </div>

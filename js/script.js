@@ -1,313 +1,368 @@
-//var requestURL = "../notes.json";
-//var request = new XMLHttpRequest();
-//request.open('GET', requestURL);
-//request.responseType = 'json';
-//request.send();
-//request.onload = function() {
-//    var notes = request.response;
-//    console.table(notes);
-//}
-/* ========================================================================= */
-/* BE SURE TO COMMENT CODE/IDENTIFY PER PLUGIN CALL */
-/* ========================================================================= */
-// Declare Global CKEditor WYSIWYG Fields
-var syntaxEditor = CKEDITOR.replace('add-syntax');
-var descriptionEditor = CKEDITOR.replace('add-description');
-
-// Declare Global Note Vars
-var noteEditBtn, noteDoneBtn, formEl, noteList, notes, noteID, addBtn, manageBtn, doneBtn, noteForm, notes, noteID;
-noteForm = $("#note-form-container");
-editBtn = $("#note-edit-btn");
-doneBtn = $("#note-done-btn");
-addBtn = $("#note-add-btn");
-manageBtn = $("#note-manage-btn");
-formEl = $("#note-form");
-noteList = $("#noteList");
-doneBtn = $("#note-done-btn");
-formSubmitBtn = $("#form-submit");
-notes = [];
-noteID = 0;
-
-/* ============================================================== */
-/*    DECLARE A NEW NOTE OBJECT */
-/* ============================================================== */
-function note(id, title, category, introduction, syntax, description) {
-    this.id = id;
-    this.title = title;
-    this.category = category;
-    this.introduction = introduction;
-    this.syntax = syntax;
-    this.description = description;
-}
-
 jQuery(function($){
+    // Declare Global Note Vars
+    var noteID, notes, formEl, noteList, addBtn, manageBtn, doneBtn, editBtn, noteForm, syntaxEditor, descriptionEditor, formTitle, formCategory, formIntroduction, formSyntax, formDescription, formNoteID, formSubmitBtn, category;
+
+    notes = [];
+    category = ["javascript", "jquery"];
+    
+    $.getJSON( "notes.json" )
+    .done(function( data ) {
+        console.log( "success" );
+        notes = data.notes;
+        for(var i=0; i<notes.length; i++) {
+            displayNote(notes[i]);
+        }
+    })
+    .fail(function() {
+        console.log( "error" );
+    })
+    .always(function() {
+        console.log( "complete" );
+    });
+
+    // Declare Global CKEditor WYSIWYG Fields
+    syntaxEditor = CKEDITOR.replace('add-syntax');
+    descriptionEditor = CKEDITOR.replace('add-description');
+    
+    noteForm = $("#note-form-container");
+    editBtn = $("#note-edit-btn");
+    doneBtn = $("#note-done-btn");
+    addBtn = $("#note-add-btn");
+    manageBtn = $("#note-manage-btn");
+    formEl = $("#note-form");
+    noteList = $("#noteList");
+    doneBtn = $("#note-done-btn");
+    formSubmitBtn = $("#form-submit");
+    
+    //notes = notes ? notes : [];
+    noteID = notes.length > 0 ? notes.length : 0;
+    /* ============================================================== */
+    /*    VISUAL PART EVENTS  */
+    /* ============================================================== */ 
+    /* ============================================================== */
+    /*    TOGGLE FOR NOTE FORM */
+    /* ============================================================== */ 
+    var formToggle = {
+        showForm: function() {
+            $(noteForm).fadeIn(300);
+        },
+        hideForm: function() {
+            $(noteForm).fadeOut(300);
+        },
+        toggleForm: function() {
+            $(noteForm).fadeToggle(300);
+        }
+    }
+
+    /* ============================================================== */
+    /*    TOGGLE FOR ADD BUTTON */
+    /* ============================================================== */ 
+    var addBtnToggle = {
+        showBtn: function() {
+            $(addBtn).show();
+        },
+        hideBtn: function() {
+            $(addBtn).hide();
+        }
+    }
+
+    /* ============================================================== */
+    /*    TOGGLE FOR MANAGING MANAGE BUTTON */
+    /* ============================================================== */ 
+    var manageBtnToggle = {
+        showBtn: function() {
+            $(manageBtn).show();
+        },
+        hideBtn: function() {
+            $(manageBtn).hide();
+        },
+        toggleBtn: function() {
+            if( $(noteList).is(":parent") ) {
+                $(manageBtn).show();
+            } else {
+                $(manageBtn).hide();
+            }
+        }
+    }
+
+    /* ============================================================== */
+    /*    TOGGLE FOR DONE BUTTON */
+    /* ============================================================== */ 
+    var doneBtnToggle = {
+        showBtn: function() {
+            $(doneBtn).show();
+        },
+        hideBtn: function() {
+            $(doneBtn).hide();
+        }
+    }
+    
+    /* ============================================================== */
+    /*    EVENT FOR ALL NOTE HEADING BUTTONS */
+    /* ============================================================== */
+    function noteHeader() {
+        $(addBtn).on("click", function(e) {
+            formToggle.toggleForm();
+            setForm(e);
+            manageBtnToggle.hideBtn();
+            addBtnToggle.hideBtn();
+            doneBtnToggle.showBtn();
+            $("html, body").animate({
+                scrollTop: $(noteForm).offset().top 
+            });
+        });
+
+        $(manageBtn).on("click", function() {
+            var itemBtn = $(".item-btns");
+            $(itemBtn).toggleClass("active");
+            formToggle.hideForm();
+            manageBtnToggle.hideBtn();
+            addBtnToggle.hideBtn();
+            doneBtnToggle.showBtn();
+        });
+
+        $(doneBtn).on("click", function() {
+            var itemBtn = $(".item-btns");
+            $(itemBtn).removeClass("active");
+            doneBtnToggle.hideBtn();
+            manageBtnToggle.toggleBtn();
+            addBtnToggle.showBtn();
+            formToggle.hideForm();
+        });
+
+        manageBtnToggle.toggleBtn();
+    }
+
+    /* ============================================================== */
+    /* EVENT FOR ALL NOTE BODY BUTTONS */
+    /* ============================================================== */
+    function noteBody() {
+        $(noteList).on("click", function(e) {
+            var target = e.target;
+            if( $(target).hasClass("delete-btn") ) {
+                deleteNote(target);
+            } else if( $(target).hasClass("edit-btn") ) {
+                setForm(e);
+                $("html, body").animate({
+                    scrollTop: $(noteForm).offset().top 
+                });
+            } else if( $(target).hasClass("item-top") ) {
+                $(target).parent().find(".item-bottom").stop().slideToggle(150);
+            }
+        });
+    }
+    
+    /* ============================================================== */
+    /*    MAIN NOTE FUNCTIONS CALL */
+    /* ============================================================== */
     noteHeader();
     noteBody();
-});
-
-/* ============================================================== */
-/*    EVENT FOR ALL NOTE HEADING BUTTONS */
-/* ============================================================== */
-function noteHeader() {
-    $(addBtn).on("click", function(e) {
-        var target = e.target;
-        formToggle.toggleForm(300);
-        initialForm(e);
-        manageBtnToggle.hideBtn();
-        addBtnToggle.hideBtn();
-        doneBtnToggle.showBtn();
-    });
-
-    $(manageBtn).on("click", function() {
-        var itemBtn = $(".item-btns");
-        $(itemBtn).toggleClass("active");
-        formToggle.hideForm();
-        manageBtnToggle.hideBtn();
-        addBtnToggle.hideBtn();
-        doneBtnToggle.showBtn();
-    });
     
-    $(doneBtn).on("click", function() {
-        var itemBtn = $(".item-btns");
-        $(itemBtn).removeClass("active");
-        doneBtnToggle.hideBtn();
-        manageBtnToggle.toggleBtn();
-        addBtnToggle.showBtn();
-        formToggle.hideForm();
-    });
+    $(formEl).on('submit', function(e) {
+        e.preventDefault();
+        // Update The Current Note
+        saveNote(getFormData());
+    })
     
-    manageBtnToggle.toggleBtn();
-}
+    /* ============================================================== */
+    /*    FUNCTIONS TO MANAGE THE NOTE LIST  */
+    /* ============================================================== */
+    function saveNote(obj) {
+        var noteObj;
 
-/* ============================================================== */
-/* EVENT FOR ALL NOTE BODY BUTTONS */
-/* ============================================================== */
-function noteBody() {
-    $(noteList).on("click", function(e) {
-        var target = e.target;
-        if( $(target).hasClass("delete-btn") ) {
-            deleteNote(target);
-        } else if( $(target).hasClass("edit-btn") ) {
-            initialForm(e);
-        } else if( $(target).hasClass("item-top") ) {
-            $(target).parent().find(".item-bottom").stop().slideToggle(150);
-        }
-    });
-}
-
-/* ============================================================== */
-/*    TOGGLE FOR NOTE FORM */
-/* ============================================================== */ 
-var formToggle = {
-    showForm: function() {
-        $(noteForm).fadeIn(300);
-    },
-    hideForm: function() {
-        $(noteForm).fadeOut(300);
-    },
-    toggleForm: function() {
-        $(noteForm).fadeToggle(300);
-    }
-}
-
-/* ============================================================== */
-/*    TOGGLE FOR ADD BUTTON */
-/* ============================================================== */ 
-var addBtnToggle = {
-    showBtn: function() {
-        $(addBtn).show();
-    },
-    hideBtn: function() {
-        $(addBtn).hide();
-    }
-}
-
-/* ============================================================== */
-/*    TOGGLE FOR MANAGING MANAGE BUTTON */
-/* ============================================================== */ 
-var manageBtnToggle = {
-    showBtn: function() {
-        $(manageBtn).show();
-    },
-    hideBtn: function() {
-        $(manageBtn).hide();
-    },
-    toggleBtn: function() {
-        if( $(noteList).is(":empty") ) {
-            $(manageBtn).hide();
+        if(obj.id) {
+            notes[obj.id] = {
+                id: obj.id,
+                title: obj.title,
+                category: obj.category,
+                introduction: obj.introduction,
+                syntax: obj.syntax,
+                description: obj.description
+            }
+            noteObj = notes[obj.id];
         } else {
-            $(manageBtn).show();
+            var newNote = {
+                id: noteID,
+                title: obj.title,
+                category: obj.category,
+                introduction: obj.introduction,
+                syntax: obj.syntax,
+                description: obj.description
+            }
+            notes[noteID] = newNote;
+            noteID++;
+            noteObj = newNote;
+        }
+        
+        displayNote(noteObj);
+        
+        var noteData = {"notes": notes};
+        $.post("notes.php", {
+            json: JSON.stringify(noteData)
+        })
+        .done(function() {
+            console.log( "second success" );
+        })
+        .fail(function() {
+            console.log( "error" );
+        })
+        .always(function() {
+            console.log( "finished" );
+        });
+
+        $("html, body").animate({
+            scrollTop: 0
+        });
+
+        formToggle.hideForm();
+    }
+
+    // DELETE A NEW NOTE BASED ON THE ID
+    function deleteNote(e) {
+        var targetID = $(e).attr("id").slice(10);
+        var r = confirm("Are You Sure You Want to Delete This Item?");
+        if( r === true ) {
+            notes[targetID] = '';
+            $("#note"+targetID).remove();
+        } else {
+            return false;
         }
     }
-}
 
-/* ============================================================== */
-/*    TOGGLE FOR DONE BUTTON */
-/* ============================================================== */ 
-var doneBtnToggle = {
-    showBtn: function() {
-        $(doneBtn).show();
-    },
-    hideBtn: function() {
-        $(doneBtn).hide();
+    // DISPLAY THE ELEMENT WITH NEW DOM STRUCTURE
+    function displayNote(note) {
+        var listItem, itemTop, itemBottom, itemHeader, itemTitle, itemCategory, itemIntroduction, itemSyntax, itemDescription, itembtns, itemDelete, itemDeleteBtn, syntaxTitle, descriptionTitle, itemEditBtn, itemEdit, listCategory;
+
+        // Define ID
+        var itemId = "note"+note.id;
+        var editId = "noteEdit"+note.id;
+        var deleteId = "noteDelete"+note.id;
+
+        // Define Classes
+        var itemClass = "list-item list-group-item list-group-item-action";
+        var headerClass = "item-header";
+        var topClass = "item-top";
+        var bottomClass = "item-bottom";
+        var TitleClass = "item-title note-field-text";
+        var categoryClass = "item-category note-field-select";
+        var introductionClass = "item-introduction note-field-area";
+        var syntaxClass = "item-syntax note-field-area";
+        var descriptionClass = "item-description note-field-area";
+        var btnsClass = "item-btns";
+        var deleteClass = "item-btn delete-btn";
+        var deleteBtnClass = "fas fa-trash-alt";
+        var editClass = "item-btn edit-btn";
+        var editBtnClass = "far fa-edit";
+
+        /* =========== Item Top ============ */
+        // Item Header
+        itemTitle = $("<p></p>").addClass(TitleClass).text(note.title);
+        itemCategory = $("<h5></h5>").addClass(categoryClass).text(note.category);
+
+        itemHeader = $("<div></div>").addClass(headerClass).append(itemTitle, itemCategory);
+
+        // Item Introduction
+        itemIntroduction = $("<p></p>").addClass(introductionClass).text(note.introduction);
+
+        itemTop = $("<div></div>").addClass(topClass).append(itemHeader, itemIntroduction);
+
+        /* =========== Item Bottom ============ */
+        syntaxTitle = $("<h4></h4>").text("Syntax");
+        itemSyntax = $("<div></div>").addClass(syntaxClass).html(note.syntax).prepend(syntaxTitle);
+        descriptionTitle = $("<h4></h4>").text("Description");
+        itemDescription = $("<div></div>").addClass(descriptionClass).html(note.description).prepend(descriptionTitle);
+
+        itemBottom = $("<div></div>").addClass(bottomClass).append(itemSyntax, itemDescription);
+
+        /* =========== Item Buttons ============ */
+        itemDeleteBtn = $("<i></i>").addClass(deleteBtnClass);
+        itemDelete = $("<button></button>").attr("id", deleteId).addClass(deleteClass).append(itemDeleteBtn);
+
+        itemEditBtn = $("<i></i>").addClass(editBtnClass);
+        itemEdit = $("<button></button>").attr("id", editId).addClass(editClass).append(itemEditBtn);
+
+        itembtns = $("<div></div>").addClass(btnsClass).append(itemDelete, itemEdit);
+
+        /* =========== List Item ============ */
+        listItem = $("<li></li>").attr("id", itemId).addClass(itemClass).append(itemTop, itemBottom, itembtns);
+
+        if( $("#"+itemId).length > 0 ) {
+            $("#"+itemId).replaceWith(listItem);
+            $("#"+itemId).find(".item-btns").addClass("active");
+        } else {
+            $(noteList).find(".category-"+note.category).find("ul").append(listItem);
+        }
     }
-}
-/* ============================================================== */
-/*    FUNCTIONS TO MANAGE THE NOTE LIST  */
-/* ============================================================== */
-function addNote(id, title, category, introduction, syntax, description) {
-    var newNote = new note(id, title, category, introduction, syntax, description);
-    notes[noteID] = newNote;
-    //console.table(notes);
-    
-    displayNote(newNote);
-}
 
-// DELETE A NEW NOTE BASED ON THE ID
-function deleteNote(e) {
-    var targetID = $(e).attr("id").slice(10);
-    var r = confirm("Are You Sure You Want to Delete This Item?");
-    if( r === true ) {
-        $("#note"+targetID).remove();
-        notes[targetID] = '';
-        //console.table(notes);
-    } else {
-        return false;
-    }
-}
-
-// EDIT A NEW NOTE BASED ON THE ID
-function editNote(id, title, category, introduction, syntax, description) {
-    notes[id].title = title;
-    notes[id].category = category;
-    notes[id].introduction = introduction;
-    notes[id].syntax = syntax;
-    notes[id].description = description;
-
-    //console.table(notes);
-    displayNote(notes[id]);
-}
-
-// DISPLAY THE ELEMENT WITH NEW DOM STRUCTURE
-function displayNote(note) {
-    var itemId, listItem, itemTop, itemBottom, itemHeader, itemTitle, itemCategory, itemIntroduction, itemSyntax, itemDescription, itembtns, itemDelete, itemDeleteBtn;
-    // Create New Element
-    listItem = document.createElement("li");
-
-    // Define ID
-    var itemId = "note"+note.id;
-    var editId = "noteEdit"+note.id;
-    var deleteId = "noteDelete"+note.id;
-
-    // Define Classes
-    var itemClass = "list-item list-group-item list-group-item-action";
-    var headerClass = "item-header";
-    var topClass = "item-top";
-    var bottomClass = "item-bottom";
-    var TitleClass = "item-title note-field-text";
-    var categoryClass = "item-category note-field-select";
-    var introductionClass = "item-introduction note-field-area";
-    var syntaxClass = "item-syntax note-field-area";
-    var descriptionClass = "item-description note-field-area";
-    var btnsClass = "item-btns";
-    var deleteClass = "item-btn delete-btn";
-    var deleteBtnClass = "fas fa-trash-alt";
-    var editClass = "item-btn edit-btn";
-    var editBtnClass = "far fa-edit";
-
-    /* =========== Item Top ============ */
-    // Item Header
-    itemTitle = "<p class=\""+TitleClass+"\">"+note.title+"</p>";
-    itemCategory = "<h5 class=\""+categoryClass+"\">"+note.category+"</h5>";
-    itemHeader = "<div class=\""+headerClass+"\">"+itemTitle+itemCategory+"</div>";
-    // Item Introduction
-    itemIntroduction = "<p class=\""+introductionClass+"\">"+note.introduction+"</p>";
-
-    itemTop = "<div class=\""+topClass+"\">"+itemHeader+itemIntroduction+"</div>";
-
-    /* =========== Item Bottom ============ */
-    itemSyntax = "<div class=\""+syntaxClass+"\">"+note.syntax+"</div>";
-    itemDescription = "<div class=\""+descriptionClass+"\">"+note.description+"</div>";
-
-    itemBottom = "<div class=\""+bottomClass+"\">"+itemSyntax+itemDescription+"</div>";
-
-    /* =========== Item Buttons ============ */
-    itemEditBtn = "<i class=\""+editBtnClass+"\"></i>";
-    itemEdit = "<button id=\""+editId+"\" class=\""+editClass+"\">"+itemEditBtn+"</button>";
-    itemDeleteBtn = "<i class=\""+deleteBtnClass+"\"></i>";
-    itemDelete = "<button id=\""+deleteId+"\" class=\""+deleteClass+"\">"+itemDeleteBtn+"</button>";
-
-    itembtns = "<div class=\""+btnsClass+"\">"+itemDelete+itemEdit+"</div>";
-
-    /* =========== List Item ============ */
-    listItem = "<li id=\""+itemId+"\" class=\""+itemClass+"\">"+itemTop+itemBottom+itembtns+"</li>";
-    
-    if( $("#"+itemId).length > 0 ) {
-        $("#"+itemId).html(itemTop+itemBottom+itembtns);
-        $("#"+itemId).find(".item-btns").addClass("active");
-    } else {
-        $(noteList).append(listItem);
-    }
-}
-
-/* ============================================================== */
-/* FUNCTIONS TO MANAGE THE FORM */   
-/* ============================================================== */
-// TRIGGER THE SUBMIT FUNCTION WHEN FORM SUBMITS
-function initialForm(e) {
-    var target = e.target;
-    var id, targetID, title, category, introduction, syntax, description;
-    formTitle = $("#add-title");
-    formCategory = $("#add-category");
-    formIntroduction = $("#add-introduction");
-    formSyntax = syntaxEditor.activeFilter.editor;
-    formDescription = descriptionEditor.activeFilter.editor;
-    
-    if( $(target).hasClass("edit-btn") ) {
-        id = $(target).attr("id").slice(8);
-        targetID = $(target).attr("id");
-        title = $(formTitle).val(notes[id].title);
-        category = $(formCategory).val(notes[id].category);
-        introduction = $(formIntroduction).val(notes[id].introduction);
-        syntax =formSyntax.setData(notes[id].syntax);
-        description = formDescription.setData(notes[id].description);
-        formSubmitBtn.text("Update Note");
-        $(formEl).unbind("submit").on("submit", function(e) {
-            e.preventDefault();
-            title = $(formTitle).val();
-            category = $(formCategory).val();
-            introduction = $(formIntroduction).val();
-            syntax =formSyntax.getData();
-            description = formDescription.getData();
-             
-            // Update The Current Note
-            editNote(id, title, category, introduction, syntax, description);
-        });
+    /* ============================================================== */
+    /* FUNCTIONS TO MANAGE THE FORM */   
+    /* ============================================================== */
+    // TRIGGER THE SUBMIT FUNCTION WHEN FORM SUBMITS
+    function setForm(e) {
+        var target = e.target;
+        var id, title, category, introduction, syntax, description, btnTxt;
+        formTitle = $("#add-title");
+        formCategory = $("#add-category");
+        formIntroduction = $("#add-introduction");
+        formNoteID = '';
+        formSyntax = syntaxEditor.activeFilter.editor;
+        formDescription = descriptionEditor.activeFilter.editor;
         
-    } else if( $(target).hasClass("add-btn") ) {
-        title = $(formTitle).val('');
-        category = $(formCategory).val('Category');
-        introduction = $(formIntroduction).val('');
-        syntax = formSyntax.setData('');
-        description = formDescription.setData('');
-        formSubmitBtn.text("Add Note");
-        $(formEl).unbind("submit").submit(function(e) {
-            e.preventDefault();
-            id = noteID;
-            title = $(formTitle).val();
-            category = $(formCategory).val();
-            introduction = $(formIntroduction).val();
-            syntax =formSyntax.getData();
-            description = formDescription.getData();
-            // ADD A NEW ITEM WITH NEW VALUES WHEN ADDING FINISHES
-            
-            // Create A New Note
-            addNote(id, title, category, introduction, syntax, description);
-            // Increase Note ID
-            noteID ++;
-            //console.log('work2');
-        });
+        id = $(target).attr("id");
+        if ($(target).hasClass("edit-btn")) {
+            id = id.slice(8);
+            title = notes[id].title;
+            category = notes[id].category;
+            introduction = notes[id].introduction;
+            syntax = notes[id].syntax;
+            description = notes[id].description;
+            btnTxt = "Update Note";
+        }
+        else {
+            id = '';
+            title = "";
+            category = "Category";
+            introduction = "";
+            syntax = "";
+            description = "";
+            btnTxt = "Add Note";
+        }
+        
+        formNoteID = id;
+        $(formTitle).val(title);
+        $(formCategory).val(category);
+        $(formIntroduction).val(introduction);
+        formSyntax.setData(syntax);
+        formDescription.setData(description);
+        $(formSubmitBtn).text(btnTxt);
+        
+        // SHOW THE FORM AFTER IT HAS BEEN ASSIGNED VALUES
+        formToggle.showForm();
     }
-    // SHOW THE FORM AFTER IT HAS BEEN ASSIGNED VALUES
-    formToggle.showForm();
-}
+    
+    function getFormData() {
+        // fetch form data
+        var id = formNoteID;
+        var title = $(formTitle).val();
+        var category = $(formCategory).val();
+        var introduction = $(formIntroduction).val();
+        var syntax =formSyntax.getData();
+        var description = formDescription.getData();
+        
+        // format obj
+        var resObj = {
+            id: '',
+            title: title,
+            category: category,
+            introduction: introduction,
+            syntax: syntax,
+            description: description
+        }
+        
+        if (id) {
+            resObj['id'] = id;
+        }
+        
+        return resObj;
+    }
+});

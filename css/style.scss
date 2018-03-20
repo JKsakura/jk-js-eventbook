@@ -174,8 +174,12 @@ button, input[type=submit], .btn {
             position: relative;
             border: solid 1px #eee;
             overflow: hidden;
+            a {
+                display: block;
+                color: #000;
+            }
             .item-top {
-                cursor: pointer;
+                pointer-events: none;
                 .item-header {
                     display: inline-block;
                     vertical-align: middle;

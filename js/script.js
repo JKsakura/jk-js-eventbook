@@ -1,7 +1,27 @@
 jQuery(function($){
     // Declare Global Note Vars
-    var noteID, notes, formEl, noteList, addBtn, manageBtn, doneBtn, editBtn, noteForm, syntaxEditor, descriptionEditor, formTitle, formCategory, formIntroduction, formSyntax, formDescription, formNoteID, formSubmitBtn, category;
+    var noteID, notes, formEl, noteList, addBtn, manageBtn, doneBtn, editBtn, formContainer, syntaxEditor, descriptionEditor, formTitle, formCategory, formIntroduction, formSyntax, formDescription, formNoteID, formSubmitBtn, category, detailTitle, detailCategory, detailIntroduction, detailSyntax, detailDescription;
 
+    // Declare Global CKEditor WYSIWYG Fields
+    syntaxEditor = CKEDITOR.replace('add-syntax');
+    descriptionEditor = CKEDITOR.replace('add-description');
+    
+    // Get All Global DOM Element
+    formContainer = $("#note-form-container");
+    editBtn = $("#note-edit-btn");
+    doneBtn = $("#note-done-btn");
+    addBtn = $("#note-add-btn");
+    manageBtn = $("#note-manage-btn");
+    formEl = $("#note-form");
+    noteList = $("#noteList");
+    doneBtn = $("#note-done-btn");
+    formSubmitBtn = $("#form-submit");
+    detailTitle = $("#detail-title");
+    detailIntroduction = $("#detail-introduction");
+    detailCategory = $("#detail-category");
+    detailSyntax = $("#detail-syntax");
+    detailDescription = $("#detail-description");
+    
     notes = [];
     category = ["javascript", "jquery"];
     
@@ -19,44 +39,26 @@ jQuery(function($){
     .always(function() {
         console.log( "complete" );
     });
-
-    // Declare Global CKEditor WYSIWYG Fields
-    syntaxEditor = CKEDITOR.replace('add-syntax');
-    descriptionEditor = CKEDITOR.replace('add-description');
-    
-    noteForm = $("#note-form-container");
-    editBtn = $("#note-edit-btn");
-    doneBtn = $("#note-done-btn");
-    addBtn = $("#note-add-btn");
-    manageBtn = $("#note-manage-btn");
-    formEl = $("#note-form");
-    noteList = $("#noteList");
-    doneBtn = $("#note-done-btn");
-    formSubmitBtn = $("#form-submit");
     
     //notes = notes ? notes : [];
-    noteID = notes.length > 0 ? notes.length : 0;
+    noteID = notes.length > 0 ? notes[length-1].id : 0;
     /* ============================================================== */
     /*    VISUAL PART EVENTS  */
-    /* ============================================================== */ 
     /* ============================================================== */
-    /*    TOGGLE FOR NOTE FORM */
-    /* ============================================================== */ 
+    // TOGGLE FOR NOTE FORM 
     var formToggle = {
         showForm: function() {
-            $(noteForm).fadeIn(300);
+            $(formContainer).fadeIn(300);
         },
         hideForm: function() {
-            $(noteForm).fadeOut(300);
+            $(formContainer).fadeOut(300);
         },
         toggleForm: function() {
-            $(noteForm).fadeToggle(300);
+            $(formContainer).fadeToggle(300);
         }
     }
 
-    /* ============================================================== */
-    /*    TOGGLE FOR ADD BUTTON */
-    /* ============================================================== */ 
+    // TOGGLE FOR ADD BUTTON
     var addBtnToggle = {
         showBtn: function() {
             $(addBtn).show();
@@ -66,9 +68,7 @@ jQuery(function($){
         }
     }
 
-    /* ============================================================== */
-    /*    TOGGLE FOR MANAGING MANAGE BUTTON */
-    /* ============================================================== */ 
+    // TOGGLE FOR MANAGING MANAGE BUTTON
     var manageBtnToggle = {
         showBtn: function() {
             $(manageBtn).show();
@@ -85,9 +85,7 @@ jQuery(function($){
         }
     }
 
-    /* ============================================================== */
-    /*    TOGGLE FOR DONE BUTTON */
-    /* ============================================================== */ 
+    // TOGGLE FOR DONE BUTTON
     var doneBtnToggle = {
         showBtn: function() {
             $(doneBtn).show();
@@ -108,7 +106,7 @@ jQuery(function($){
             addBtnToggle.hideBtn();
             doneBtnToggle.showBtn();
             $("html, body").animate({
-                scrollTop: $(noteForm).offset().top 
+                scrollTop: $(formContainer).offset().top 
             });
         });
 
@@ -144,10 +142,12 @@ jQuery(function($){
             } else if( $(target).hasClass("edit-btn") ) {
                 setForm(e);
                 $("html, body").animate({
-                    scrollTop: $(noteForm).offset().top 
+                    scrollTop: $(formContainer).offset().top 
                 });
-            } else if( $(target).hasClass("item-top") ) {
-                $(target).parent().find(".item-bottom").stop().slideToggle(150);
+            } else if( $(target).is("a") ) {
+                e.preventDefault();
+                var detailId = $(target).attr("href").slice(5);
+                displayDetail(notes[detailId]);
             }
         });
     }
@@ -246,8 +246,8 @@ jQuery(function($){
         var TitleClass = "item-title note-field-text";
         var categoryClass = "item-category note-field-select";
         var introductionClass = "item-introduction note-field-area";
-        var syntaxClass = "item-syntax note-field-area";
-        var descriptionClass = "item-description note-field-area";
+//        var syntaxClass = "item-syntax note-field-area";
+//        var descriptionClass = "item-description note-field-area";
         var btnsClass = "item-btns";
         var deleteClass = "item-btn delete-btn";
         var deleteBtnClass = "fas fa-trash-alt";
@@ -267,12 +267,12 @@ jQuery(function($){
         itemTop = $("<div></div>").addClass(topClass).append(itemHeader, itemIntroduction);
 
         /* =========== Item Bottom ============ */
-        syntaxTitle = $("<h4></h4>").text("Syntax");
-        itemSyntax = $("<div></div>").addClass(syntaxClass).html(note.syntax).prepend(syntaxTitle);
-        descriptionTitle = $("<h4></h4>").text("Description");
-        itemDescription = $("<div></div>").addClass(descriptionClass).html(note.description).prepend(descriptionTitle);
-
-        itemBottom = $("<div></div>").addClass(bottomClass).append(itemSyntax, itemDescription);
+//        syntaxTitle = $("<h4></h4>").text("Syntax");
+//        itemSyntax = $("<div></div>").addClass(syntaxClass).html(note.syntax).prepend(syntaxTitle);
+//        descriptionTitle = $("<h4></h4>").text("Description");
+//        itemDescription = $("<div></div>").addClass(descriptionClass).html(note.description).prepend(descriptionTitle);
+//
+//        itemBottom = $("<div></div>").addClass(bottomClass).append(itemSyntax, itemDescription);
 
         /* =========== Item Buttons ============ */
         itemDeleteBtn = $("<i></i>").addClass(deleteBtnClass);
@@ -284,8 +284,11 @@ jQuery(function($){
         itembtns = $("<div></div>").addClass(btnsClass).append(itemDelete, itemEdit);
 
         /* =========== List Item ============ */
-        listItem = $("<li></li>").attr("id", itemId).addClass(itemClass).append(itemTop, itemBottom, itembtns);
+//        listItem = $("<li></li>").attr("id", itemId).addClass(itemClass).append(itemTop, itemBottom, itembtns);
 
+        listLink = $("<a></a>").attr("href", "#"+itemId).append(itemTop, itembtns);
+        listItem = $("<li></li>").attr("id", itemId).addClass(itemClass).append(listLink);
+        
         if( $("#"+itemId).length > 0 ) {
             $("#"+itemId).replaceWith(listItem);
             $("#"+itemId).find(".item-btns").addClass("active");
@@ -294,6 +297,15 @@ jQuery(function($){
         }
     }
 
+    // DISPLAY THE ELEMENT WITH NEW DOM STRUCTURE
+    function displayDetail(note) {
+        $(detailTitle).text(note.title);
+        $(detailCategory).text(note.category);
+        $(detailIntroduction).text(note.introduction);
+        $(detailSyntax).html(note.syntax);
+        $(detailDescription).html(note.description);
+    }
+    
     /* ============================================================== */
     /* FUNCTIONS TO MANAGE THE FORM */   
     /* ============================================================== */
@@ -321,7 +333,7 @@ jQuery(function($){
         else {
             id = '';
             title = "";
-            category = "Category";
+            category = "";
             introduction = "";
             syntax = "";
             description = "";

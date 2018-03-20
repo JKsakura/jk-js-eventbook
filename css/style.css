@@ -67,7 +67,9 @@ button, input[type=submit], .btn { text-transform: uppercase; letter-spacing: 0.
 
 #notes-module #noteList .list-item { position: relative; border: solid 1px #eee; overflow: hidden; }
 
-#notes-module #noteList .list-item .item-top { cursor: pointer; }
+#notes-module #noteList .list-item a { display: block; color: #000; }
+
+#notes-module #noteList .list-item .item-top { pointer-events: none; }
 
 #notes-module #noteList .list-item .item-top .item-header { display: inline-block; vertical-align: middle; width: 20%; margin-right: 20px; pointer-events: none; }
 

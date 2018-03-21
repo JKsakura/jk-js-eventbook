@@ -159,170 +159,157 @@ button, input[type=submit], .btn {
         }
     }
     .notes-wrapper {
-        max-width: 700px;
-        margin: 0 auto;
+        .notes-body {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            overflow: hidden;
+        }
+
+        #note-list {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transform: translateX(0);
+            transition: 0.3s;
+            &:not(:empty) {
+                padding: 50px 0;
+            }
+            &.hide {
+                left: -100%;
+            }
+            .list-item {
+                position: relative;
+                border: solid 1px #eee;
+                overflow: hidden;
+                a {
+                    display: block;
+                    color: #000;
+                }
+                .item-top {
+                    pointer-events: none;
+                    .item-header {
+                        display: inline-block;
+                        vertical-align: middle;
+                        width: 20%;
+                        margin-right: 20px;
+                        pointer-events: none;
+                        .item-title {
+                            font-size: 18px;
+                            letter-spacing: 0.5px;
+                            font-weight: 300;
+                            margin-bottom: 5px;
+                            pointer-events: none;
+                        }
+                        .item-category {
+                            color: #999;
+                            font-size: 11px;
+                            font-weight: 500;
+                            text-transform: uppercase;
+                            pointer-events: none;
+                            select {
+                                @include max(768) {
+                                    margin-bottom: 10px;
+                                }
+                            }
+                        }
+                        @include max(768) {
+                            display: block;
+                            width: 100%;
+                            margin-right: 0;
+                        }
+                    }
+                    .item-introduction {
+                        display: inline-block;
+                        vertical-align: middle;
+                        width: calc(80% - 74px);
+                        overflow-x: auto;
+                        pointer-events: none;
+                        @include max(768px) {
+                            display: block;
+                            width: 100%;
+                            margin-left: 0;
+                        }
+                    }
+                }
+                .item-bottom {
+                    display: none;
+                    overflow-x: auto;
+                    div:not(:empty) {
+                        border-top: solid 1px #eee;
+                        padding-top: 10px;
+                        margin-top: 10px;
+                    }
+                }
+                .item-btns {
+                    position: absolute;
+                    top: 0;
+                    right: -100%;
+                    width: 90px;
+                    height: 100%; //background-color: #f8f9fa;
+                    background-color: rgba(0, 0, 0, 0.7);
+                    text-align: center;
+                    font-size: 0;
+                    transition: right 0.15s;
+                    &::before {
+                        content: '';
+                        display: inline-block;
+                        width: 0;
+                        height: 100%;
+                        vertical-align: middle;
+                    }
+                    .item-btn {
+                        width: 25px;
+                        display: inline-block;
+                        vertical-align: middle;
+                        padding: 0;
+                        background-color: transparent;
+                        border: 0;
+                        cursor: pointer;
+                        color: #fff;
+                        font-size: 20px;
+                        text-align: center;
+                        svg {
+                            pointer-events: none;
+                        }
+                        &+.item-btn {
+                            margin-left: 15px;
+                        }
+                        &.edit-btn {
+                            &:hover {
+                                color: #1983ff;
+                            }
+                        }
+                        &.delete-btn {
+                            &:hover {
+                                color: #ff2f2f;
+                            }
+                        }
+                    }
+                    &.active {
+                        right: 0;
+                    }
+                }
+            }
+        }
+
+        #note-detail {
+            position: absolute;
+            left: 100%;
+            width: 100%;
+            height: 100%;
+            transition: 0.3s;
+            &:not(:empty) {
+                padding: 50px 0;
+            }
+            &.show {
+                left: 0;
+            }
+        }
     }
     .notes-form {
         margin: 50px 0;
     }
 
-    .notes-body {
-        position: relative;
-        width: 100%;
-        height: 500px;
-        overflow: hidden;
-    }
-    #note-list {
-        position: absolute;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        transform: translateX(0);
-        transition: 0.3s;
-        &:not(:empty) {
-            padding: 50px 0;
-        }
-        &.hide {
-            left: -100%;
-        }
-        .list-item {
-            position: relative;
-            border: solid 1px #eee;
-            overflow: hidden;
-            a {
-                display: block;
-                color: #000;
-            }
-            .item-top {
-                pointer-events: none;
-                .item-header {
-                    display: inline-block;
-                    vertical-align: middle;
-                    width: 20%;
-                    margin-right: 20px;
-                    pointer-events: none;
-                    .item-title {
-                        font-size: 18px;
-                        letter-spacing: 0.5px;
-                        font-weight: 300;
-                        margin-bottom: 5px;
-                        pointer-events: none;
-                        &[contenteditable=true] { 
-                            border: solid 1px #999;
-                            padding: 5px 9px;
-                            @include max(768) {
-                                margin: 15px 0 10px;
-                            }
-                        }
-                    }
-                    .item-category {
-                        color: #999;
-                        font-size: 11px;
-                        font-weight: 500;
-                        text-transform: uppercase;
-                        pointer-events: none;
-                        select {
-                            @include max(768) {
-                                margin-bottom: 10px;
-                            }
-                        }
-                    }
-                    @include max(768) {
-                        display: block;
-                        width: 100%;
-                        margin-right: 0;
-                    }
-                }
-                .item-introduction {
-                    display: inline-block; 
-                    vertical-align: middle;
-                    width: calc(80% - 74px);
-                    overflow-x: auto;
-                    pointer-events: none;
-                    &[contenteditable=true] {
-                        height: 100%;
-                        min-height: 60px;
-                        border: solid 1px #999;
-                        padding: 5px 9px;
-                    }
-                    @include max(768px) {
-                        display: block;
-                        width: 100%;
-                        margin-left: 0;
-                    }
-                }
-            }
-            .item-bottom {
-                display: none;
-                overflow-x: auto;
-                div:not(:empty) {
-                    border-top: solid 1px #eee;
-                    padding-top: 10px;
-                    margin-top: 10px;
-                }
-            }
-            .item-btns {
-                position: absolute; 
-                top: 0;
-                right: -100%;
-                width: 90px;
-                height: 100%;
-                //background-color: #f8f9fa;
-                background-color: rgba(0,0,0,0.7);
-                text-align: center;
-                font-size: 0;
-                transition: right 0.15s;
-                &::before {
-                    content: '';
-                    display: inline-block;
-                    width: 0;
-                    height: 100%;
-                    vertical-align: middle;
-                }
-                .item-btn {
-                    width: 25px;
-                    display: inline-block; 
-                    vertical-align: middle;
-                    padding: 0;
-                    background-color: transparent;
-                    border: 0;
-                    cursor: pointer;
-                    color: #fff;
-                    font-size: 20px;
-                    text-align: center;
-                    svg { pointer-events: none; }
-                    & + .item-btn {
-                        margin-left: 15px;
-                    }
-                    &.edit-btn {
-                        &:hover {
-                            color: #1983ff;
-                        }
-                    }
-                    &.delete-btn {
-                        &:hover {
-                            color: #ff2f2f;
-                        }
-                    }
-                }
-                &.active {
-                    right: 0;
-                }
-            }
-        }
-    }
-
-    #note-detail {
-        position: absolute;
-        left: 100%;
-        width: 100%;
-        height: 100%;
-        transition: 0.3s;
-        &:not(:empty) {
-            padding: 50px 0;
-        }
-        &.show {
-            left: 0;
-        }
-    }
 }

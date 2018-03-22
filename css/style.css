@@ -36,8 +36,6 @@ button, input[type=submit], .btn { text-transform: uppercase; letter-spacing: 0.
 /* ============================ */
 /* CREATE NEW NOTE FORM
 /* ============================ */
-#note-form-container { display: none; }
-
 #note-form .form-field { text-align: center; }
 
 #note-form .form-field:first-child { width: 49%; float: left; }
@@ -57,15 +55,21 @@ button, input[type=submit], .btn { text-transform: uppercase; letter-spacing: 0.
 
 #notes-module #note-done-btn { display: none; }
 
-#notes-module .notes-header .btn svg { margin-right: 5px; }
+#notes-module .notes-wrapper { position: relative; }
 
-#notes-module .notes-wrapper .notes-body { position: relative; width: 100%; height: 500px; overflow: hidden; }
+#notes-module .notes-wrapper .notes-header .btn svg { margin-right: 5px; }
 
-#notes-module .notes-wrapper #note-list { position: absolute; left: 0; width: 100%; height: 100%; -webkit-transform: translateX(0); -ms-transform: translateX(0); transform: translateX(0); -webkit-transition: 0.3s; -o-transition: 0.3s; transition: 0.3s; }
+#notes-module .notes-wrapper .notes-body { position: relative; width: 100%; }
+
+#notes-module .notes-wrapper .note-list-container { position: absolute; left: 0; width: 100%; -webkit-transition: 0.3s; -o-transition: 0.3s; transition: 0.3s; }
+
+#notes-module .notes-wrapper .note-list-container.hide { left: -100%; }
+
+#notes-module .notes-wrapper .note-form-container { position: absolute; left: 100%; width: 100%; -webkit-transition: 0.3s; -o-transition: 0.3s; transition: 0.3s; }
+
+#notes-module .notes-wrapper .note-form-container.show { left: 0; }
 
 #notes-module .notes-wrapper #note-list:not(:empty) { padding: 50px 0; }
-
-#notes-module .notes-wrapper #note-list.hide { left: -100%; }
 
 #notes-module .notes-wrapper #note-list .list-item { position: relative; border: solid 1px #eee; overflow: hidden; }
 
@@ -87,10 +91,6 @@ button, input[type=submit], .btn { text-transform: uppercase; letter-spacing: 0.
 
 @media screen and (max-width: 768px) { #notes-module .notes-wrapper #note-list .list-item .item-top .item-introduction { display: block; width: 100%; margin-left: 0; } }
 
-#notes-module .notes-wrapper #note-list .list-item .item-bottom { display: none; overflow-x: auto; }
-
-#notes-module .notes-wrapper #note-list .list-item .item-bottom div:not(:empty) { border-top: solid 1px #eee; padding-top: 10px; margin-top: 10px; }
-
 #notes-module .notes-wrapper #note-list .list-item .item-btns { position: absolute; top: 0; right: -100%; width: 90px; height: 100%; background-color: rgba(0, 0, 0, 0.7); text-align: center; font-size: 0; -webkit-transition: right 0.15s; -o-transition: right 0.15s; transition: right 0.15s; }
 
 #notes-module .notes-wrapper #note-list .list-item .item-btns::before { content: ''; display: inline-block; width: 0; height: 100%; vertical-align: middle; }
@@ -106,13 +106,5 @@ button, input[type=submit], .btn { text-transform: uppercase; letter-spacing: 0.
 #notes-module .notes-wrapper #note-list .list-item .item-btns .item-btn.delete-btn:hover { color: #ff2f2f; }
 
 #notes-module .notes-wrapper #note-list .list-item .item-btns.active { right: 0; }
-
-#notes-module .notes-wrapper #note-detail { position: absolute; left: 100%; width: 100%; height: 100%; -webkit-transition: 0.3s; -o-transition: 0.3s; transition: 0.3s; }
-
-#notes-module .notes-wrapper #note-detail:not(:empty) { padding: 50px 0; }
-
-#notes-module .notes-wrapper #note-detail.show { left: 0; }
-
-#notes-module .notes-form { margin: 50px 0; }
 
 /*# sourceMappingURL=style.css.map */

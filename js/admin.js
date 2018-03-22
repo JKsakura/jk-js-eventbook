@@ -1,6 +1,6 @@
 jQuery(function($){
     // Declare Global Note Vars
-    var noteID, notes, formEl, noteList, addBtn, manageBtn, doneBtn, editBtn, formContainer, syntaxEditor, descriptionEditor, formTitle, formCategory, formIntroduction, formSyntax, formDescription, formNoteID, formSubmitBtn, category, detailTitle, detailCategory, detailIntroduction, detailSyntax, detailDescription;
+    var noteID, notes, formEl, listContainer, noteList, addBtn, manageBtn, doneBtn, editBtn, formContainer, syntaxEditor, descriptionEditor, formTitle, formCategory, formIntroduction, formSyntax, formDescription, formNoteID, formSubmitBtn, category, detailTitle, detailCategory, detailIntroduction, detailSyntax, detailDescription;
 
     // Declare Global CKEditor WYSIWYG Fields
     syntaxEditor = CKEDITOR.replace('add-syntax');
@@ -8,6 +8,7 @@ jQuery(function($){
     
     // Get All Global DOM Element
     formContainer = $("#note-form-container");
+    listContainer = $("#note-list-container");
     editBtn = $("#note-edit-btn");
     doneBtn = $("#note-done-btn");
     addBtn = $("#note-add-btn");
@@ -17,14 +18,6 @@ jQuery(function($){
     doneBtn = $("#note-done-btn");
     formSubmitBtn = $("#form-submit");
     
-    noteDetail = $("#note-detail");
-    detailTitle = $("#detail-title");
-    detailIntroduction = $("#detail-introduction");
-    detailCategory = $("#detail-category");
-    detailSyntax = $("#detail-syntax");
-    detailDescription = $("#detail-description");
-    
-    notes = [];
     category = ["javascript", "jquery"];
     
     $.getJSON( "notes.json" )
@@ -34,29 +27,42 @@ jQuery(function($){
         for(var i=0; i<notes.length; i++) {
             displayNote(notes[i]);
         }
+        //notes = notes ? notes : [];
+        noteID = notes.length > 0 ? notes[length-1].id : 0;
     })
     .fail(function() {
         console.log( "error" );
+        notes = [];
+        noteID = 0;
     })
     .always(function() {
         console.log( "complete" );
     });
-    
-    //notes = notes ? notes : [];
-    noteID = notes.length > 0 ? notes[length-1].id : 0;
     /* ============================================================== */
     /*    VISUAL PART EVENTS  */
     /* ============================================================== */
     // TOGGLE FOR NOTE FORM 
     var formToggle = {
         showForm: function() {
-            $(formContainer).fadeIn(300);
+            $(formContainer).addClass("show");
         },
         hideForm: function() {
-            $(formContainer).fadeOut(300);
+            $(formContainer).removeClass("show");
         },
         toggleForm: function() {
-            $(formContainer).fadeToggle(300);
+            $(formContainer).toggleClass("show");
+        }
+    }
+    
+    var listToggle = {
+        showList: function() {
+            $(listContainer).removeClass("hide");
+        },
+        hideList: function() {
+            $(listContainer).addClass("hide");
+        },
+        toggleList: function() {
+            $(listContainer).toggleClass("hide");
         }
     }
 
@@ -103,13 +109,14 @@ jQuery(function($){
     function noteHeader() {
         $(addBtn).on("click", function(e) {
             formToggle.toggleForm();
+            listToggle.toggleList();
             setForm(e);
             manageBtnToggle.hideBtn();
             addBtnToggle.hideBtn();
             doneBtnToggle.showBtn();
-            $("html, body").animate({
-                scrollTop: $(formContainer).offset().top 
-            });
+//            $("html, body").animate({
+//                scrollTop: $(formContainer).offset().top 
+//            });
         });
 
         $(manageBtn).on("click", function() {
@@ -128,6 +135,7 @@ jQuery(function($){
             manageBtnToggle.toggleBtn();
             addBtnToggle.showBtn();
             formToggle.hideForm();
+            listToggle.showList();
         });
 
         manageBtnToggle.toggleBtn();
@@ -151,15 +159,6 @@ jQuery(function($){
                 var detailId = $(target).attr("href").slice(5);
                 displayDetail(notes[detailId]);
                 $(noteList).addClass("hide");
-                $(noteDetail).addClass("show");
-            }
-        });
-        $(noteDetail).on("click", function(e) {
-            var target = e.target;
-            if( $(target).is("a") ) {
-                e.preventDefault();
-                $(noteList).removeClass("hide");
-                $(noteDetail).removeClass("show");
             }
         });
     }

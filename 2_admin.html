@@ -40,35 +40,37 @@
                                 </div>
                             </div>
                             <div id="note-form-container" class="note-form-container">
-                                <div class="section-title">
-                                    <h4>Add a New Note</h4>
+                                <div class="notes-header">
+                                    <button class="cancel-btn btn btn-light" id="note-cancel-btn"><i class="fas fa-times-circle"></i>Cancel</button>
                                 </div>
-                                <form id="note-form">
-                                    <div class="form-field">
-                                        <input type="text" class="form-control" placeholder="Title" id="add-title" required>
-                                    </div>
-                                    <div class="form-field">
-                                        <span class="select-menu">
-                                            <select id="add-category" class="form-control" required>
-                                                <option value="">Category</option>
-                                                <option value="javascript">JavaScript</option>
-                                                <option value="jquery">jQuery</option>
-                                            </select>
-                                        </span>
-                                    </div>
-                                    <div class="form-field">
-                                        <textarea class="form-control" name="introduction" placeholder="Introduction" id="add-introduction"></textarea>
-                                    </div>
-                                    <div class="form-field">
-                                        <textarea class="form-control" name="syntax" placeholder="Syntax" id="add-syntax" class="syntax-editor"></textarea>
-                                    </div>
-                                    <div class="form-field">
-                                        <textarea class="form-control" name="description" placeholder="Description" id="add-description" class="description-editor"></textarea>
-                                    </div>
-                                    <div class="form-field">
-                                        <button id="form-submit" type="submit" value="Add Note" class="btn btn-success">Add Note</button>
-                                    </div>
-                                </form>
+                                <div class="notes-body">
+                                    <form id="note-form">
+                                        <div class="form-field">
+                                            <input type="text" class="form-control" placeholder="Title" id="add-title" required>
+                                        </div>
+                                        <div class="form-field">
+                                            <span class="select-menu">
+                                                <select id="add-category" class="form-control" required>
+                                                    <option value="">Category</option>
+                                                    <option value="javascript">JavaScript</option>
+                                                    <option value="jquery">jQuery</option>
+                                                </select>
+                                            </span>
+                                        </div>
+                                        <div class="form-field">
+                                            <textarea class="form-control" name="introduction" placeholder="Introduction" id="add-introduction"></textarea>
+                                        </div>
+                                        <div class="form-field">
+                                            <textarea class="form-control" name="syntax" placeholder="Syntax" id="add-syntax" class="syntax-editor"></textarea>
+                                        </div>
+                                        <div class="form-field">
+                                            <textarea class="form-control" name="description" placeholder="Description" id="add-description" class="description-editor"></textarea>
+                                        </div>
+                                        <div class="form-field">
+                                            <button id="form-submit" type="submit" value="Add Note" class="btn btn-success">Add Note</button>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -13,6 +13,7 @@ jQuery(function($){
     doneBtn = $("#note-done-btn");
     addBtn = $("#note-add-btn");
     manageBtn = $("#note-manage-btn");
+    cancelBtn = $("#note-cancel-btn");
     formEl = $("#note-form");
     noteList = $("#note-list");
     doneBtn = $("#note-done-btn");
@@ -41,7 +42,7 @@ jQuery(function($){
     /* ============================================================== */
     /*    VISUAL PART EVENTS  */
     /* ============================================================== */
-    // TOGGLE FOR NOTE FORM 
+    // TOGGLE FOR NOTE FORM
     var formToggle = {
         showForm: function() {
             $(formContainer).addClass("show");
@@ -103,6 +104,16 @@ jQuery(function($){
         }
     }
     
+    // TOGGLE FOR CANCEL BUTTON
+    var cancelBtnToggle = {
+        showBtn: function() {
+            $(cancelBtn).show();
+        },
+        hideBtn: function() {
+            $(cancelBtn).hide();
+        }
+    }
+    
     /* ============================================================== */
     /*    EVENT FOR ALL NOTE HEADING BUTTONS */
     /* ============================================================== */
@@ -116,6 +127,11 @@ jQuery(function($){
             //doneBtnToggle.showBtn();
         });
 
+        $(cancelBtn).on("click", function() {
+            formToggle.hideForm();
+            listToggle.showList();
+        });
+        
         $(manageBtn).on("click", function() {
             var itemBtn = $(".item-btns");
             $(itemBtn).toggleClass("active");
@@ -134,7 +150,7 @@ jQuery(function($){
             formToggle.hideForm();
             listToggle.showList();
         });
-
+        
         manageBtnToggle.toggleBtn();
     }
 

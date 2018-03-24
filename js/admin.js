@@ -85,7 +85,7 @@ jQuery(function($){
             $(manageBtn).hide();
         },
         toggleBtn: function() {
-            if( $(noteList).is(":parent") ) {
+            if( $(".list-item").length > 0 ) {
                 $(manageBtn).show();
             } else {
                 $(manageBtn).hide();
@@ -112,11 +112,8 @@ jQuery(function($){
             listToggle.toggleList();
             setForm(e);
             manageBtnToggle.hideBtn();
-            addBtnToggle.hideBtn();
-            doneBtnToggle.showBtn();
-//            $("html, body").animate({
-//                scrollTop: $(formContainer).offset().top 
-//            });
+            //addBtnToggle.hideBtn();
+            //doneBtnToggle.showBtn();
         });
 
         $(manageBtn).on("click", function() {
@@ -152,13 +149,8 @@ jQuery(function($){
             } else if( $(target).hasClass("edit-btn") ) {
                 setForm(e);
                 $("html, body").animate({
-                    scrollTop: $(formContainer).offset().top 
+                    scrollTop: 0
                 });
-            } else if( $(target).is("a") ) {
-                e.preventDefault();
-                var detailId = $(target).attr("href").slice(5);
-                displayDetail(notes[detailId]);
-                $(noteList).addClass("hide");
             }
         });
     }
@@ -224,8 +216,9 @@ jQuery(function($){
         $("html, body").animate({
             scrollTop: 0
         });
-
+        manageBtnToggle.showBtn();
         formToggle.hideForm();
+        listToggle.showList();
     }
 
     // DELETE A NEW NOTE BASED ON THE ID
@@ -360,6 +353,7 @@ jQuery(function($){
         $(formSubmitBtn).text(btnTxt);
         
         // SHOW THE FORM AFTER IT HAS BEEN ASSIGNED VALUES
+        listToggle.hideList();
         formToggle.showForm();
     }
     

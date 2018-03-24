@@ -62,9 +62,11 @@ $color_secondary: #20a714;
     @media screen and (min-width: $min) and (max-width: $max) { @content; }
 }
 
-html, body { 
+html, body {
+    height: 100%;
     font: normal 16px/1.2 sans-serif; 
-    color: #000; 
+    color: #000;
+    overflow-x: hidden;
 }
 
 h1 {}
@@ -167,12 +169,12 @@ button, input[type=submit], .btn {
             width: 100%;
             transition: 0.3s;
             &.hide{
-                left: -100%;
+                left: -100vw;
             }
         }
         .note-form-container {
             position: absolute;
-            left: 100%;
+            left: 100vw;
             width: 100%;
             transition: 0.3s;
             &.show{

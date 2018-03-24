@@ -13,7 +13,7 @@ blockquote:before, blockquote:after, q:before, q:after { content: ''; content: n
 
 table { border-collapse: collapse; border-spacing: 0; }
 
-html, body { font: normal 16px/1.2 sans-serif; color: #000; }
+html, body { height: 100%; font: normal 16px/1.2 sans-serif; color: #000; overflow-x: hidden; }
 
 h4 { font: normal 20px/1.5 sans-serif; }
 
@@ -63,9 +63,9 @@ button, input[type=submit], .btn { text-transform: uppercase; letter-spacing: 0.
 
 #notes-module .notes-wrapper .note-list-container { position: absolute; left: 0; width: 100%; -webkit-transition: 0.3s; -o-transition: 0.3s; transition: 0.3s; }
 
-#notes-module .notes-wrapper .note-list-container.hide { left: -100%; }
+#notes-module .notes-wrapper .note-list-container.hide { left: -100vw; }
 
-#notes-module .notes-wrapper .note-form-container { position: absolute; left: 100%; width: 100%; -webkit-transition: 0.3s; -o-transition: 0.3s; transition: 0.3s; }
+#notes-module .notes-wrapper .note-form-container { position: absolute; left: 100vw; width: 100%; -webkit-transition: 0.3s; -o-transition: 0.3s; transition: 0.3s; }
 
 #notes-module .notes-wrapper .note-form-container.show { left: 0; }
 

@@ -1,47 +1,32 @@
 jQuery(function($){
     // Declare Global Note Vars
     var noteID, notes, formEl, listContainer, noteList, addBtn, manageBtn, doneBtn, editBtn, formContainer, syntaxEditor, descriptionEditor, formTitle, formCategory, formIntroduction, formSyntax, formDescription, formNoteID, formSubmitBtn, category, detailTitle, detailCategory, detailIntroduction, detailSyntax, detailDescription;
-
+    
     // Declare Global CKEditor WYSIWYG Fields
     syntaxEditor = CKEDITOR.replace('add-syntax');
     descriptionEditor = CKEDITOR.replace('add-description');
     
     // Get All Global DOM Element
+    // Containers
     formContainer = $("#note-form-container");
     listContainer = $("#note-list-container");
+    // Buttons
     editBtn = $("#note-edit-btn");
     doneBtn = $("#note-done-btn");
     addBtn = $("#note-add-btn");
     manageBtn = $("#note-manage-btn");
     cancelBtn = $("#note-cancel-btn");
+    // Form
     formEl = $("#note-form");
+    // Note
     noteList = $("#note-list");
-    doneBtn = $("#note-done-btn");
-    formSubmitBtn = $("#form-submit");
-    
     category = ["javascript", "jquery"];
     
-    $.getJSON( "notes.json" )
-    .done(function( data ) {
-        console.log( "success" );
-        notes = data.notes;
-        for(var i=0; i<notes.length; i++) {
-            displayNote(notes[i]);
-        }
-        //notes = notes ? notes : [];
-        noteID = notes.length > 0 ? notes[length-1].id : 0;
-    })
-    .fail(function() {
-        console.log( "error" );
-        notes = [];
-        noteID = 0;
-    })
-    .always(function() {
-        console.log( "complete" );
-    });
-    /* ============================================================== */
-    /*    VISUAL PART EVENTS  */
-    /* ============================================================== */
+    // LOAD DATA FROM JSON FILE
+    loadData();
+/* ============================================================== */
+/*    VISUAL PART EVENTS  */
+/* ============================================================== */
     // TOGGLE FOR NOTE FORM
     var formToggle = {
         showForm: function() {
@@ -86,7 +71,9 @@ jQuery(function($){
             $(manageBtn).hide();
         },
         toggleBtn: function() {
+            console.log($(".list-item").length);
             if( $(".list-item").length > 0 ) {
+                console.log('works');
                 $(manageBtn).show();
             } else {
                 $(manageBtn).hide();
@@ -113,6 +100,33 @@ jQuery(function($){
             $(cancelBtn).hide();
         }
     }
+    
+    // INITIAL NOTE HEADER VISUAL 
+    noteHeader();
+    
+    // INITIAL NOTE BODY EVENTS
+    $(noteList).on("click", function(e) {
+        var target = e.target;
+        if( $(target).hasClass("delete-btn") ) {
+            deleteNote(target);
+        } else if( $(target).hasClass("edit-btn") ) {
+            setForm(e);
+            $("html, body").animate({
+                scrollTop: 0
+            });
+        }
+    });
+    
+    // INITIAL FORM EVENTS
+    $(formEl).on('submit', function(e) {
+        e.preventDefault();
+        // Update The Current Note
+        saveNote(getFormData());
+        
+        listToggle.showList();
+        formToggle.hideForm();
+        manageBtnToggle.toggleBtn();
+    });
     
     /* ============================================================== */
     /*    EVENT FOR ALL NOTE HEADING BUTTONS */
@@ -153,39 +167,10 @@ jQuery(function($){
         
         manageBtnToggle.toggleBtn();
     }
-
-    /* ============================================================== */
-    /* EVENT FOR ALL NOTE BODY BUTTONS */
-    /* ============================================================== */
-    function noteBody() {
-        $(noteList).on("click", function(e) {
-            var target = e.target;
-            if( $(target).hasClass("delete-btn") ) {
-                deleteNote(target);
-            } else if( $(target).hasClass("edit-btn") ) {
-                setForm(e);
-                $("html, body").animate({
-                    scrollTop: 0
-                });
-            }
-        });
-    }
     
-    /* ============================================================== */
-    /*    MAIN NOTE FUNCTIONS CALL */
-    /* ============================================================== */
-    noteHeader();
-    noteBody();
-    
-    $(formEl).on('submit', function(e) {
-        e.preventDefault();
-        // Update The Current Note
-        saveNote(getFormData());
-    })
-    
-    /* ============================================================== */
-    /*    FUNCTIONS TO MANAGE THE NOTE LIST  */
-    /* ============================================================== */
+/* ============================================================== */
+/*    FUNCTIONS TO MANAGE THE NOTE LIST  */
+/* ============================================================== */
     function saveNote(obj) {
         var noteObj;
 
@@ -208,33 +193,14 @@ jQuery(function($){
                 syntax: obj.syntax,
                 description: obj.description
             }
-            notes[noteID] = newNote;
+            notes.push(newNote);
             noteID++;
             noteObj = newNote;
         }
         
         displayNote(noteObj);
         
-        var noteData = {"notes": notes};
-        $.post("notes.php", {
-            json: JSON.stringify(noteData)
-        })
-        .done(function() {
-            console.log( "second success" );
-        })
-        .fail(function() {
-            console.log( "error" );
-        })
-        .always(function() {
-            console.log( "finished" );
-        });
-
-        $("html, body").animate({
-            scrollTop: 0
-        });
-        manageBtnToggle.showBtn();
-        formToggle.hideForm();
-        listToggle.showList();
+        saveData(notes);
     }
 
     // DELETE A NEW NOTE BASED ON THE ID
@@ -242,8 +208,15 @@ jQuery(function($){
         var targetID = $(e).attr("id").slice(10);
         var r = confirm("Are You Sure You Want to Delete This Item?");
         if( r === true ) {
-            notes[targetID] = '';
-            $("#note"+targetID).remove();
+            var index = notes.findIndex(function(element) {
+                return element.id && element.id.toString() === targetID;
+            });
+            if (index >= -1) {
+                notes.splice(index,1);
+                $("#note"+targetID).remove();
+                console.table(notes);
+                saveData(notes);
+            }
         } else {
             return false;
         }
@@ -283,17 +256,8 @@ jQuery(function($){
 
         // Item Introduction
         itemIntroduction = $("<p></p>").addClass(introductionClass).text(note.introduction);
-
         itemTop = $("<div></div>").addClass(topClass).append(itemHeader, itemIntroduction);
-
-        /* =========== Item Bottom ============ */
-//        syntaxTitle = $("<h4></h4>").text("Syntax");
-//        itemSyntax = $("<div></div>").addClass(syntaxClass).html(note.syntax).prepend(syntaxTitle);
-//        descriptionTitle = $("<h4></h4>").text("Description");
-//        itemDescription = $("<div></div>").addClass(descriptionClass).html(note.description).prepend(descriptionTitle);
-//
-//        itemBottom = $("<div></div>").addClass(bottomClass).append(itemSyntax, itemDescription);
-
+        
         /* =========== Item Buttons ============ */
         itemDeleteBtn = $("<i></i>").addClass(deleteBtnClass);
         itemDelete = $("<button></button>").attr("id", deleteId).addClass(deleteClass).append(itemDeleteBtn);
@@ -304,8 +268,6 @@ jQuery(function($){
         itembtns = $("<div></div>").addClass(btnsClass).append(itemDelete, itemEdit);
 
         /* =========== List Item ============ */
-//        listItem = $("<li></li>").attr("id", itemId).addClass(itemClass).append(itemTop, itemBottom, itembtns);
-
         listLink = $("<a></a>").attr("href", "#"+itemId).append(itemTop, itembtns);
         listItem = $("<li></li>").attr("id", itemId).addClass(itemClass).append(listLink);
         
@@ -316,19 +278,10 @@ jQuery(function($){
             $(noteList).find(".category-"+note.category).find("ul").append(listItem);
         }
     }
-
-    // DISPLAY THE ELEMENT WITH NEW DOM STRUCTURE
-    function displayDetail(note) {
-        $(detailTitle).text(note.title);
-        $(detailCategory).text(note.category);
-        $(detailIntroduction).text(note.introduction);
-        $(detailSyntax).html(note.syntax);
-        $(detailDescription).html(note.description);
-    }
     
-    /* ============================================================== */
-    /* FUNCTIONS TO MANAGE THE FORM */   
-    /* ============================================================== */
+/* ============================================================== */
+/* FUNCTIONS TO MANAGE THE FORM */   
+/* ============================================================== */
     // TRIGGER THE SUBMIT FUNCTION WHEN FORM SUBMITS
     function setForm(e) {
         var target = e.target;
@@ -339,8 +292,10 @@ jQuery(function($){
         formNoteID = '';
         formSyntax = syntaxEditor.activeFilter.editor;
         formDescription = descriptionEditor.activeFilter.editor;
+        formSubmitBtn = $("#form-submit");
         
         id = $(target).attr("id");
+        
         if ($(target).hasClass("edit-btn")) {
             id = id.slice(8);
             title = notes[id].title;
@@ -397,5 +352,47 @@ jQuery(function($){
         }
         
         return resObj;
+    }
+    
+/* ============================================================== */
+/* FUNCTIONS TO LOAD AND SAVE JSON DATA */   
+/* ============================================================== */
+    function loadData() {
+        var jqxhr = $.getJSON( "notes.json", function(data) {
+            console.log( "success" );
+            notes = data.notes ? data.notes : [];
+            noteID = 0;
+            if( notes.length > 0 ) {
+                for(var i=0; i<notes.length; i++) {
+                    displayNote(notes[i]);
+                    if(notes[i].id > noteID) { noteID = notes[i].id+1; }
+                }
+            }
+        })
+        .done(function() {
+            console.log( "second success" );
+        })
+        .fail( function(d, textStatus, error) {
+            console.error("getJSON failed, status: " + textStatus + ", error: "+error);
+        })
+        .always(function() {
+            console.log( "complete" );
+        });
+    }
+    function saveData(notes) {
+        var noteData = {"notes": notes};
+        
+        $.post("notes.php", {
+            json: JSON.stringify(noteData)
+        })
+        .done(function() {
+            console.log( "second success" );
+        })
+        .fail(function() {
+            console.log( "error" );
+        })
+        .always(function() {
+            console.log( "finished" );
+        });
     }
 });

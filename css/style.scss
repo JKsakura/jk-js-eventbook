@@ -122,6 +122,9 @@ button, input[type=submit], .btn {
 /* CREATE NEW NOTE FORM
 /* ============================ */
 #note-form {
+    select {
+        text-transform: capitalize;
+    }
     .form-field {
         text-align: center;
         &:first-child {
@@ -187,6 +190,11 @@ button, input[type=submit], .btn {
             }
         }
         #note-list {
+            .category {
+                h3 {
+                    text-transform: capitalize;
+                }
+            }
             .list-item {
                 position: relative;
                 border: solid 1px #eee;

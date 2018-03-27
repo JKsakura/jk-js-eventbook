@@ -1,6 +1,6 @@
 jQuery(function($){
     // Declare Global Note Vars
-    var noteID, notes, formEl, listContainer, noteList, addBtn, manageBtn, doneBtn, editBtn, formContainer, syntaxEditor, descriptionEditor, formTitle, formCategory, formIntroduction, formSyntax, formDescription, formNoteID, formSubmitBtn, category, detailTitle, detailCategory, detailIntroduction, detailSyntax, detailDescription;
+    var noteID, notes, formEl, listContainer, noteList, addBtn, manageBtn, doneBtn, editBtn, formContainer, syntaxEditor, descriptionEditor, category, detailTitle, detailCategory, detailIntroduction, detailSyntax, detailDescription;
     
     // Declare Global CKEditor WYSIWYG Fields
     syntaxEditor = CKEDITOR.replace('add-syntax');
@@ -101,6 +101,83 @@ jQuery(function($){
         }
     }
     
+/* ============================================================== */
+/* FUNCTIONS TO MANAGE THE FORM */   
+/* ============================================================== */
+    // TRIGGER THE SUBMIT FUNCTION WHEN FORM SUBMITS
+    var form = (function(){
+        var formNoteID = null,
+            formTitle = $("#add-title"),
+            formCategory = $("#add-category"),
+            formIntroduction = $("#add-introduction"),
+            formSyntax = syntaxEditor.activeFilter.editor,
+            formDescription = descriptionEditor.activeFilter.editor,
+            formSubmitBtn = $("#form-submit");
+        
+        var id, title, category, introduction, syntax, description, btnTxt;
+        return {
+            setForm: function(e) {
+                id = $(target).attr("id");
+
+                if ($(target).hasClass("edit-btn")) {
+                    id = id.slice(8);
+                    title = notes[id].title;
+                    category = notes[id].category;
+                    introduction = notes[id].introduction;
+                    syntax = notes[id].syntax;
+                    description = notes[id].description;
+                    btnTxt = "Update Note";
+                }
+                else {
+                    id = '';
+                    title = "";
+                    category = "";
+                    introduction = "";
+                    syntax = "";
+                    description = "";
+                    btnTxt = "Add Note";
+                }
+
+                formNoteID = id;
+                $(formTitle).val(title);
+                $(formCategory).val(category);
+                $(formIntroduction).val(introduction);
+                formSyntax.setData(syntax);
+                formDescription.setData(description);
+                $(formSubmitBtn).text(btnTxt);
+
+                // SHOW THE FORM AFTER IT HAS BEEN ASSIGNED VALUES
+                listToggle.hideList();
+                formToggle.showForm();
+            },
+            getForm: function() {
+                // fetch form data
+                var id = formNoteID;
+                var title = $(formTitle).val();
+                var category = $(formCategory).val();
+                var introduction = $(formIntroduction).val();
+                var syntax =formSyntax.getData();
+                var description = formDescription.getData();
+
+                // format obj
+                var resObj = {
+                    id: '',
+                    title: title,
+                    category: category,
+                    introduction: introduction,
+                    syntax: syntax,
+                    description: description
+                }
+
+                if (id) {
+                    resObj['id'] = id;
+                }
+
+                return resObj;
+            }
+        };
+    }());
+    
     // INITIAL NOTE HEADER VISUAL 
     noteHeader();
     
@@ -110,7 +187,7 @@ jQuery(function($){
         if( $(target).hasClass("delete-btn") ) {
             deleteNote(target);
         } else if( $(target).hasClass("edit-btn") ) {
-            setForm(e);
+            form.setForm(e);
             $("html, body").animate({
                 scrollTop: 0
             });
@@ -121,7 +198,7 @@ jQuery(function($){
     $(formEl).on('submit', function(e) {
         e.preventDefault();
         // Update The Current Note
-        saveNote(getFormData());
+        saveNote(form.getForm());
         
         listToggle.showList();
         formToggle.hideForm();
@@ -135,7 +212,7 @@ jQuery(function($){
         $(addBtn).on("click", function(e) {
             formToggle.toggleForm();
             listToggle.toggleList();
-            setForm(e);
+            form.setForm(e);
             manageBtnToggle.hideBtn();
             //addBtnToggle.hideBtn();
             //doneBtnToggle.showBtn();
@@ -278,82 +355,6 @@ jQuery(function($){
             $(noteList).find(".category-"+note.category).find("ul").append(listItem);
         }
     }
-    
-/* ============================================================== */
-/* FUNCTIONS TO MANAGE THE FORM */   
-/* ============================================================== */
-    // TRIGGER THE SUBMIT FUNCTION WHEN FORM SUBMITS
-    function setForm(e) {
-        var target = e.target;
-        var id, title, category, introduction, syntax, description, btnTxt;
-        formTitle = $("#add-title");
-        formCategory = $("#add-category");
-        formIntroduction = $("#add-introduction");
-        formNoteID = '';
-        formSyntax = syntaxEditor.activeFilter.editor;
-        formDescription = descriptionEditor.activeFilter.editor;
-        formSubmitBtn = $("#form-submit");
-        
-        id = $(target).attr("id");
-        
-        if ($(target).hasClass("edit-btn")) {
-            id = id.slice(8);
-            title = notes[id].title;
-            category = notes[id].category;
-            introduction = notes[id].introduction;
-            syntax = notes[id].syntax;
-            description = notes[id].description;
-            btnTxt = "Update Note";
-        }
-        else {
-            id = '';
-            title = "";
-            category = "";
-            introduction = "";
-            syntax = "";
-            description = "";
-            btnTxt = "Add Note";
-        }
-        
-        formNoteID = id;
-        $(formTitle).val(title);
-        $(formCategory).val(category);
-        $(formIntroduction).val(introduction);
-        formSyntax.setData(syntax);
-        formDescription.setData(description);
-        $(formSubmitBtn).text(btnTxt);
-        
-        // SHOW THE FORM AFTER IT HAS BEEN ASSIGNED VALUES
-        listToggle.hideList();
-        formToggle.showForm();
-    }
-    
-    function getFormData() {
-        // fetch form data
-        var id = formNoteID;
-        var title = $(formTitle).val();
-        var category = $(formCategory).val();
-        var introduction = $(formIntroduction).val();
-        var syntax =formSyntax.getData();
-        var description = formDescription.getData();
-        
-        // format obj
-        var resObj = {
-            id: '',
-            title: title,
-            category: category,
-            introduction: introduction,
-            syntax: syntax,
-            description: description
-        }
-        
-        if (id) {
-            resObj['id'] = id;
-        }
-        
-        return resObj;
-    }
-    
 /* ============================================================== */
 /* FUNCTIONS TO LOAD AND SAVE JSON DATA */   
 /* ============================================================== */

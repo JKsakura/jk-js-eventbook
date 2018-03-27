@@ -342,7 +342,7 @@ jQuery(function($){
     
     // LOAD DATA FROM JSON FILE
     dataManager.loadData();
-    //dataManager.resetData();
+    dataManager.resetData();
     
     
     // INITIAL NOTE BODY EVENTS
@@ -409,7 +409,7 @@ jQuery(function($){
             formCategory;
         for(var i=0; i<category.length; i++) {
             listClass = "category category-"+category[i];
-            listCategory = $("<li></li>").addClass(listClass).html("<h3 class=\"h3\">"+category[i]+"</h3>");
+            listCategory = $("<li></li>").addClass(listClass).html("<h3 class=\"h3\">"+category[i]+"</h3>").append("<ul></ul>");
             $("#note-list").append(listCategory);
             
             formCategory = $("<option></option>").val(category[i]).text(category[i]);

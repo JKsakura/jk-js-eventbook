@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, maximum-scale=1">
         <title>JavaScript Handbook</title>
         <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="css/atom-one-light.css">
         <link rel="stylesheet" type="text/css" href="css/style.css">
         <script type="text/javascript" src="js/jquery.js"></script>
         <script src="ckeditor/ckeditor.js"/></script>
@@ -22,17 +23,19 @@
                         <div class="notes-wrapper">
                             <div id="note-list-container" class="note-list-container">
                                 <div class="notes-body">
-                                    <ul id="note-list"></ul>
+                                    <ul id="note-list" class="list-group"></ul>
                                 </div>
                             </div>
                             <div id="note-detail-container" class="note-detail-container">
                                 <div id="note-detail">
                                     <a href="#note-list" class="back-to-all">Back To All Notes</a>
-                                    <h2 class="h2 detail-title"></h2>
-                                    <h5 class="h5 detail-category"></h5>
-                                    <p class="detail-introduction"></p>
-                                    <div class="detail-syntax"></div>
-                                    <div class="detail-description"></div>
+                                    <div class="detail-header">
+                                        <h1 class="h1 detail-title"></h1>
+                                        <h5 class="h5 detail-category"></h5>
+                                    </div>
+                                    <p class="detail-introduction lead"></p>
+                                    <div class="detail-syntax lead code javascript"></div>
+                                    <div class="detail-description lead"></div>
                                 </div>
                             </div>
                         </div>
@@ -46,6 +49,7 @@
         </div>
         <!-- END SITE -->
     <script type="text/javascript" defer src="js/fontawesome-all.min.js"></script>
+    <script type="text/javascript" defer src="js/plugins.js"></script>
     <script type="text/javascript" src="js/script.js"></script>
     </body>
 </html>

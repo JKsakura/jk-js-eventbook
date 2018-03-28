@@ -49,7 +49,7 @@ jQuery(function ($) {
             // DISPLAY THE ELEMENT WITH NEW DOM STRUCTURE
             displayNote: function (note) {
                 // Define ID
-                var itemId = "note" + note.id
+                var itemId = "note" + note.id;
 
                 // Define Classes
                 var itemClass = "list-item list-group-item list-group-item-action",
@@ -74,7 +74,7 @@ jQuery(function ($) {
                 var listLink = $("<a></a>").attr("href", "#" + itemId).append(itemTop);
                 var listItem = $("<li></li>").attr("id", itemId).addClass(itemClass).append(listLink);
 
-                $(noteList).find(".category-" + note.category).find("ul").append(listItem);
+                $(noteList).find(".category-" + note.category).after(listItem);
             },
             fetchDetail: function (target) {
                 var id = target.hash.slice(5);
@@ -86,9 +86,9 @@ jQuery(function ($) {
             },
             displayDetail: function(note) {
                 var detailTitle = $(".detail-title").html(note.title),
-                    detailCategory = $(".detail-category").html(note.introduction),
+                    detailCategory = $(".detail-category").html(note.category),
                     detailIntroduction = $(".detail-introduction").html(note.introduction),
-                    detailSyntax = $(".detail-syntax").html(note.syntax),
+                    detailSyntax = $(".detail-syntax").addClass("code").html(note.syntax),
                     detailDescription = $(".detail-description").html(note.description);
             }
         };
@@ -134,6 +134,11 @@ jQuery(function ($) {
             noteManager.fetchDetail(target);
             listToggle.hideList();
             detailToggle.showDetail();
+            hljs.initHighlightingOnLoad();
+            hljs.configure({ useBR: true });
+            $('div.code').each(function (i, block) {
+                hljs.highlightBlock(block);
+            });
         }
     });
 
@@ -143,7 +148,7 @@ jQuery(function ($) {
             e.preventDefault();
             detailToggle.hideDetail();
             listToggle.showList();
-        }
+        } 
     });
     /* ============================================================== */
     /*    EVENT FOR ALL NOTE HEADING BUTTONS */
@@ -153,9 +158,9 @@ jQuery(function ($) {
             listClass,
             formCategory;
         for (var i = 0; i < category.length; i++) {
-            listClass = "list-group category-" + category[i];
-            listCategory = $("<li></li>").addClass(listClass).html("<h4 class=\"h4\">" + category[i] + "</h4>").append("<ul></ul>");
-            $("#note-list").append(listCategory);
+            listClass = "list-group-item list-group-item-primary category-" + category[i];
+            listCategory = $("<li></li>").addClass(listClass).text(category[i]);
+            $("#note-list").append($("<ul></ul>").append(listCategory));
         }
     }
 });

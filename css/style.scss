@@ -191,6 +191,19 @@ button, input[type=submit], .btn {
                 transition: left 0.3s 0s, transform 0s 0s;
             }
         }
+        .note-detail-container {
+            position: absolute;
+            left: 100vw;
+            width: 100%;
+            padding: 50px 0;
+            transform: scale(0);
+            transition: left 0.3s 0s, transform 0s 0.3s;
+            &.show {
+                left: 0;
+                transform: scale(1);
+                transition: left 0.3s 0s, transform 0s 0s;
+            }
+        }
         #note-list {
             .list-group {
                 margin-bottom: 40px;
@@ -203,6 +216,9 @@ button, input[type=submit], .btn {
                 position: relative;
                 border: solid 1px #eee;
                 overflow: hidden;
+                a {
+                    display: block;
+                }
                 .item-top {
                     pointer-events: none;
                     .item-header {

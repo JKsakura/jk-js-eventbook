@@ -71,11 +71,17 @@ button, input[type=submit], .btn { text-transform: uppercase; letter-spacing: 0.
 
 #notes-module .notes-wrapper .note-form-container.show { left: 0; -webkit-transform: scale(1); -ms-transform: scale(1); transform: scale(1); -webkit-transition: left 0.3s 0s, -webkit-transform 0s 0s; transition: left 0.3s 0s, -webkit-transform 0s 0s; -o-transition: left 0.3s 0s, transform 0s 0s; transition: left 0.3s 0s, transform 0s 0s; transition: left 0.3s 0s, transform 0s 0s, -webkit-transform 0s 0s; }
 
+#notes-module .notes-wrapper .note-detail-container { position: absolute; left: 100vw; width: 100%; padding: 50px 0; -webkit-transform: scale(0); -ms-transform: scale(0); transform: scale(0); -webkit-transition: left 0.3s 0s, -webkit-transform 0s 0.3s; transition: left 0.3s 0s, -webkit-transform 0s 0.3s; -o-transition: left 0.3s 0s, transform 0s 0.3s; transition: left 0.3s 0s, transform 0s 0.3s; transition: left 0.3s 0s, transform 0s 0.3s, -webkit-transform 0s 0.3s; }
+
+#notes-module .notes-wrapper .note-detail-container.show { left: 0; -webkit-transform: scale(1); -ms-transform: scale(1); transform: scale(1); -webkit-transition: left 0.3s 0s, -webkit-transform 0s 0s; transition: left 0.3s 0s, -webkit-transform 0s 0s; -o-transition: left 0.3s 0s, transform 0s 0s; transition: left 0.3s 0s, transform 0s 0s; transition: left 0.3s 0s, transform 0s 0s, -webkit-transform 0s 0s; }
+
 #notes-module .notes-wrapper #note-list .list-group { margin-bottom: 40px; }
 
 #notes-module .notes-wrapper #note-list .list-group h4 { text-transform: capitalize; margin-bottom: 10px; }
 
 #notes-module .notes-wrapper #note-list .list-item { position: relative; border: solid 1px #eee; overflow: hidden; }
+
+#notes-module .notes-wrapper #note-list .list-item a { display: block; }
 
 #notes-module .notes-wrapper #note-list .list-item .item-top { pointer-events: none; }
 

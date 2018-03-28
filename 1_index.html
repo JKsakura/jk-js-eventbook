@@ -20,28 +20,19 @@
                 <section id="notes-module" class="main-content">
                     <div class="wrap">
                         <div class="notes-wrapper">
-                            <div class="notes-body">
-                                <ul id="noteList">
-                                    <li class="category-javascript">
-                                        <h3>JavaScript</h3>
-                                        <ul></ul>
-                                    </li>
-                                    <li class="category-jquery">
-                                        <h3>jQuery</h3>
-                                        <ul></ul>
-                                    </li>
-                                </ul>
+                            <div id="note-list-container" class="note-list-container">
+                                <div class="notes-body">
+                                    <ul id="note-list"></ul>
+                                </div>
+                            </div>
+                            <div id="note-detail-container" class="note-detail-container">
                                 <div id="note-detail">
-                                    <a href="#">Back To All Notes</a>
-                                    <h2 id="detail-title"></h2>
-                                    <h5 id="detail-category"></h5>
-                                    <p id="detail-introduction"></p>
-                                    <div id="detail-syntax">
-                                        <p></p>
-                                    </div>
-                                    <div id="detail-description">
-                                        <p></p>
-                                    </div>
+                                    <a href="#note-list" class="back-to-all">Back To All Notes</a>
+                                    <h2 class="h2 detail-title"></h2>
+                                    <h5 class="h5 detail-category"></h5>
+                                    <p class="detail-introduction"></p>
+                                    <div class="detail-syntax"></div>
+                                    <div class="detail-description"></div>
                                 </div>
                             </div>
                         </div>

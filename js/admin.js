@@ -428,7 +428,9 @@ jQuery(function($){
             } else if( $(target).hasClass("cancel-btn") ) {
                 formToggle.hideForm();
                 listToggle.showList();
-                manageBtnToggle.toggleBtn();
+                if ( !$("#note-done-btn").is(":visible") ) {
+                    manageBtnToggle.toggleBtn();
+                }
             }
         });
     }

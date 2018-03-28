@@ -154,6 +154,8 @@ button, input[type=submit], .btn {
     #note-done-btn { display: none; }
     .notes-wrapper {
         position: relative;
+        max-width: 800px;
+        margin: 0 auto;
         .notes-header {
             margin-bottom: 20px;
             .btn {
@@ -190,19 +192,17 @@ button, input[type=submit], .btn {
             }
         }
         #note-list {
-            .category {
-                h3 {
+            .list-group {
+                margin-bottom: 40px;
+                h4 {
                     text-transform: capitalize;
+                    margin-bottom: 10px;
                 }
             }
             .list-item {
                 position: relative;
                 border: solid 1px #eee;
                 overflow: hidden;
-                a {
-                    display: block;
-                    color: #000;
-                }
                 .item-top {
                     pointer-events: none;
                     .item-header {

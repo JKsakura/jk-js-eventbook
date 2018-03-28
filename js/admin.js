@@ -1,13 +1,13 @@
 jQuery(function($){
     // Declare Global Note Vars
     var noteID, notes;
+    
     // Declare Global CKEditor WYSIWYG Fields
     var syntaxEditor = CKEDITOR.replace('add-syntax'),
-        descriptionEditor = CKEDITOR.replace('add-description');
-    var formEl = $("#note-form");
-    var noteList = $("#note-list");
-    
-    var category = ["array", "booleans", "date", "error"];
+        descriptionEditor = CKEDITOR.replace('add-description'),
+        formEl = $("#note-form"),
+        noteList = $("#note-list"),
+        category = ["array", "booleans", "date", "error"];
     
 /* ============================================================== */
 /*    VISUAL PART EVENTS  */
@@ -67,9 +67,7 @@ jQuery(function($){
                 $(manageBtn).hide();
             },
             toggleBtn: function() {
-                console.log($(".list-item").length);
                 if( $(".list-item").length > 0 ) {
-                    console.log('works');
                     $(manageBtn).show();
                 } else {
                     $(manageBtn).hide();
@@ -304,7 +302,6 @@ jQuery(function($){
                     if( notes.length > 0 ) {
                         for(var i=0; i<notes.length; i++) {
                             noteManager.displayNote(notes[i]);
-                            console.log(notes[i]);
                             if(notes[i].id >= noteID) { noteID = notes[i].id+1; }
                         }
                     }
@@ -342,7 +339,7 @@ jQuery(function($){
     
     // LOAD DATA FROM JSON FILE
     dataManager.loadData();
-    dataManager.resetData();
+    //dataManager.resetData();
     
     
     // INITIAL NOTE BODY EVENTS
@@ -368,7 +365,6 @@ jQuery(function($){
         formToggle.hideForm();
         manageBtnToggle.toggleBtn();
     });
-    
     /* ============================================================== */
     /*    EVENT FOR ALL NOTE HEADING BUTTONS */
     /* ============================================================== */
@@ -381,12 +377,19 @@ jQuery(function($){
                 form.setForm(e);
                 manageBtnToggle.hideBtn();
             } else if( $(target).hasClass("manage-btn") ) {
-                var itemBtn = $(".item-btns");
-                $(itemBtn).toggleClass("active");
+                $(".item-btns").toggleClass("active");
                 formToggle.hideForm();
                 manageBtnToggle.hideBtn();
                 addBtnToggle.hideBtn();
                 doneBtnToggle.showBtn();
+                $( ".list-group ul" ).each(function() {
+                    if( $(this).sortable() ) {
+                        $(this).sortable("enable");
+                    } else {
+                        $(this).sortable();
+                        $(this).disableSelection();
+                    }
+                });
             } else if( $(target).hasClass("done-btn") ) {
                 var itemBtn = $(".item-btns");
                 $(itemBtn).removeClass("active");
@@ -395,6 +398,9 @@ jQuery(function($){
                 addBtnToggle.showBtn();
                 formToggle.hideForm();
                 listToggle.showList();
+                $( ".list-group ul" ).each(function() {
+                    $(this).sortable("disable");
+                });
             } else if( $(target).hasClass("cancel-btn") ) {
                 formToggle.hideForm();
                 listToggle.showList();
@@ -408,8 +414,8 @@ jQuery(function($){
             listClass,
             formCategory;
         for(var i=0; i<category.length; i++) {
-            listClass = "category category-"+category[i];
-            listCategory = $("<li></li>").addClass(listClass).html("<h3 class=\"h3\">"+category[i]+"</h3>").append("<ul></ul>");
+            listClass = "list-group category-"+category[i];
+            listCategory = $("<li></li>").addClass(listClass).html("<h4 class=\"h4\">"+category[i]+"</h4>").append("<ul></ul>");
             $("#note-list").append(listCategory);
             
             formCategory = $("<option></option>").val(category[i]).text(category[i]);

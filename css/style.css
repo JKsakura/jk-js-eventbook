@@ -55,7 +55,7 @@ button, input[type=submit], .btn { text-transform: uppercase; letter-spacing: 0.
 /* ============================ */
 #notes-module #note-done-btn { display: none; }
 
-#notes-module .notes-wrapper { position: relative; }
+#notes-module .notes-wrapper { position: relative; max-width: 800px; margin: 0 auto; }
 
 #notes-module .notes-wrapper .notes-header { margin-bottom: 20px; }
 
@@ -71,11 +71,11 @@ button, input[type=submit], .btn { text-transform: uppercase; letter-spacing: 0.
 
 #notes-module .notes-wrapper .note-form-container.show { left: 0; -webkit-transform: scale(1); -ms-transform: scale(1); transform: scale(1); -webkit-transition: left 0.3s 0s, -webkit-transform 0s 0s; transition: left 0.3s 0s, -webkit-transform 0s 0s; -o-transition: left 0.3s 0s, transform 0s 0s; transition: left 0.3s 0s, transform 0s 0s; transition: left 0.3s 0s, transform 0s 0s, -webkit-transform 0s 0s; }
 
-#notes-module .notes-wrapper #note-list .category h3 { text-transform: capitalize; }
+#notes-module .notes-wrapper #note-list .list-group { margin-bottom: 40px; }
+
+#notes-module .notes-wrapper #note-list .list-group h4 { text-transform: capitalize; margin-bottom: 10px; }
 
 #notes-module .notes-wrapper #note-list .list-item { position: relative; border: solid 1px #eee; overflow: hidden; }
-
-#notes-module .notes-wrapper #note-list .list-item a { display: block; color: #000; }
 
 #notes-module .notes-wrapper #note-list .list-item .item-top { pointer-events: none; }
 

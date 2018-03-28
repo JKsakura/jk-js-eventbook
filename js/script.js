@@ -49,9 +49,7 @@ jQuery(function ($) {
             // DISPLAY THE ELEMENT WITH NEW DOM STRUCTURE
             displayNote: function (note) {
                 // Define ID
-                var itemId = "note" + note.id,
-                    editId = "noteEdit" + note.id,
-                    deleteId = "noteDelete" + note.id;
+                var itemId = "note" + note.id
 
                 // Define Classes
                 var itemClass = "list-item list-group-item list-group-item-action",
@@ -76,12 +74,7 @@ jQuery(function ($) {
                 var listLink = $("<a></a>").attr("href", "#" + itemId).append(itemTop);
                 var listItem = $("<li></li>").attr("id", itemId).addClass(itemClass).append(listLink);
 
-                if ($("#" + itemId).length > 0) {
-                    $("#" + itemId).replaceWith(listItem);
-                    $("#" + itemId).find(".item-btns").addClass("active");
-                } else {
-                    $(noteList).find(".category-" + note.category).find("ul").append(listItem);
-                }
+                $(noteList).find(".category-" + note.category).find("ul").append(listItem);
             },
             fetchDetail: function (target) {
                 var id = target.hash.slice(5);

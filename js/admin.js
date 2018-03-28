@@ -25,7 +25,7 @@ jQuery(function($){
             toggleForm: function() {
                 $(formContainer).toggleClass("show");
             }
-        }
+        };
     }());
     
     var listToggle = (function() {
@@ -40,7 +40,7 @@ jQuery(function($){
             toggleList: function() {
                 $(listContainer).toggleClass("hide");
             }
-        }
+        };
     }());
 
     // TOGGLE FOR ADD BUTTON
@@ -53,7 +53,7 @@ jQuery(function($){
             hideBtn: function() {
                 $(addBtn).hide();
             }
-        }
+        };
     }());
 
     // TOGGLE FOR MANAGING MANAGE BUTTON
@@ -73,7 +73,7 @@ jQuery(function($){
                     $(manageBtn).hide();
                 }
             }
-        }
+        };
     }());
 
     // TOGGLE FOR DONE BUTTON
@@ -86,7 +86,7 @@ jQuery(function($){
             hideBtn: function() {
                 $(doneBtn).hide();
             }
-        }
+        };
     }());
     
     // TOGGLE FOR CANCEL BUTTON
@@ -99,7 +99,7 @@ jQuery(function($){
             hideBtn: function() {
                 $(cancelBtn).hide();
             }
-        }
+        };
     }());
     
 /* ============================================================== */
@@ -174,7 +174,7 @@ jQuery(function($){
                 }
 
                 if (id) {
-                    resObj['id'] = id;
+                    resObj.id = id;
                 }
 
                 return resObj;
@@ -196,7 +196,7 @@ jQuery(function($){
                         introduction: obj.introduction,
                         syntax: obj.syntax,
                         description: obj.description
-                    }
+                    };
                     noteObj = notes[obj.id];
                 } else {
                     var newNote = {
@@ -206,7 +206,7 @@ jQuery(function($){
                         introduction: obj.introduction,
                         syntax: obj.syntax,
                         description: obj.description
-                    }
+                    };
                     notes.push(newNote);
                     noteID++;
                     noteObj = newNote;
@@ -269,20 +269,49 @@ jQuery(function($){
                 var targetID = $(e).attr("id").slice(10);
                 var r = confirm("Are You Sure You Want to Delete This Item?");
                 if( r === true ) {
-                    var index = notes.findIndex(function(element) {
-                        return element.id && element.id.toString() === targetID;
-                    });
-                    if (index >= -1) {
+                    var index = notes.map(function (element) { return element.id.toString(); }).indexOf(targetID);
+                    if (index > -1) {
                         notes.splice(index,1);
                         $("#note"+targetID).remove();
-                        console.table(notes);
                         dataManager.saveData(notes);
                     }
                 } else {
                     return false;
                 }
+            },
+            sortNote: function(e) {
+                if ($(e).sortable()) {
+                    $(e).sortable("enable");
+                    $(e).sortable({
+                        update: function (e, ui) {
+                            var prevIndex = ui.item.prev(),
+                                nextIndex = ui.item.next(),
+                                targetID = ui.item.attr("id").slice(4),
+                                newIndex,
+                                note,
+                                oldIntex = findTarget(notes, targetID);
+                            if ($(prevIndex).length > 0) {
+                                newIndex = findTarget(notes, $(prevIndex).attr("id").slice(4));
+                            } else if ($(nextIndex).length > 0) {
+                                newIndex = findTarget(notes, $(nextIndex).attr("id").slice(4)) - 1;
+                            }
+                            note = notes[oldIntex];
+                            if (oldIntex > -1) {
+                                notes.splice(oldIntex, 1);
+                                notes.splice(newIndex, 0, note);
+                                dataManager.saveData(notes);
+                            }
+                            function findTarget(object, target) {
+                                return object.map(function (element) {
+                                    return element.id.toString();
+                                }).indexOf(target);
+                            }
+                        }
+                    });
+                    $(e).disableSelection();
+                }
             }
-        }
+        };
     }());
     
 /* ============================================================== */
@@ -330,7 +359,7 @@ jQuery(function($){
                     console.log( "finished" );
                 });
             }
-        }
+        };
     }());
     
     // INITIAL NOTE HEADER VISUAL 
@@ -382,13 +411,8 @@ jQuery(function($){
                 manageBtnToggle.hideBtn();
                 addBtnToggle.hideBtn();
                 doneBtnToggle.showBtn();
-                $( ".list-group ul" ).each(function() {
-                    if( $(this).sortable() ) {
-                        $(this).sortable("enable");
-                    } else {
-                        $(this).sortable();
-                        $(this).disableSelection();
-                    }
+                $(".list-group ul").each(function() {
+                    noteManager.sortNote(this);
                 });
             } else if( $(target).hasClass("done-btn") ) {
                 var itemBtn = $(".item-btns");

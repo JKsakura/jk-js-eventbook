@@ -13,13 +13,33 @@ blockquote:before, blockquote:after, q:before, q:after { content: ''; content: n
 
 table { border-collapse: collapse; border-spacing: 0; }
 
-html, body { height: 100%; font: normal 16px/1.2 sans-serif; color: #000; overflow-x: hidden; font-weight: 300; }
+html, body { width: 100%; height: 100%; font: normal 16px/1.5 sans-serif; color: #000; overflow: hidden; font-weight: 300; }
 
 h1 { font-weight: 300; }
 
 h4 { font: normal 20px/1.5 sans-serif; }
 
-.wrap { width: 1100px; max-width: 100%; margin: 0 auto; padding: 0 20px; -webkit-box-sizing: border-box; box-sizing: border-box; }
+.wrap { width: 800px; max-width: 100%; margin: 0 auto; padding: 0 20px; -webkit-box-sizing: border-box; box-sizing: border-box; }
+
+.content-main p { margin-bottom: 10px; }
+
+.content-main p:last-child { margin-bottom: 0; }
+
+.content-main ul { margin-bottom: 20px; }
+
+.content-main ul > li { position: relative; padding-left: 20px; margin-bottom: 10px; }
+
+.content-main ul > li:before { content: '\2022'; position: absolute; left: 0; }
+
+.content-main ul:last-child { margin-bottom: 0; }
+
+.content-main ol { margin-bottom: 20px; counter-reset: li; }
+
+.content-main ol > li { position: relative; padding-left: 20px; }
+
+.content-main ol > li:before { content: counter(li) ". "; counter-increment: li; position: absolute; right: calc(100% - 15px); }
+
+.content-main ol:last-child { margin-bottom: 0; }
 
 .icon-btn { display: inline-block; vertical-align: middle; background-color: transparent; border: 0; color: #000; cursor: pointer; padding: 0; font-size: 24px; }
 
@@ -57,27 +77,43 @@ button, input[type=submit], .btn { text-transform: uppercase; letter-spacing: 0.
 /* ============================ */
 #notes-module #note-done-btn { display: none; }
 
-#notes-module .notes-wrapper { position: relative; max-width: 800px; margin: 0 auto; }
+#notes-module .notes-wrapper { position: relative; margin: 0 auto; }
 
 #notes-module .notes-wrapper .notes-header { margin-bottom: 20px; }
 
 #notes-module .notes-wrapper .notes-header .btn svg { margin-right: 5px; }
 
+#notes-module .notes-wrapper .notes-header #search-form { position: relative; }
+
+#notes-module .notes-wrapper .notes-header #search-form input { padding-right: 30px; }
+
+#notes-module .notes-wrapper .notes-header #search-form button { position: absolute; top: 0; right: 0; height: 100%; color: #bbb; top: 0; border: 0; background-color: transparent; cursor: pointer; }
+
+#notes-module .notes-wrapper .notes-header #search-form button:hover .fa-search { color: #999; }
+
+#notes-module .notes-wrapper .notes-header #search-form button .fa-search { pointer-events: none; }
+
 #notes-module .notes-wrapper .notes-body { position: relative; width: 100%; }
 
-#notes-module .notes-wrapper .note-list-container { position: absolute; left: 0; width: 100%; padding: 50px 0; -webkit-transition: left 0.3s; -o-transition: left 0.3s; transition: left 0.3s; }
+#notes-module .notes-wrapper .note-list-container { position: absolute; left: 0; width: 100%; height: 100vh; padding: 50px 0; -webkit-transition: left 0.3s; -o-transition: left 0.3s; transition: left 0.3s; overflow-y: auto; }
 
 #notes-module .notes-wrapper .note-list-container.hide { left: -100vw; }
 
-#notes-module .notes-wrapper .note-form-container { position: absolute; left: 100vw; width: 100%; padding: 50px 0; -webkit-transform: scale(0); -ms-transform: scale(0); transform: scale(0); -webkit-transition: left 0.3s 0s, -webkit-transform 0s 0.3s; transition: left 0.3s 0s, -webkit-transform 0s 0.3s; -o-transition: left 0.3s 0s, transform 0s 0.3s; transition: left 0.3s 0s, transform 0s 0.3s; transition: left 0.3s 0s, transform 0s 0.3s, -webkit-transform 0s 0.3s; }
+#notes-module .notes-wrapper .note-form-container { position: absolute; left: 100vw; width: 100%; height: 100vh; padding: 50px 0; -webkit-transform: scale(0); -ms-transform: scale(0); transform: scale(0); -webkit-transition: left 0.3s 0s, -webkit-transform 0s 0.3s; transition: left 0.3s 0s, -webkit-transform 0s 0.3s; -o-transition: left 0.3s 0s, transform 0s 0.3s; transition: left 0.3s 0s, transform 0s 0.3s; transition: left 0.3s 0s, transform 0s 0.3s, -webkit-transform 0s 0.3s; overflow-y: auto; }
 
 #notes-module .notes-wrapper .note-form-container.show { left: 0; -webkit-transform: scale(1); -ms-transform: scale(1); transform: scale(1); -webkit-transition: left 0.3s 0s, -webkit-transform 0s 0s; transition: left 0.3s 0s, -webkit-transform 0s 0s; -o-transition: left 0.3s 0s, transform 0s 0s; transition: left 0.3s 0s, transform 0s 0s; transition: left 0.3s 0s, transform 0s 0s, -webkit-transform 0s 0s; }
 
-#notes-module .notes-wrapper .note-detail-container { position: absolute; left: 100vw; width: 100%; padding: 50px 0; -webkit-transform: scale(0); -ms-transform: scale(0); transform: scale(0); -webkit-transition: left 0.3s 0s, -webkit-transform 0s 0.3s; transition: left 0.3s 0s, -webkit-transform 0s 0.3s; -o-transition: left 0.3s 0s, transform 0s 0.3s; transition: left 0.3s 0s, transform 0s 0.3s; transition: left 0.3s 0s, transform 0s 0.3s, -webkit-transform 0s 0.3s; }
+#notes-module .notes-wrapper .note-detail-container { position: absolute; left: 100vw; width: 100%; height: 100vh; padding: 50px 0; -webkit-transform: scale(0); -ms-transform: scale(0); transform: scale(0); -webkit-transition: left 0.3s 0s, -webkit-transform 0s 0.3s; transition: left 0.3s 0s, -webkit-transform 0s 0.3s; -o-transition: left 0.3s 0s, transform 0s 0.3s; transition: left 0.3s 0s, transform 0s 0.3s; transition: left 0.3s 0s, transform 0s 0.3s, -webkit-transform 0s 0.3s; overflow-y: auto; }
 
 #notes-module .notes-wrapper .note-detail-container.show { left: 0; -webkit-transform: scale(1); -ms-transform: scale(1); transform: scale(1); -webkit-transition: left 0.3s 0s, -webkit-transform 0s 0s; transition: left 0.3s 0s, -webkit-transform 0s 0s; -o-transition: left 0.3s 0s, transform 0s 0s; transition: left 0.3s 0s, transform 0s 0s; transition: left 0.3s 0s, transform 0s 0s, -webkit-transform 0s 0s; }
 
-#notes-module .notes-wrapper #note-list .list-group-item:first-child { text-transform: uppercase; font-weight: 400; }
+#notes-module .notes-wrapper #note-list p.list-group-item { text-transform: uppercase; font-weight: 400; cursor: pointer; }
+
+#notes-module .notes-wrapper #note-list p.list-group-item::before { content: ''; position: absolute; top: 50%; right: 20px; width: 8px; height: 8px; margin-top: -3px; border-right: solid 2px #fff; border-bottom: solid 2px #fff; -webkit-transform: rotate(-135deg); -ms-transform: rotate(-135deg); transform: rotate(-135deg); }
+
+#notes-module .notes-wrapper #note-list p.list-group-item.closed::before { margin-top: -5px; -webkit-transform: rotate(45deg); -ms-transform: rotate(45deg); transform: rotate(45deg); }
+
+#notes-module .notes-wrapper #note-list .list-group-item { border-radius: 0; }
 
 @media screen and (max-width: 480px) { #notes-module .notes-wrapper #note-list .list-group-item { padding: 10px; } }
 
@@ -128,6 +164,8 @@ button, input[type=submit], .btn { text-transform: uppercase; letter-spacing: 0.
 #notes-module .notes-wrapper #note-detail .detail-category { color: #999; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
 
 #notes-module .notes-wrapper #note-detail .detail-introduction { margin-bottom: 20px; }
+
+#notes-module .notes-wrapper #note-detail .detail-syntax { margin-bottom: 20px; padding: 10px 20px; }
 
 @media screen and (max-width: 768px) { html, body { font-size: 15px; }
   a { font-size: 15px; } }

@@ -103,85 +103,6 @@ jQuery(function($){
     }());
     
 /* ============================================================== */
-/* FUNCTIONS TO MANAGE THE FORM */   
-/* ============================================================== */
-    // TRIGGER THE SUBMIT FUNCTION WHEN FORM SUBMITS
-    var form = (function(){
-        var formSyntax,
-            formDescription,
-            formNoteID = null,
-            formTitle = $("#add-title"),
-            formCategory = $("#add-category"),
-            formIntroduction = $("#add-introduction"),
-            formSubmitBtn = $("#form-submit");
-        var id, title, category, introduction, syntax, description, btnTxt;
-        
-        return {
-            setForm: function(e) {
-                var target = e.target;
-                formSyntax = syntaxEditor.activeFilter.editor,
-                formDescription = descriptionEditor.activeFilter.editor,
-                id = $(target).attr("id");
-
-                if ($(target).hasClass("edit-btn")) {
-                    id = id.slice(8);
-                    title = notes[id].title;
-                    category = notes[id].category;
-                    introduction = notes[id].introduction;
-                    syntax = notes[id].syntax;
-                    description = notes[id].description;
-                    btnTxt = "Update Note";
-                }
-                else {
-                    id = '';
-                    title = "";
-                    category = "";
-                    introduction = "";
-                    syntax = "";
-                    description = "";
-                    btnTxt = "Add Note";
-                }
-
-                formNoteID = id;
-                $(formTitle).val(title);
-                $(formCategory).val(category);
-                $(formIntroduction).val(introduction);
-                formSyntax.setData(syntax);
-                formDescription.setData(description);
-                $(formSubmitBtn).text(btnTxt);
-
-                // SHOW THE FORM AFTER IT HAS BEEN ASSIGNED VALUES
-                listToggle.hideList();
-                formToggle.showForm();
-            },
-            getForm: function() {
-                // fetch form data
-                id = formNoteID;
-                title = $(formTitle).val();
-                category = $(formCategory).val();
-                introduction = $(formIntroduction).val();
-                syntax =formSyntax.getData();
-                description = formDescription.getData();
-
-                // format obj
-                var resObj = {
-                    id: '',
-                    title: title,
-                    category: category,
-                    introduction: introduction,
-                    syntax: syntax,
-                    description: description
-                }
-
-                if (id) {
-                    resObj.id = id;
-                }
-
-                return resObj;
-            }
-        };
-    }());
-/* ============================================================== */
 /*    FUNCTIONS TO MANAGE THE NOTE LIST  */
 /* ============================================================== */
     var noteManager = (function() {
@@ -261,7 +182,7 @@ jQuery(function($){
                     $("#"+itemId).replaceWith(listItem);
                     $("#"+itemId).find(".item-btns").addClass("active");
                 } else {
-                    $(noteList).find(".category-"+note.category).find("ul").append(listItem);
+                    $(noteList).find(".category-" + note.category).find("ul").append(listItem);
                 }
             },
             // DELETE A NEW NOTE BASED ON THE ID
@@ -300,6 +221,7 @@ jQuery(function($){
                                 notes.splice(oldIntex, 1);
                                 notes.splice(newIndex, 0, note);
                                 dataManager.saveData(notes);
+                                console.table(notes);
                             }
                             function findTarget(object, target) {
                                 return object.map(function (element) {
@@ -310,6 +232,88 @@ jQuery(function($){
                     });
                     $(e).disableSelection();
                 }
+            }
+        };
+    }());
+    
+/* ============================================================== */
+/* FUNCTIONS TO MANAGE THE FORM */   
+/* ============================================================== */
+    // TRIGGER THE SUBMIT FUNCTION WHEN FORM SUBMITS
+    var form = (function(){
+        var formSyntax,
+            formDescription,
+            formNoteID = "",
+            formTitle = $("#add-title"),
+            formCategory = $("#add-category"),
+            formIntroduction = $("#add-introduction"),
+            formSubmitBtn = $("#form-submit");
+        var id, title, category, introduction, syntax, description, btnTxt;
+        
+        return {
+            setForm: function(e) {
+                var target = e.target;
+                formSyntax = syntaxEditor.activeFilter.editor,
+                formDescription = descriptionEditor.activeFilter.editor,
+                id = $(target).attr("id");
+
+                if ($(target).hasClass("edit-btn")) {
+                    id = id.slice(8);
+                    index = notes.map(function(element) {
+                        return element.id.toString();
+                    }).indexOf(id);
+                    title = notes[index].title;
+                    category = notes[index].category;
+                    introduction = notes[index].introduction;
+                    syntax = notes[index].syntax;
+                    description = notes[index].description;
+                    btnTxt = "Update Note";
+                }
+                else {
+                    id = "";
+                    title = "";
+                    category = "";
+                    introduction = "";
+                    syntax = "";
+                    description = "";
+                    btnTxt = "Add Note";
+                }
+
+                $(formTitle).val(title);
+                $(formCategory).val(category);
+                $(formIntroduction).val(introduction);
+                formSyntax.setData(syntax);
+                formDescription.setData(description);
+                $(formSubmitBtn).text(btnTxt);
+
+                // SHOW THE FORM AFTER IT HAS BEEN ASSIGNED VALUES
+                listToggle.hideList();
+                formToggle.showForm();
+            },
+            getForm: function() {
+                // fetch form data
+                title = $(formTitle).val();
+                category = $(formCategory).val();
+                introduction = $(formIntroduction).val();
+                syntax =formSyntax.getData();
+                description = formDescription.getData();
+                
+                console.log(id);
+                // format obj
+                var resObj = {
+                    id: "",
+                    title: title,
+                    category: category,
+                    introduction: introduction,
+                    syntax: syntax,
+                    description: description
+                }
+
+                if (id) {
+                    resObj.id = id;
+                }
+
+                return resObj;
             }
         };
     }());
@@ -335,6 +339,7 @@ jQuery(function($){
                         }
                     }
                     manageBtnToggle.toggleBtn();
+                    console.table(notes);
                 })
                 .fail( function(d, textStatus, error) {
                     console.error("getJSON failed, status: " + textStatus + ", error: "+error);
@@ -368,7 +373,7 @@ jQuery(function($){
     
     // LOAD DATA FROM JSON FILE
     dataManager.loadData();
-    //dataManager.resetData();
+    dataManager.resetData();
     
     
     // INITIAL NOTE BODY EVENTS
@@ -378,8 +383,13 @@ jQuery(function($){
             noteManager.deleteNote(target);
         } else if( $(target).hasClass("edit-btn") ) {
             form.setForm(e);
-            $("html, body").animate({
+            $("#note-form-container").animate({
                 scrollTop: 0
+            });
+        } else if( $(target).is("p.list-group-item") ) {
+            $(target).each(function() {
+                $(this).next("ul").stop().slideToggle(300);
+                $(this).stop().toggleClass("closed");
             });
         }
     });
@@ -405,6 +415,9 @@ jQuery(function($){
                 listToggle.toggleList();
                 form.setForm(e);
                 manageBtnToggle.hideBtn();
+                $("#note-form-container").animate({
+                    scrollTop:0
+                }, 300);
             } else if( $(target).hasClass("manage-btn") ) {
                 $(".item-btns").toggleClass("active");
                 formToggle.hideForm();
@@ -439,9 +452,11 @@ jQuery(function($){
         var listCategory,
             listClass,
             formCategory;
+        
         for(var i=0; i<category.length; i++) {
-            listClass = "list-group category-"+category[i];
-            listCategory = $("<li></li>").addClass(listClass).html("<h4 class=\"h4\">"+category[i]+"</h4>").append("<ul></ul>");
+            listClass = "category-" + category[i];
+            listTitle = $("<p class=\"list-group-item list-group-item-primary\"></p>").text(category[i]);
+            listCategory = $("<li></li>").addClass(listClass).append(listTitle, "<ul></ul>");
             $("#note-list").append(listCategory);
             
             formCategory = $("<option></option>").val(category[i]).text(category[i]);

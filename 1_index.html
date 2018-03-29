@@ -19,22 +19,34 @@
             <!-- START WRAPPER -->
             <main role="main" class="wrapper">
                 <section id="notes-module" class="main-content">
-                    <div class="wrap">
-                        <div class="notes-wrapper">
-                            <div id="note-list-container" class="note-list-container">
+                    <div class="notes-wrapper">
+                        <div id="note-list-container" class="note-list-container">
+                            <div class="wrap">
+                                <div class="notes-header">
+                                    <form id="search-form">
+                                        <div class="form-group">
+                                            <input type="search" class="form-control" id="search" aria-describedby="searchHelp" placeholder="Search..." name="search">
+                                            <button type="submit">
+                                                <i class="fas fa-search"></i>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
                                 <div class="notes-body">
                                     <ul id="note-list" class="list-group"></ul>
                                 </div>
                             </div>
-                            <div id="note-detail-container" class="note-detail-container">
-                                <div id="note-detail">
+                        </div>
+                        <div id="note-detail-container" class="note-detail-container">
+                            <div class="wrap">
+                                <div id="note-detail" class="content-main">
                                     <a href="#note-list" class="back-to-all">Back To All Notes</a>
                                     <div class="detail-header">
                                         <h1 class="h1 detail-title"></h1>
                                         <h5 class="h5 detail-category"></h5>
                                     </div>
                                     <p class="detail-introduction"></p>
-                                    <div class="detail-syntax code javascript"></div>
+                                    <code class="detail-syntax javascript"></code>
                                     <div class="detail-description"></div>
                                 </div>
                             </div>

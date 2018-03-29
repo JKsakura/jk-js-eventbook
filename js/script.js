@@ -74,10 +74,11 @@ jQuery(function ($) {
                 var listLink = $("<a></a>").attr("href", "#" + itemId).append(itemTop);
                 var listItem = $("<li></li>").attr("id", itemId).addClass(itemClass).append(listLink);
 
-                $(noteList).find(".category-" + note.category).after(listItem);
+                $(noteList).find(".category-" + note.category).find("ul").append(listItem);
             },
             fetchDetail: function (target) {
                 var id = target.hash.slice(5);
+                console.log(id);
                 var index = notes.map(function (element) {
                     return element.id.toString();
                 }).indexOf(id);
@@ -90,6 +91,11 @@ jQuery(function ($) {
                     detailIntroduction = $(".detail-introduction").html(note.introduction),
                     detailSyntax = $(".detail-syntax").addClass("code").html(note.syntax),
                     detailDescription = $(".detail-description").html(note.description);
+                hljs.initHighlightingOnLoad();
+                hljs.configure({ useBR: true });
+                $('.code').each(function (i, block) {
+                    hljs.highlightBlock(block);
+                });
             }
         };
     }());
@@ -110,6 +116,13 @@ jQuery(function ($) {
                             if (notes[i].id >= noteID) { noteID = notes[i].id + 1; }
                         }
                     }
+                    
+                    if(location.hash) {
+                        console.log();
+                        noteManager.fetchDetail(location);
+                        listToggle.hideList();
+                        detailToggle.showDetail();
+                    }
                 })
                 .fail(function (d, textStatus, error) {
                     console.error("getJSON failed, status: " + textStatus + ", error: " + error);
@@ -127,6 +140,11 @@ jQuery(function ($) {
     dataManager.loadData();
 
     // INITIAL NOTE BODY EVENTS
+    $("#search-form").on("submit", function(e) {
+        e.preventDefault();
+        var key = $("#search").val();
+        console.log(key);
+    });
     $(noteList).on("click", function (e) {
         var target = e.target;
         if( $(target).is("a") ) {
@@ -134,10 +152,10 @@ jQuery(function ($) {
             noteManager.fetchDetail(target);
             listToggle.hideList();
             detailToggle.showDetail();
-            hljs.initHighlightingOnLoad();
-            hljs.configure({ useBR: true });
-            $('div.code').each(function (i, block) {
-                hljs.highlightBlock(block);
+        } else if( $(target).is("p.list-group-item") ) {
+            $(target).each(function() {
+                $(this).next("ul").stop().slideToggle(300);
+                $(this).stop().toggleClass("closed");
             });
         }
     });
@@ -148,7 +166,7 @@ jQuery(function ($) {
             e.preventDefault();
             detailToggle.hideDetail();
             listToggle.showList();
-        } 
+        }
     });
     /* ============================================================== */
     /*    EVENT FOR ALL NOTE HEADING BUTTONS */
@@ -158,9 +176,11 @@ jQuery(function ($) {
             listClass,
             formCategory;
         for (var i = 0; i < category.length; i++) {
-            listClass = "list-group-item list-group-item-primary category-" + category[i];
-            listCategory = $("<li></li>").addClass(listClass).text(category[i]);
-            $("#note-list").append($("<ul></ul>").append(listCategory));
+            listClass = "category-" + category[i];
+            listTitle = $("<p class=\"list-group-item list-group-item-primary\"></p>").text(category[i]);
+            listCategory = $("<li></li>").addClass(listClass).append(listTitle, "<ul></ul>");
+            
+            $("#note-list").append(listCategory);
         }
     }
 });

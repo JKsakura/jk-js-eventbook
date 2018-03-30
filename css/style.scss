@@ -42,7 +42,7 @@ table {
 	border-spacing: 0;
 }
 
-$color_primary: #111;
+$color_primary: #333;
 $color_secondary: #20a714;
 
 @mixin size($w,$h) {
@@ -83,23 +83,9 @@ h4 {
 }
 h5 {}
 h6 {}
-#header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 40px;
-    background-color: $color_secondary;
-}
-#menu-toggle {
-    position: absolute;
-    right: 20px;
-    width: 50px;
-    height: 100%;
-    span {
-        position: absolute;
-        width: 20px;
-        border-top: solid 2px #fff;
+a {
+    &:hover {
+        text-decoration: none;
     }
 }
 .wrap { 
@@ -217,6 +203,102 @@ button, input[type=submit], .btn {
     text-align: center;
     text-transform: uppercase;
 }
+/* ============================ */
+/* MAIN MODULES
+/* ============================ */
+#header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    background-color: $color_secondary;
+    z-index: 100;
+    &.open {
+        #menu-toggle {
+            span {
+                background-color: transparent;
+                transform: translateY(-50%) rotateY(180deg);
+                transition: background 0.3s, transform 0.3s;
+                &::before {
+                    top: 0;
+                    transform: rotate(45deg);
+                    transition: transform 0.3s;
+                }
+                &::after {
+                    top: 0;
+                    transform: rotate(-45deg);
+                    transition: transform 0.3s;
+                }
+            }
+        }
+        #main-menu {
+            left: 0;
+        }
+    }
+}
+
+#menu-toggle {
+    position: absolute;
+    right: 20px;
+    width: 50px;
+    height: 100%;
+    span {
+        position: absolute;
+        top: 50%;
+        right: 0;
+        width: 22px;
+        height: 2px;
+        background-color: #fff;
+        transform: translateY(-50%) rotateY(0);
+        transition: background 0.3s, transform 0.3s linear;
+        &::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            width: 22px;
+            height: 2px;
+            background-color: #fff;
+            transform: rotate(0);
+            transition: 0.3s linear;
+        }
+        &::after {
+            content: '';
+            position: absolute;
+            top: 5px;
+            width: 22px;
+            height: 2px;
+            background-color: #fff;
+            transform: rotate(0);
+            transition: 0.3s linear;
+        }
+    }
+}
+
+#main-menu {
+    position: absolute;
+    top: 100%;
+    left: 100%;
+    width: 100%;
+    height: 100vh;
+    padding: 20px;
+    background-color: $color_primary;
+    overflow-y: auto;
+    transition: left 0.3s;
+    >li {
+        > a {
+            display: block;
+            color: #fff;
+            padding: 5px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            &:hover {
+                color: $color_secondary;
+            }
+        }
+    }
+}
+
 /* ============================ */
 /* CREATE NEW NOTE FORM
 /* ============================ */

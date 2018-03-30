@@ -10,6 +10,19 @@ jQuery(function ($) {
     /* ============================================================== */
     /*    VISUAL PART EVENTS  */
     /* ============================================================== */
+    // TOGGLE FOR APP HEADER
+    var headerToggle =(function() {
+        var header = $("#header");
+        var menu = $("#main-menu");
+        var toggle = $("#menu-toggle");
+        return {
+            menuToggle: function() {
+                $(toggle).on("click", function () {
+                    $(header).toggleClass("open");
+                });
+            }
+        };
+    }());
     // TOGGLE FOR NOTE FORM
     var listToggle = (function () {
         var listContainer = $("#note-list-container");
@@ -51,6 +64,13 @@ jQuery(function ($) {
                 $("#filter-search").keyup(function () {
                     var search = $(this).val().toUpperCase();
                     $(noteList).find(".list-item").each(function () {
+                        if ($(this).html().toUpperCase().indexOf(search) > -1) {
+                            $(this).show();
+                        } else {
+                            $(this).hide();
+                        }
+                    });
+                    $(noteList).find("p.list-group-item").each(function () {
                         if ($(this).html().toUpperCase().indexOf(search) > -1) {
                             $(this).show();
                         } else {
@@ -210,6 +230,10 @@ jQuery(function ($) {
     /* ============================================================== */
     /*    EVENT FOR ALL NOTE HEADING BUTTONS */
     /* ============================================================== */
+    function noteHeader() {
+        headerToggle.menuToggle();
+        filterManager.iniCategory();
+    }
     function noteBody() {
         var listCategory,
             listClass,
@@ -220,8 +244,5 @@ jQuery(function ($) {
             listCategory = $("<li></li>").addClass(listClass).data("category", category[i]).append(listTitle, "<ul></ul>");
             $("#note-list").append(listCategory);
         }
-    }
-    function noteHeader() {
-        filterManager.iniCategory();
     }
 });

@@ -12,6 +12,19 @@ jQuery(function($){
 /* ============================================================== */
 /*    VISUAL PART EVENTS  */
 /* ============================================================== */
+    // TOGGLE FOR APP HEADER
+    var headerToggle = (function () {
+        var header = $("#header");
+        var menu = $("#main-menu");
+        var toggle = $("#menu-toggle");
+        return {
+            menuToggle: function () {
+                $(toggle).on("click", function () {
+                    $(header).toggleClass("open");
+                });
+            }
+        };
+    }());
     // TOGGLE FOR NOTE FORM
     var formToggle = (function() {
         var formContainer = $("#note-form-container");
@@ -408,6 +421,7 @@ jQuery(function($){
     /*    EVENT FOR ALL NOTE HEADING BUTTONS */
     /* ============================================================== */
     function noteHeader() {
+        headerToggle.menuToggle();
         $(".notes-header").on("click", function(e) {
             var target = e.target;
             if( $(target).hasClass("add-btn") ) {

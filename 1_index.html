@@ -14,7 +14,19 @@
         <!-- START SITE -->
         <div class="site">
             <!-- START HEADER -->
-            <header></header>
+            <header id="header">
+                <nav>
+                    <span id="menu-toggle"><span></span></span>
+                    <ul id="main-menu">
+                        <li>
+                            <a>Home</a>
+                        </li>
+                        <li>
+                            <a>Admin</a>
+                        </li>
+                    </ul>
+                </nav>
+            </header>
             <!-- END HEADER -->
             <!-- START WRAPPER -->
             <main role="main" class="wrapper">
@@ -23,14 +35,15 @@
                         <div id="note-list-container" class="note-list-container">
                             <div class="wrap">
                                 <div class="notes-header">
-                                    <form id="search-form">
-                                        <div class="form-group">
-                                            <input type="search" class="form-control" id="search" aria-describedby="searchHelp" placeholder="Search..." name="search">
-                                            <button type="submit">
-                                                <i class="fas fa-search"></i>
-                                            </button>
-                                        </div>
-                                    </form>
+                                    <div class="search-box form-group">
+                                        <input type="search" class="form-control" id="filter-search" aria-describedby="searchHelp" placeholder="Search..." name="search">
+                                        <button type="submit">
+                                            <i class="fas fa-search"></i>
+                                        </button>
+                                    </div>
+                                    <div class="select-menu form-group">
+                                        <select class="form-control" id="filter-category"></select>
+                                    </div>
                                 </div>
                                 <div class="notes-body">
                                     <ul id="note-list" class="list-group"></ul>
@@ -52,9 +65,9 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </main>
-            <!-- END WRAPPER -->
+                </section>
+            </main
+            ><!-- END WRAPPER -->
             <!-- START FOOTER -->
             <footer></footer>
             <!-- END FOOTER -->

@@ -42,6 +42,47 @@ jQuery(function ($) {
     }());
 
     /* ============================================================== */
+    /*    FUNCTIONS TO MANAGE THE NOTE HEADER  */
+    /* ============================================================== */
+    // INITIAL NOTE BODY EVENTS
+    var filterManager = (function () {
+        return {
+            goSearch: function () {
+                $("#filter-search").keyup(function () {
+                    var search = $(this).val().toUpperCase();
+                    $(noteList).find(".list-item").each(function () {
+                        if ($(this).html().toUpperCase().indexOf(search) > -1) {
+                            $(this).show();
+                        } else {
+                            $(this).hide();
+                        }
+                    });
+                });
+            },
+            iniCategory: function () {
+                var defaultVal = '<option value="" disabled selected>Category</option>';
+                var filterCategory = $("#filter-category").append(defaultVal, "<option value='all'>All</option>");
+                for (var i = 0; i < category.length; i++) {
+                    var newCategory = $("<option></option>").text(category[i]).val(category[i]).appendTo(filterCategory);
+                }
+            },
+            goFilter: function () {
+                $("#filter-category").change(function() {
+                    var filterCategory = $(this).val();
+                    $(noteList).find(".category").each(function () {
+                        if( filterCategory === "all") {
+                            $(noteList).find(".category").show();
+                        } else if ($(this).find("p.list-group-item").html().toUpperCase() === filterCategory.toUpperCase()) {
+                            $(this).show();
+                        } else {
+                            $(this).hide();
+                        }
+                    });
+                });
+            }
+        };
+    }());
+    /* ============================================================== */
     /*    FUNCTIONS TO MANAGE THE NOTE LIST  */
     /* ============================================================== */
     var noteManager = (function () {
@@ -78,7 +119,6 @@ jQuery(function ($) {
             },
             fetchDetail: function (target) {
                 var id = target.hash.slice(5);
-                console.log(id);
                 var index = notes.map(function (element) {
                     return element.id.toString();
                 }).indexOf(id);
@@ -134,17 +174,15 @@ jQuery(function ($) {
         };
     }());
 
+    noteHeader();
     noteBody();
 
     // LOAD DATA FROM JSON FILE
     dataManager.loadData();
 
-    // INITIAL NOTE BODY EVENTS
-    $("#search-form").on("submit", function(e) {
-        e.preventDefault();
-        var key = $("#search").val();
-        console.log(key);
-    });
+    filterManager.goSearch();
+    filterManager.goFilter();
+
     $(noteList).on("click", function (e) {
         var target = e.target;
         if( $(target).is("a") ) {
@@ -168,6 +206,7 @@ jQuery(function ($) {
             listToggle.showList();
         }
     });
+
     /* ============================================================== */
     /*    EVENT FOR ALL NOTE HEADING BUTTONS */
     /* ============================================================== */
@@ -176,11 +215,13 @@ jQuery(function ($) {
             listClass,
             formCategory;
         for (var i = 0; i < category.length; i++) {
-            listClass = "category-" + category[i];
-            listTitle = $("<p class=\"list-group-item list-group-item-primary\"></p>").text(category[i]);
-            listCategory = $("<li></li>").addClass(listClass).append(listTitle, "<ul></ul>");
-            
+            listClass = "category category-"+category[i];
+            listTitle = $("<p class='list-group-item list-group-item-primary'></p>").text(category[i]);
+            listCategory = $("<li></li>").addClass(listClass).data("category", category[i]).append(listTitle, "<ul></ul>");
             $("#note-list").append(listCategory);
         }
+    }
+    function noteHeader() {
+        filterManager.iniCategory();
     }
 });

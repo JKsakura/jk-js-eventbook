@@ -1,11 +1,10 @@
 jQuery(function ($) {
     // Declare Global Note Vars
     var noteID, notes;
-
-    // Declare Global CKEditor WYSIWYG Fields
     var noteList = $("#note-list"),
         noteDetail = $("#note-detail-container"),
-        category = ["array", "booleans", "date", "error"];
+        categories = ["array", "booleans", "date", "error"],
+        cache = [];
 
     /* ============================================================== */
     /*    VISUAL PART EVENTS  */
@@ -61,13 +60,13 @@ jQuery(function ($) {
     var filterManager = (function () {
         return {
             goSearch: function () {
-                $("#filter-search").keyup(function () {
-                    var search = $(this).val().toUpperCase();
-                    $(noteList).find(".list-item").each(function () {
-                        if ($(this).html().toUpperCase().indexOf(search) > -1) {
-                            $(this).show();
+                $("#filter-search").on("input", function () {
+                    var search = $(this).val().trim().toUpperCase();
+                    cache.forEach( function(note){
+                        if( note.content.indexOf(search) > -1 ) {
+                            $(note.element).show();
                         } else {
-                            $(this).hide();
+                            $(note.element).hide();
                         }
                     });
                     $(noteList).find("p.list-group-item").each(function () {
@@ -82,9 +81,9 @@ jQuery(function ($) {
             iniCategory: function () {
                 var defaultVal = '<option value="" disabled selected>Category</option>';
                 var filterCategory = $("#filter-category").append(defaultVal, "<option value='all'>All</option>");
-                for (var i = 0; i < category.length; i++) {
-                    var newCategory = $("<option></option>").text(category[i]).val(category[i]).appendTo(filterCategory);
-                }
+                categories.forEach(function(category) {
+                    var newCategory = $("<option></option>").text(category).val(category).appendTo(filterCategory);
+                });
             },
             goFilter: function () {
                 $("#filter-category").change(function() {
@@ -136,6 +135,10 @@ jQuery(function ($) {
                 var listItem = $("<li></li>").attr("id", itemId).addClass(itemClass).append(listLink);
 
                 $(noteList).find(".category-" + note.category).find("ul").append(listItem);
+                cache.push({
+                    element: listItem,
+                    content: $(listItem).html().trim().toUpperCase()
+                });
             },
             fetchDetail: function (target) {
                 var id = target.hash.slice(5);
@@ -171,10 +174,10 @@ jQuery(function ($) {
                     notes = data.notes ? data.notes : [];
                     noteID = 0;
                     if (notes.length > 0) {
-                        for (var i = 0; i < notes.length; i++) {
-                            noteManager.displayNote(notes[i]);
-                            if (notes[i].id >= noteID) { noteID = notes[i].id + 1; }
-                        }
+                        notes.forEach(function(note) {
+                            noteManager.displayNote(note);
+                            if (note.id >= noteID) { noteID = note.id + 1; }
+                        });
                     }
                     
                     if(location.hash) {
@@ -238,11 +241,11 @@ jQuery(function ($) {
         var listCategory,
             listClass,
             formCategory;
-        for (var i = 0; i < category.length; i++) {
-            listClass = "category category-"+category[i];
-            listTitle = $("<p class='list-group-item list-group-item-primary'></p>").text(category[i]);
-            listCategory = $("<li></li>").addClass(listClass).data("category", category[i]).append(listTitle, "<ul></ul>");
-            $("#note-list").append(listCategory);
-        }
+        categories.forEach(function(category){
+            listClass = "category category-"+category;
+            listTitle = $("<p class='list-group-item list-group-item-primary'></p>").text(category);
+            listCategory = $("<li></li>").addClass(listClass).data("category", category).append(listTitle, "<ul></ul>");
+            $("#note-list").append(listCategory); 
+        });
     }
 });

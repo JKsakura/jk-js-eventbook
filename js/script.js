@@ -63,7 +63,7 @@ jQuery(function ($) {
                 $("#filter-search").on("input", function () {
                     var search = $(this).val().trim().toUpperCase();
                     cache.forEach( function(note){
-                        if( note.content.indexOf(search) > -1 ) {
+                        if( note.content.trim().toUpperCase().indexOf(search) > -1 ) {
                             $(note.element).show();
                         } else {
                             $(note.element).hide();
@@ -137,7 +137,7 @@ jQuery(function ($) {
                 $(noteList).find(".category-" + note.category).find("ul").append(listItem);
                 cache.push({
                     element: listItem,
-                    content: $(listItem).html().trim().toUpperCase()
+                    content: $(listItem).html()
                 });
             },
             fetchDetail: function (target) {
@@ -179,9 +179,7 @@ jQuery(function ($) {
                             if (note.id >= noteID) { noteID = note.id + 1; }
                         });
                     }
-                    
                     if(location.hash) {
-                        console.log();
                         noteManager.fetchDetail(location);
                         listToggle.hideList();
                         detailToggle.showDetail();

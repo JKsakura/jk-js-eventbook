@@ -8,7 +8,7 @@
         <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="css/style.css">
         <script type="text/javascript" src="js/jquery.js"></script>
-        <script src="ckeditor/ckeditor.js"/></script>
+        <script type="text/javascript" src="ckeditor/ckeditor.js"></script>
     </head>
     <body>
         <!-- START SITE -->
@@ -40,7 +40,20 @@
                                     <button class="done-btn btn btn-success" id="note-done-btn">Done</button>
                                 </div>
                                 <div class="notes-body">
-                                    <ul id="note-list"></ul>
+                                    <table id="note-table" class="table">
+                                        <thead class="thead-dark">
+                                        <tr>
+                                            <th scope="col">id</th>
+                                            <th scope="col">title</th>
+                                            <th scope="col">date</th>
+                                            <th scope="col">category</th>
+                                            <th scope="col">introduction</th>
+                                            <th width="25"></th>
+                                            <th width="25"></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -65,10 +78,10 @@
                                         <textarea class="form-control" name="introduction" placeholder="Introduction" id="add-introduction"></textarea>
                                     </div>
                                     <div class="form-field">
-                                        <textarea class="form-control" name="syntax" placeholder="Syntax" id="add-syntax" class="syntax-editor"></textarea>
+                                        <textarea class="form-control syntax-editor" name="syntax" placeholder="Syntax" id="add-syntax"></textarea>
                                     </div>
                                     <div class="form-field">
-                                        <textarea class="form-control" name="description" placeholder="Description" id="add-description" class="description-editor"></textarea>
+                                        <textarea class="form-control description-editor" name="description" placeholder="Description" id="add-description"></textarea>
                                     </div>
                                     <div class="form-field">
                                         <button id="form-submit" type="submit" value="Add Note" class="btn btn-success">Add Note</button>
@@ -78,7 +91,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </section>
             </main>
             <!-- END WRAPPER -->
             <!-- START FOOTER -->

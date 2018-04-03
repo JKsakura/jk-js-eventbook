@@ -6,8 +6,9 @@ jQuery(function($){
     var syntaxEditor = CKEDITOR.replace('add-syntax'),
         descriptionEditor = CKEDITOR.replace('add-description'),
         formEl = $("#note-form"),
-        noteList = $("#note-list"),
-        category = ["array", "booleans", "date", "error"];
+        noteList = $("#note-table"),
+        categories = ["array", "booleans", "date", "error"],
+        cache = [];
     
 /* ============================================================== */
 /*    VISUAL PART EVENTS  */
@@ -122,93 +123,49 @@ jQuery(function($){
         return {
             saveNote: function(obj) {
                 var noteObj;
-                if(obj.id) {
-                    notes[obj.id] = {
-                        id: obj.id,
-                        title: obj.title,
-                        category: obj.category,
-                        introduction: obj.introduction,
-                        syntax: obj.syntax,
-                        description: obj.description
-                    };
-                    noteObj = notes[obj.id];
-                } else {
-                    var newNote = {
-                        id: noteID,
-                        title: obj.title,
-                        category: obj.category,
-                        introduction: obj.introduction,
-                        syntax: obj.syntax,
-                        description: obj.description
-                    };
-                    notes.push(newNote);
-                    noteID++;
-                    noteObj = newNote;
-                }
-                console.table(noteObj);
+                var newNote = {
+                    id: noteID,
+                    title: obj.title,
+                    created: Date.now(),
+                    category: obj.category,
+                    introduction: obj.introduction,
+                    syntax: obj.syntax,
+                    description: obj.description
+                };
+                notes.push(newNote);
+                noteID++;
+                noteObj = newNote;
+
+                // console.table(noteObj);
                 noteManager.displayNote(noteObj);
                 dataManager.saveData(notes);
             },
             // DISPLAY THE ELEMENT WITH NEW DOM STRUCTURE
             displayNote: function(note) {
-                // Define ID
-                var itemId = "note"+note.id,
-                    editId = "noteEdit"+note.id,
-                    deleteId = "noteDelete"+note.id;
-
-                // Define Classes
-                var itemClass = "list-item list-group-item list-group-item-action",
-                    headerClass = "item-header",
-                    topClass = "item-top",
-                    TitleClass = "item-title note-field-text",
-                    categoryClass = "item-category note-field-select",
-                    introductionClass = "item-introduction note-field-area",
-                    btnsClass = "item-btns",
-                    deleteClass = "item-btn delete-btn",
-                    deleteBtnClass = "fas fa-trash-alt",
-                    editClass = "item-btn edit-btn",
-                    editBtnClass = "far fa-edit";
-
-                /* =========== Item Top ============ */
-                // Item Header
-                var itemTitle = $("<p></p>").addClass(TitleClass).text(note.title);
-                var itemCategory = $("<h5></h5>").addClass(categoryClass).text(note.category);
-
-                var itemHeader = $("<div></div>").addClass(headerClass).append(itemTitle, itemCategory);
-
-                // Item Introduction
-                var itemIntroduction = $("<p></p>").addClass(introductionClass).text(note.introduction);
-                var itemTop = $("<div></div>").addClass(topClass).append(itemHeader, itemIntroduction);
-
-                /* =========== Item Buttons ============ */
-                var itemDeleteBtn = $("<i></i>").addClass(deleteBtnClass);
-                var itemDelete = $("<button></button>").attr("id", deleteId).addClass(deleteClass).append(itemDeleteBtn);
-
-                var itemEditBtn = $("<i></i>").addClass(editBtnClass);
-                var itemEdit = $("<button></button>").attr("id", editId).addClass(editClass).append(itemEditBtn);
-
-                var itembtns = $("<div></div>").addClass(btnsClass).append(itemDelete, itemEdit);
-                /* =========== List Item ============ */
-                var listItem = $("<li></li>").attr("id", itemId).addClass(itemClass).append(itemTop, itembtns);
-
-                if( $("#"+itemId).length > 0 ) {
-                    $("#"+itemId).replaceWith(listItem);
-                    $("#"+itemId).find(".item-btns").addClass("active");
-                } else {
-                    $(noteList).find(".category-" + note.category).find("ul").append(listItem);
-                }
+                var id = $("<td></td>").text(note.id),
+                    title = $("<td></td>").text(note.title),
+                    created = $("<td></td>").text(note.created),
+                    category = $("<td></td>").text(note.category),
+                    introduction = $("<td></td>").text(note.introduction),
+                    temEdit = $("<button></button>").addClass("item-btn edit-btn"),
+                    itemEditBtn = $("<i></i>").addClass("far fa-edit"),
+                    itemDelete = $("<button></button>").addClass("item-btn delete-btn"),
+                    itemDeleteBtn = $("<i></i>").addClass("far fa-trash-alt"),
+                    editBtn = $("<td></td>").append($(temEdit).append(itemEditBtn)),
+                    deleteBtn = $("<td></td>").append($(itemDelete).append(itemDeleteBtn));
+                var row = $("<tr></tr>").append(id, title, created, category, introduction, editBtn, deleteBtn).appendTo($(noteList).find('tbody'));
+                cache.push(row);
             },
             // DELETE A NEW NOTE BASED ON THE ID
             deleteNote: function(e) {
-                var targetID = $(e).attr("id").slice(10);
+                var index = $(e).closest("tr").index();
                 var r = confirm("Are You Sure You Want to Delete This Item?");
-                if( r === true ) {
-                    var index = notes.map(function (element) { return element.id.toString(); }).indexOf(targetID);
-                    if (index > -1) {
-                        notes.splice(index,1);
-                        $("#note"+targetID).remove();
-                        dataManager.saveData(notes);
-                    }
+                if(r === true) {
+                    notes.splice(index, 1);
+                    cache.splice(index, 1);
+                    cache[index].remove();
+                    console.log(index);
+                    console.table(cache);
                 } else {
                     return false;
                 }
@@ -223,15 +180,15 @@ jQuery(function($){
                                 targetID = ui.item.attr("id").slice(4),
                                 newIndex,
                                 note,
-                                oldIntex = findTarget(notes, targetID);
+                                oldIndex = findTarget(notes, targetID);
                             if ($(prevIndex).length > 0) {
                                 newIndex = findTarget(notes, $(prevIndex).attr("id").slice(4));
                             } else if ($(nextIndex).length > 0) {
                                 newIndex = findTarget(notes, $(nextIndex).attr("id").slice(4)) - 1;
                             }
-                            note = notes[oldIntex];
-                            if (oldIntex > -1) {
-                                notes.splice(oldIntex, 1);
+                            note = notes[oldIndex];
+                            if (oldIndex > -1) {
+                                notes.splice(oldIndex, 1);
                                 notes.splice(newIndex, 0, note);
                                 dataManager.saveData(notes);
                                 console.table(notes);
@@ -268,29 +225,13 @@ jQuery(function($){
                 var target = e.target;
                 formSyntax = syntaxEditor.activeFilter.editor,
                 formDescription = descriptionEditor.activeFilter.editor,
-                id = $(target).attr("id");
-
-                if ($(target).hasClass("edit-btn")) {
-                    id = id.slice(8);
-                    index = notes.map(function(element) {
-                        return element.id.toString();
-                    }).indexOf(id);
-                    title = notes[index].title;
-                    category = notes[index].category;
-                    introduction = notes[index].introduction;
-                    syntax = notes[index].syntax;
-                    description = notes[index].description;
-                    btnTxt = "Update Note";
-                }
-                else {
-                    id = "";
-                    title = "";
-                    category = "";
-                    introduction = "";
-                    syntax = "";
-                    description = "";
-                    btnTxt = "Add Note";
-                }
+                id = "";
+                title = "";
+                category = "";
+                introduction = "";
+                syntax = "";
+                description = "";
+                btnTxt = "Add Note";
 
                 $(formTitle).val(title);
                 $(formCategory).val(category);
@@ -311,7 +252,6 @@ jQuery(function($){
                 syntax =formSyntax.getData();
                 description = formDescription.getData();
                 
-                console.log(id);
                 // format obj
                 var resObj = {
                     id: "",
@@ -352,7 +292,6 @@ jQuery(function($){
                         }
                     }
                     manageBtnToggle.toggleBtn();
-                    console.table(notes);
                 })
                 .fail( function(d, textStatus, error) {
                     console.error("getJSON failed, status: " + textStatus + ", error: "+error);
@@ -438,7 +377,7 @@ jQuery(function($){
                 manageBtnToggle.hideBtn();
                 addBtnToggle.hideBtn();
                 doneBtnToggle.showBtn();
-                $(".list-group ul").each(function() {
+                $(".category ul").each(function() {
                     noteManager.sortNote(this);
                 });
             } else if( $(target).hasClass("done-btn") ) {
@@ -449,7 +388,7 @@ jQuery(function($){
                 addBtnToggle.showBtn();
                 formToggle.hideForm();
                 listToggle.showList();
-                $( ".list-group ul" ).each(function() {
+                $( ".category ul" ).each(function() {
                     $(this).sortable("disable");
                 });
             } else if( $(target).hasClass("cancel-btn") ) {
@@ -463,18 +402,11 @@ jQuery(function($){
     }
     
     function noteBody() {
-        var listCategory,
-            listClass,
-            formCategory;
+        var formCategory;
         
-        for(var i=0; i<category.length; i++) {
-            listClass = "category-" + category[i];
-            listTitle = $("<p class=\"list-group-item list-group-item-primary\"></p>").text(category[i]);
-            listCategory = $("<li></li>").addClass(listClass).append(listTitle, "<ul></ul>");
-            $("#note-list").append(listCategory);
-            
-            formCategory = $("<option></option>").val(category[i]).text(category[i]);
+        categories.forEach(function(category) {
+            formCategory = $("<option></option>").val(category).text(category);
             $("#add-category").append(formCategory);
-        }
+        });
     }
 });

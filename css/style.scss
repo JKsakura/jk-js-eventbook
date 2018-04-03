@@ -89,7 +89,7 @@ a {
     }
 }
 .wrap { 
-    width: 800px; 
+    width: 1100px; 
     max-width: 100%; 
     margin: 0 auto; 
     padding: 0 20px;
@@ -181,22 +181,6 @@ button, input[type=submit], .btn {
     select {
         text-transform: capitalize;
     }
-    &::before {
-        content: '';
-        position: absolute;
-        right: 10px;
-        top: 5px;
-        border: solid 4px transparent;
-        border-bottom: solid 7px #bbb;
-    }
-    &::after {
-        content: '';
-        position: absolute;
-        right: 10px;
-        top: 18px;
-        border: solid 4px transparent;
-        border-top: solid 7px #bbb;
-    }
 }
 .section-title {
     margin-bottom: 20px;
@@ -211,7 +195,7 @@ button, input[type=submit], .btn {
     top: 0;
     left: 0;
     width: 100%;
-    height: 40px;
+    height: 50px;
     background-color: $color_secondary;
     z-index: 100;
     &.open {
@@ -243,6 +227,7 @@ button, input[type=submit], .btn {
     right: 20px;
     width: 50px;
     height: 100%;
+    cursor: pointer;
     span {
         position: absolute;
         top: 50%;
@@ -332,7 +317,6 @@ button, input[type=submit], .btn {
 /* NOTES MODUKE
 /* ============================ */
 #notes-module {
-    #note-done-btn { display: none; }
     .notes-wrapper {
         position: relative;
         margin: 0 auto;
@@ -343,6 +327,7 @@ button, input[type=submit], .btn {
                     margin-right: 5px;
                 }
             }
+            #note-done-btn { display: none; }
         }
         .notes-body {
             position: relative;
@@ -353,7 +338,7 @@ button, input[type=submit], .btn {
             left: 0;
             width: 100%;
             height: 100vh;
-            padding: 70px 0 30px;
+            padding: 70px 0 50px;
             transition: left 0.3s;
             overflow-y: auto;
             &.hide{
@@ -365,7 +350,7 @@ button, input[type=submit], .btn {
             left: 100vw;
             width: 100%;
             height: 100vh;
-            padding: 70px 0 30px;
+            padding: 70px 0 50px;
             transform: scale(0);
             transition: left 0.3s 0s, transform 0s 0.3s;
             overflow-y: auto;
@@ -380,7 +365,7 @@ button, input[type=submit], .btn {
             left: 100vw;
             width: 100%;
             height: 100vh;
-            padding: 50px 0;
+            padding: 70px 0 30px;
             transform: scale(0);
             transition: left 0.3s 0s, transform 0s 0.3s;
             overflow-y: auto;
@@ -388,6 +373,41 @@ button, input[type=submit], .btn {
                 left: 0;
                 transform: scale(1);
                 transition: left 0.3s 0s, transform 0s 0s;
+            }
+        }
+        #note-table {
+            width: 100%;
+            tr {
+                th {
+                    text-transform: uppercase;
+                }
+                td {
+                    .item-btn {
+                        width: 25px;
+                        display: inline-block;
+                        vertical-align: middle;
+                        padding: 0;
+                        background-color: transparent;
+                        border: 0;
+                        cursor: pointer;
+                        color: #000;
+                        font-size: 20px;
+                        text-align: center;
+                        svg {
+                            pointer-events: none;
+                        }
+                        &.edit-btn {
+                            &:hover {
+                                color: #1983ff;
+                            }
+                        }
+                        &.delete-btn {
+                            &:hover {
+                                color: #ff2f2f;
+                            }
+                        }
+                    }
+                }
             }
         }
         #note-list {
@@ -472,55 +492,6 @@ button, input[type=submit], .btn {
                             width: 100%;
                             margin-left: 0;
                         }
-                    }
-                }
-                .item-btns {
-                    position: absolute;
-                    top: 0;
-                    right: -100%;
-                    width: 90px;
-                    height: 100%; //background-color: #f8f9fa;
-                    background-color: rgba(0, 0, 0, 0.7);
-                    text-align: center;
-                    font-size: 0;
-                    transition: right 0.15s;
-                    &::before {
-                        content: '';
-                        display: inline-block;
-                        width: 0;
-                        height: 100%;
-                        vertical-align: middle;
-                    }
-                    .item-btn {
-                        width: 25px;
-                        display: inline-block;
-                        vertical-align: middle;
-                        padding: 0;
-                        background-color: transparent;
-                        border: 0;
-                        cursor: pointer;
-                        color: #fff;
-                        font-size: 20px;
-                        text-align: center;
-                        svg {
-                            pointer-events: none;
-                        }
-                        &+.item-btn {
-                            margin-left: 15px;
-                        }
-                        &.edit-btn {
-                            &:hover {
-                                color: #1983ff;
-                            }
-                        }
-                        &.delete-btn {
-                            &:hover {
-                                color: #ff2f2f;
-                            }
-                        }
-                    }
-                    &.active {
-                        right: 0;
                     }
                 }
             }

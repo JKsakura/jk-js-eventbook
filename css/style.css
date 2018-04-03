@@ -21,7 +21,7 @@ h4 { font: normal 20px/1.5 sans-serif; }
 
 a:hover { text-decoration: none; }
 
-.wrap { width: 800px; max-width: 100%; margin: 0 auto; padding: 0 20px; -webkit-box-sizing: border-box; box-sizing: border-box; }
+.wrap { width: 1100px; max-width: 100%; margin: 0 auto; padding: 0 20px; -webkit-box-sizing: border-box; box-sizing: border-box; }
 
 .content-main p { margin-bottom: 10px; }
 
@@ -69,16 +69,12 @@ button, input[type=submit], .btn { text-transform: uppercase; letter-spacing: 0.
 
 .select-menu select { text-transform: capitalize; }
 
-.select-menu::before { content: ''; position: absolute; right: 10px; top: 5px; border: solid 4px transparent; border-bottom: solid 7px #bbb; }
-
-.select-menu::after { content: ''; position: absolute; right: 10px; top: 18px; border: solid 4px transparent; border-top: solid 7px #bbb; }
-
 .section-title { margin-bottom: 20px; text-align: center; text-transform: uppercase; }
 
 /* ============================ */
 /* MAIN MODULES
 /* ============================ */
-#header { position: fixed; top: 0; left: 0; width: 100%; height: 40px; background-color: #20a714; z-index: 100; }
+#header { position: fixed; top: 0; left: 0; width: 100%; height: 50px; background-color: #20a714; z-index: 100; }
 
 #header.open #menu-toggle span { background-color: transparent; -webkit-transform: translateY(-50%) rotateY(180deg); transform: translateY(-50%) rotateY(180deg); -webkit-transition: background 0.3s, -webkit-transform 0.3s; transition: background 0.3s, -webkit-transform 0.3s; -o-transition: background 0.3s, transform 0.3s; transition: background 0.3s, transform 0.3s; transition: background 0.3s, transform 0.3s, -webkit-transform 0.3s; }
 
@@ -88,7 +84,7 @@ button, input[type=submit], .btn { text-transform: uppercase; letter-spacing: 0.
 
 #header.open #main-menu { left: 0; }
 
-#menu-toggle { position: absolute; right: 20px; width: 50px; height: 100%; }
+#menu-toggle { position: absolute; right: 20px; width: 50px; height: 100%; cursor: pointer; }
 
 #menu-toggle span { position: absolute; top: 50%; right: 0; width: 22px; height: 2px; background-color: #fff; -webkit-transform: translateY(-50%) rotateY(0); transform: translateY(-50%) rotateY(0); -webkit-transition: background 0.3s, -webkit-transform 0.3s linear; transition: background 0.3s, -webkit-transform 0.3s linear; -o-transition: background 0.3s, transform 0.3s linear; transition: background 0.3s, transform 0.3s linear; transition: background 0.3s, transform 0.3s linear, -webkit-transform 0.3s linear; }
 
@@ -122,27 +118,39 @@ button, input[type=submit], .btn { text-transform: uppercase; letter-spacing: 0.
 /* ============================ */
 /* NOTES MODUKE
 /* ============================ */
-#notes-module #note-done-btn { display: none; }
-
 #notes-module .notes-wrapper { position: relative; margin: 0 auto; }
 
 #notes-module .notes-wrapper .notes-header { margin-bottom: 20px; }
 
 #notes-module .notes-wrapper .notes-header .btn svg { margin-right: 5px; }
 
+#notes-module .notes-wrapper .notes-header #note-done-btn { display: none; }
+
 #notes-module .notes-wrapper .notes-body { position: relative; width: 100%; }
 
-#notes-module .notes-wrapper .note-list-container { position: absolute; left: 0; width: 100%; height: 100vh; padding: 70px 0 30px; -webkit-transition: left 0.3s; -o-transition: left 0.3s; transition: left 0.3s; overflow-y: auto; }
+#notes-module .notes-wrapper .note-list-container { position: absolute; left: 0; width: 100%; height: 100vh; padding: 70px 0 50px; -webkit-transition: left 0.3s; -o-transition: left 0.3s; transition: left 0.3s; overflow-y: auto; }
 
 #notes-module .notes-wrapper .note-list-container.hide { left: -100vw; }
 
-#notes-module .notes-wrapper .note-form-container { position: absolute; left: 100vw; width: 100%; height: 100vh; padding: 70px 0 30px; -webkit-transform: scale(0); -ms-transform: scale(0); transform: scale(0); -webkit-transition: left 0.3s 0s, -webkit-transform 0s 0.3s; transition: left 0.3s 0s, -webkit-transform 0s 0.3s; -o-transition: left 0.3s 0s, transform 0s 0.3s; transition: left 0.3s 0s, transform 0s 0.3s; transition: left 0.3s 0s, transform 0s 0.3s, -webkit-transform 0s 0.3s; overflow-y: auto; }
+#notes-module .notes-wrapper .note-form-container { position: absolute; left: 100vw; width: 100%; height: 100vh; padding: 70px 0 50px; -webkit-transform: scale(0); -ms-transform: scale(0); transform: scale(0); -webkit-transition: left 0.3s 0s, -webkit-transform 0s 0.3s; transition: left 0.3s 0s, -webkit-transform 0s 0.3s; -o-transition: left 0.3s 0s, transform 0s 0.3s; transition: left 0.3s 0s, transform 0s 0.3s; transition: left 0.3s 0s, transform 0s 0.3s, -webkit-transform 0s 0.3s; overflow-y: auto; }
 
 #notes-module .notes-wrapper .note-form-container.show { left: 0; -webkit-transform: scale(1); -ms-transform: scale(1); transform: scale(1); -webkit-transition: left 0.3s 0s, -webkit-transform 0s 0s; transition: left 0.3s 0s, -webkit-transform 0s 0s; -o-transition: left 0.3s 0s, transform 0s 0s; transition: left 0.3s 0s, transform 0s 0s; transition: left 0.3s 0s, transform 0s 0s, -webkit-transform 0s 0s; }
 
-#notes-module .notes-wrapper .note-detail-container { position: absolute; left: 100vw; width: 100%; height: 100vh; padding: 50px 0; -webkit-transform: scale(0); -ms-transform: scale(0); transform: scale(0); -webkit-transition: left 0.3s 0s, -webkit-transform 0s 0.3s; transition: left 0.3s 0s, -webkit-transform 0s 0.3s; -o-transition: left 0.3s 0s, transform 0s 0.3s; transition: left 0.3s 0s, transform 0s 0.3s; transition: left 0.3s 0s, transform 0s 0.3s, -webkit-transform 0s 0.3s; overflow-y: auto; }
+#notes-module .notes-wrapper .note-detail-container { position: absolute; left: 100vw; width: 100%; height: 100vh; padding: 70px 0 30px; -webkit-transform: scale(0); -ms-transform: scale(0); transform: scale(0); -webkit-transition: left 0.3s 0s, -webkit-transform 0s 0.3s; transition: left 0.3s 0s, -webkit-transform 0s 0.3s; -o-transition: left 0.3s 0s, transform 0s 0.3s; transition: left 0.3s 0s, transform 0s 0.3s; transition: left 0.3s 0s, transform 0s 0.3s, -webkit-transform 0s 0.3s; overflow-y: auto; }
 
 #notes-module .notes-wrapper .note-detail-container.show { left: 0; -webkit-transform: scale(1); -ms-transform: scale(1); transform: scale(1); -webkit-transition: left 0.3s 0s, -webkit-transform 0s 0s; transition: left 0.3s 0s, -webkit-transform 0s 0s; -o-transition: left 0.3s 0s, transform 0s 0s; transition: left 0.3s 0s, transform 0s 0s; transition: left 0.3s 0s, transform 0s 0s, -webkit-transform 0s 0s; }
+
+#notes-module .notes-wrapper #note-table { width: 100%; }
+
+#notes-module .notes-wrapper #note-table tr th { text-transform: uppercase; }
+
+#notes-module .notes-wrapper #note-table tr td .item-btn { width: 25px; display: inline-block; vertical-align: middle; padding: 0; background-color: transparent; border: 0; cursor: pointer; color: #000; font-size: 20px; text-align: center; }
+
+#notes-module .notes-wrapper #note-table tr td .item-btn svg { pointer-events: none; }
+
+#notes-module .notes-wrapper #note-table tr td .item-btn.edit-btn:hover { color: #1983ff; }
+
+#notes-module .notes-wrapper #note-table tr td .item-btn.delete-btn:hover { color: #ff2f2f; }
 
 #notes-module .notes-wrapper #note-list p.list-group-item { text-transform: uppercase; font-weight: 400; cursor: pointer; }
 
@@ -173,22 +181,6 @@ button, input[type=submit], .btn { text-transform: uppercase; letter-spacing: 0.
 #notes-module .notes-wrapper #note-list .list-item .item-top .item-introduction { display: inline-block; vertical-align: middle; width: calc(80% - 74px); overflow-x: auto; pointer-events: none; }
 
 @media screen and (max-width: 768px) { #notes-module .notes-wrapper #note-list .list-item .item-top .item-introduction { display: block; width: 100%; margin-left: 0; } }
-
-#notes-module .notes-wrapper #note-list .list-item .item-btns { position: absolute; top: 0; right: -100%; width: 90px; height: 100%; background-color: rgba(0, 0, 0, 0.7); text-align: center; font-size: 0; -webkit-transition: right 0.15s; -o-transition: right 0.15s; transition: right 0.15s; }
-
-#notes-module .notes-wrapper #note-list .list-item .item-btns::before { content: ''; display: inline-block; width: 0; height: 100%; vertical-align: middle; }
-
-#notes-module .notes-wrapper #note-list .list-item .item-btns .item-btn { width: 25px; display: inline-block; vertical-align: middle; padding: 0; background-color: transparent; border: 0; cursor: pointer; color: #fff; font-size: 20px; text-align: center; }
-
-#notes-module .notes-wrapper #note-list .list-item .item-btns .item-btn svg { pointer-events: none; }
-
-#notes-module .notes-wrapper #note-list .list-item .item-btns .item-btn + .item-btn { margin-left: 15px; }
-
-#notes-module .notes-wrapper #note-list .list-item .item-btns .item-btn.edit-btn:hover { color: #1983ff; }
-
-#notes-module .notes-wrapper #note-list .list-item .item-btns .item-btn.delete-btn:hover { color: #ff2f2f; }
-
-#notes-module .notes-wrapper #note-list .list-item .item-btns.active { right: 0; }
 
 #notes-module .notes-wrapper #note-detail h1 { font-weight: 300; }
 

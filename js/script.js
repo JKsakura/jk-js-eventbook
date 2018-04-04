@@ -242,7 +242,7 @@ jQuery(function ($) {
             formCategory;
         categories.forEach(function(category){
             listClass = "category category-"+category;
-            listTitle = $("<p class='list-group-item list-group-item-primary'></p>").text(category);
+            listTitle = $("<p class='list-group-item'></p>").text(category);
             listCategory = $("<li></li>").addClass(listClass).data("category", category).append(listTitle, "<ul></ul>");
             $("#note-list").append(listCategory); 
         });

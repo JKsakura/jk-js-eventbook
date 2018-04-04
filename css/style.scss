@@ -414,6 +414,9 @@ button, input[type=submit], .btn {
 
 #note-list {
     p.list-group-item {
+        padding: 5px 10px;
+        background-color: $color_primary;
+        color: #fff;
         text-transform: uppercase;
         font-weight: 400;
         cursor: pointer;

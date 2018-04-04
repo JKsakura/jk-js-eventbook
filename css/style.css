@@ -150,7 +150,7 @@ button, input[type=submit], .btn { text-transform: uppercase; letter-spacing: 0.
 
 #note-table tr td .item-btn.delete-btn:hover { color: #ff2f2f; }
 
-#note-list p.list-group-item { text-transform: uppercase; font-weight: 400; cursor: pointer; }
+#note-list p.list-group-item { padding: 5px 10px; background-color: #212529; color: #fff; text-transform: uppercase; font-weight: 400; cursor: pointer; }
 
 #note-list p.list-group-item::before { content: ''; position: absolute; top: 50%; right: 20px; width: 8px; height: 8px; margin-top: -3px; border-right: solid 2px #fff; border-bottom: solid 2px #fff; -webkit-transform: rotate(-135deg); -ms-transform: rotate(-135deg); transform: rotate(-135deg); }
 

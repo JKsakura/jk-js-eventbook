@@ -35,9 +35,16 @@
                         <div id="note-list-container" class="note-list-container">
                             <div class="wrap">
                                 <div class="notes-header">
-                                    <button class="add-btn btn btn-primary" id="note-add-btn"><i class="fas fa-plus-circle"></i>Add Note</button>
-                                    <button class="manage-btn btn btn-primary" id="note-manage-btn"><i class="fas fa-edit"></i>Manage</button>
-                                    <button class="done-btn btn btn-success" id="note-done-btn">Done</button>
+                                    <button class="add-btn btn-sm btn-primary" id="note-add-btn"><i class="fas fa-plus-circle"></i>Add</button>
+                                    <div class="search-box form-group">
+                                        <input type="search" class="form-control" id="filter-search" aria-describedby="searchHelp" placeholder="Search..." name="search">
+                                        <button type="submit">
+                                            <i class="fas fa-search"></i>
+                                        </button>
+                                    </div>
+                                    <div class="select-menu form-group">
+                                        <select class="form-control" id="filter-category"></select>
+                                    </div>
                                 </div>
                                 <div class="notes-body">
                                     <table id="note-table" class="table">
@@ -60,28 +67,28 @@
                         <div id="note-form-container" class="note-form-container">
                             <div class="wrap">
                                 <div class="notes-header">
-                                    <button class="cancel-btn btn btn-light" id="note-cancel-btn"><i class="fas fa-times-circle"></i>Cancel</button>
+                                    <button class="cancel-btn btn-sm btn-light" id="note-cancel-btn"><i class="fas fa-times-circle"></i>Cancel</button>
                                 </div>
                                 <div class="notes-body">
                                 <form id="note-form">
                                     <div class="form-field">
-                                        <input type="text" class="form-control" placeholder="Title" id="add-title" required>
+                                        <input type="text" class="form-control" placeholder="Title" id="form-title" required>
                                     </div>
                                     <div class="form-field">
                                         <span class="select-menu">
-                                            <select id="add-category" class="form-control" required>
+                                            <select id="form-category" class="form-control" required>
                                                 <option value="">Category</option>
                                             </select>
                                         </span>
                                     </div>
                                     <div class="form-field">
-                                        <textarea class="form-control" name="introduction" placeholder="Introduction" id="add-introduction"></textarea>
+                                        <textarea class="form-control" name="introduction" placeholder="Introduction" id="form-introduction"></textarea>
                                     </div>
                                     <div class="form-field">
-                                        <textarea class="form-control syntax-editor" name="syntax" placeholder="Syntax" id="add-syntax"></textarea>
+                                        <textarea class="form-control syntax-editor" name="syntax" placeholder="Syntax" id="form-syntax"></textarea>
                                     </div>
                                     <div class="form-field">
-                                        <textarea class="form-control description-editor" name="description" placeholder="Description" id="add-description"></textarea>
+                                        <textarea class="form-control description-editor" name="description" placeholder="Description" id="form-description"></textarea>
                                     </div>
                                     <div class="form-field">
                                         <button id="form-submit" type="submit" value="Add Note" class="btn btn-success">Add Note</button>

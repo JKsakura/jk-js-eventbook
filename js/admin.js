@@ -3,11 +3,11 @@ jQuery(function($){
     var noteID, notes;
     
     // Declare Global CKEditor WYSIWYG Fields
-    var syntaxEditor = CKEDITOR.replace('add-syntax'),
-        descriptionEditor = CKEDITOR.replace('add-description'),
+    var syntaxEditor = CKEDITOR.replace('form-syntax'),
+        descriptionEditor = CKEDITOR.replace('form-description'),
         formEl = $("#note-form"),
         noteList = $("#note-table"),
-        categories = ["array", "booleans", "date", "error"],
+        categories = ["array", "booleans", "date", "error", "global"],
         cache = [];
     
 /* ============================================================== */
@@ -70,39 +70,6 @@ jQuery(function($){
         };
     }());
 
-    // TOGGLE FOR MANAGING MANAGE BUTTON
-    var manageBtnToggle = (function() {
-        var manageBtn = $("#note-manage-btn");
-        return {
-            showBtn: function() {
-                $(manageBtn).show();
-            },
-            hideBtn: function() {
-                $(manageBtn).hide();
-            },
-            toggleBtn: function() {
-                if( $(".list-item").length > 0 ) {
-                    $(manageBtn).show();
-                } else {
-                    $(manageBtn).hide();
-                }
-            }
-        };
-    }());
-
-    // TOGGLE FOR DONE BUTTON
-    var doneBtnToggle = (function() {
-        var doneBtn = $("#note-done-btn");
-        return {
-            showBtn: function() {
-                $(doneBtn).show();
-            },
-            hideBtn: function() {
-                $(doneBtn).hide();
-            }
-        };
-    }());
-    
     // TOGGLE FOR CANCEL BUTTON
     var cancelBtnToggle = (function() {
         var cancelBtn = $("#note-cancel-btn");
@@ -115,7 +82,58 @@ jQuery(function($){
             }
         };
     }());
-    
+
+/* ============================================================== */
+/*    FUNCTIONS TO MANAGE THE NOTE HEADER  */
+/* ============================================================== */
+// INITIAL NOTE BODY EVENTS
+    var filterManager = (function () {
+        return {
+            goSearch: function () {
+                $("#filter-search").on("input", function () {
+                    var search = $(this).val().trim().toUpperCase();
+                    cache.forEach(function (note) {
+                        if (note.content.trim().toUpperCase().indexOf(search) > -1) {
+                            $(note.element).show();
+                        } else {
+                            $(note.element).hide();
+                        }
+                    });
+                    $(noteList).find("p.list-group-item").each(function () {
+                        if ($(this).html().toUpperCase().indexOf(search) > -1) {
+                            $(this).show();
+                        } else {
+                            $(this).hide();
+                        }
+                    });
+                });
+            },
+            iniCategory: function () {
+                var defaultVal = '<option value="" disabled selected>Category</option>';
+                var filterCategory = $("#filter-category").append(defaultVal, "<option value='all'>All</option>");
+                categories.forEach(function (category) {
+                    var newCategory = $("<option></option>").text(category).val(category).appendTo(filterCategory);
+                });
+            },
+            goFilter: function () {
+                $("#filter-category").change(function () {
+                    var filterCategory = $(this).val();
+                    $(noteList).find(".category").each(function () {
+                        if (filterCategory === "all") {
+                            cache.forEach(function(cache) {
+                                cache.element.show();
+                            });
+                        } else if ($(this).find("p.list-group-item").html().toUpperCase() === filterCategory.toUpperCase()) {
+                            $(this).show();
+                        } else {
+                            $(this).hide();
+                        }
+                    });
+                });
+            }
+        };
+    }());
+
 /* ============================================================== */
 /*    FUNCTIONS TO MANAGE THE NOTE LIST  */
 /* ============================================================== */
@@ -154,50 +172,39 @@ jQuery(function($){
                     editBtn = $("<td></td>").append($(temEdit).append(itemEditBtn)),
                     deleteBtn = $("<td></td>").append($(itemDelete).append(itemDeleteBtn));
                 var row = $("<tr></tr>").append(id, title, created, category, introduction, editBtn, deleteBtn).appendTo($(noteList).find('tbody'));
-                cache.push(row);
+                cache.push({                          // Add an object to the cache array
+                  element: row,                      // This image
+                  content: row.html() // Its alt text (lowercase trimmed)
+                });
             },
             // DELETE A NEW NOTE BASED ON THE ID
             deleteNote: function(e) {
-                var index = $(e).closest("tr").index();
+                var target = e.target;
+                var index = $(target).closest("tr").index();
                 var r = confirm("Are You Sure You Want to Delete This Item?");
                 if(r === true) {
                     notes.splice(index, 1);
+                    cache[index].element.remove();
                     cache.splice(index, 1);
-                    cache[index].remove();
-                    console.log(index);
-                    console.table(cache);
                 } else {
                     return false;
                 }
             },
             sortNote: function(e) {
                 if ($(e).sortable()) {
+                    var oldIndex, newIndex;
                     $(e).sortable("enable");
                     $(e).sortable({
+                        start: function (e, ui) {
+                            oldIndex = ui.item.index();
+                            console.table(notes[oldIndex]);
+                        },
                         update: function (e, ui) {
-                            var prevIndex = ui.item.prev(),
-                                nextIndex = ui.item.next(),
-                                targetID = ui.item.attr("id").slice(4),
-                                newIndex,
-                                note,
-                                oldIndex = findTarget(notes, targetID);
-                            if ($(prevIndex).length > 0) {
-                                newIndex = findTarget(notes, $(prevIndex).attr("id").slice(4));
-                            } else if ($(nextIndex).length > 0) {
-                                newIndex = findTarget(notes, $(nextIndex).attr("id").slice(4)) - 1;
-                            }
-                            note = notes[oldIndex];
-                            if (oldIndex > -1) {
-                                notes.splice(oldIndex, 1);
-                                notes.splice(newIndex, 0, note);
-                                dataManager.saveData(notes);
-                                console.table(notes);
-                            }
-                            function findTarget(object, target) {
-                                return object.map(function (element) {
-                                    return element.id.toString();
-                                }).indexOf(target);
-                            }
+                            newIndex = ui.item.index();
+                            notes.splice(newIndex, 0, notes[oldIndex]);
+                            notes.splice(oldIndex, 1);
+                            cache.splice(newIndex, 0, notes[oldIndex]);
+                            cache.splice(oldIndex, 1);
                         }
                     });
                     $(e).disableSelection();
@@ -213,25 +220,37 @@ jQuery(function($){
     var form = (function(){
         var formSyntax,
             formDescription,
-            formNoteID = "",
-            formTitle = $("#add-title"),
-            formCategory = $("#add-category"),
-            formIntroduction = $("#add-introduction"),
+            formTitle = $("#form-title"),
+            formCategory = $("#form-category"),
+            formIntroduction = $("#form-introduction"),
             formSubmitBtn = $("#form-submit");
         var id, title, category, introduction, syntax, description, btnTxt;
         
         return {
             setForm: function(e) {
-                var target = e.target;
-                formSyntax = syntaxEditor.activeFilter.editor,
-                formDescription = descriptionEditor.activeFilter.editor,
-                id = "";
-                title = "";
-                category = "";
-                introduction = "";
-                syntax = "";
-                description = "";
-                btnTxt = "Add Note";
+                var target = e.target,
+                    index = $(target).closest("tr").index();
+                formSyntax = syntaxEditor.activeFilter.editor;
+                formDescription = descriptionEditor.activeFilter.editor;
+            
+                if( index > -1 ) {
+                    var note = notes[index];
+                    id = note.id;
+                    title = note.title;
+                    category = note.category;
+                    introduction = note.introduction;
+                    syntax = note.syntax;
+                    description = note.description;
+                    btnTxt = "Update Note";
+                } else {
+                    id = "";
+                    title = "";
+                    category = "";
+                    introduction = "";
+                    syntax = "";
+                    description = "";
+                    btnTxt = "Add Note";
+                }
 
                 $(formTitle).val(title);
                 $(formCategory).val(category);
@@ -260,7 +279,7 @@ jQuery(function($){
                     introduction: introduction,
                     syntax: syntax,
                     description: description
-                }
+                };
 
                 if (id) {
                     resObj.id = id;
@@ -291,7 +310,6 @@ jQuery(function($){
                             if(notes[i].id >= noteID) { noteID = notes[i].id+1; }
                         }
                     }
-                    manageBtnToggle.toggleBtn();
                 })
                 .fail( function(d, textStatus, error) {
                     console.error("getJSON failed, status: " + textStatus + ", error: "+error);
@@ -318,7 +336,6 @@ jQuery(function($){
             }
         };
     }());
-    
     // INITIAL NOTE HEADER VISUAL 
     noteHeader();
     noteBody();
@@ -326,13 +343,16 @@ jQuery(function($){
     // LOAD DATA FROM JSON FILE
     dataManager.loadData();
     dataManager.resetData();
-    
-    
+
+    // INITIAL HEADER FILTER
+    filterManager.goSearch();
+    filterManager.goFilter();
+
     // INITIAL NOTE BODY EVENTS
     $(noteList).on("click", function(e) {
         var target = e.target;
         if( $(target).hasClass("delete-btn") ) {
-            noteManager.deleteNote(target);
+            noteManager.deleteNote(e);
         } else if( $(target).hasClass("edit-btn") ) {
             form.setForm(e);
             $("#note-form-container").animate({
@@ -354,49 +374,25 @@ jQuery(function($){
         
         listToggle.showList();
         formToggle.hideForm();
-        manageBtnToggle.toggleBtn();
     });
     /* ============================================================== */
     /*    EVENT FOR ALL NOTE HEADING BUTTONS */
     /* ============================================================== */
     function noteHeader() {
         headerToggle.menuToggle();
+        filterManager.iniCategory();
         $(".notes-header").on("click", function(e) {
             var target = e.target;
             if( $(target).hasClass("add-btn") ) {
                 formToggle.toggleForm();
                 listToggle.toggleList();
                 form.setForm(e);
-                manageBtnToggle.hideBtn();
                 $("#note-form-container").animate({
                     scrollTop:0
                 }, 300);
-            } else if( $(target).hasClass("manage-btn") ) {
-                $(".item-btns").toggleClass("active");
-                formToggle.hideForm();
-                manageBtnToggle.hideBtn();
-                addBtnToggle.hideBtn();
-                doneBtnToggle.showBtn();
-                $(".category ul").each(function() {
-                    noteManager.sortNote(this);
-                });
-            } else if( $(target).hasClass("done-btn") ) {
-                var itemBtn = $(".item-btns");
-                $(itemBtn).removeClass("active");
-                doneBtnToggle.hideBtn();
-                manageBtnToggle.toggleBtn();
-                addBtnToggle.showBtn();
-                formToggle.hideForm();
-                listToggle.showList();
-                $( ".category ul" ).each(function() {
-                    $(this).sortable("disable");
-                });
             } else if( $(target).hasClass("cancel-btn") ) {
                 formToggle.hideForm();
                 listToggle.showList();
-                if ( !$("#note-done-btn").is(":visible") ) {
-                    manageBtnToggle.toggleBtn();
-                }
             }
         });
     }
@@ -406,7 +402,7 @@ jQuery(function($){
         
         categories.forEach(function(category) {
             formCategory = $("<option></option>").val(category).text(category);
-            $("#add-category").append(formCategory);
+            $("#form-category").append(formCategory);
         });
     }
 });

@@ -201,6 +201,7 @@ jQuery(function ($) {
     // LOAD DATA FROM JSON FILE
     dataManager.loadData();
 
+    // INITIAL HEADER FILTER
     filterManager.goSearch();
     filterManager.goFilter();
 

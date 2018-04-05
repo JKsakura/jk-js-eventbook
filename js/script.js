@@ -3,7 +3,7 @@ jQuery(function ($) {
     var noteID, notes;
     var noteList = $("#note-list"),
         noteDetail = $("#note-detail-container"),
-        categories = ["array", "booleans", "date", "error"],
+        categories = ["array", "booleans", "date", "error", "global"],
         cache = [];
 
     /* ============================================================== */
@@ -63,17 +63,21 @@ jQuery(function ($) {
                 $("#filter-search").on("input", function () {
                     var search = $(this).val().trim().toUpperCase();
                     cache.forEach( function(note){
-                        if( note.content.trim().toUpperCase().indexOf(search) > -1 ) {
+                        note.element.hide();
+                        if (
+                             note.title.trim().toUpperCase().indexOf(search) > -1 
+                          || note.category.trim().toUpperCase().indexOf(search) > -1
+                          || note.introduction.trim().toUpperCase().indexOf(search) > -1
+                          || note.syntax.trim().toUpperCase().indexOf(search) > -1
+                          || note.description.trim().toUpperCase().indexOf(search) > -1
+                        ) {
                             $(note.element).show();
-                        } else {
-                            $(note.element).hide();
                         }
                     });
                     $(noteList).find("p.list-group-item").each(function () {
+                        $(this).hide();
                         if ($(this).html().toUpperCase().indexOf(search) > -1) {
                             $(this).show();
-                        } else {
-                            $(this).hide();
                         }
                     });
                 });
@@ -87,14 +91,13 @@ jQuery(function ($) {
             },
             goFilter: function () {
                 $("#filter-category").change(function() {
-                    var filterCategory = $(this).val();
+                    var filterCategory = $(this).val().trim().toUpperCase();
+                    $(noteList).find(".category").hide();
                     $(noteList).find(".category").each(function () {
-                        if( filterCategory === "all") {
+                        if( filterCategory === "ALL") {
                             $(noteList).find(".category").show();
-                        } else if ($(this).find("p.list-group-item").html().toUpperCase() === filterCategory.toUpperCase()) {
+                        } else if ($(this).find("p.list-group-item").text().trim().toUpperCase() === filterCategory.toUpperCase()) {
                             $(this).show();
-                        } else {
-                            $(this).hide();
                         }
                     });
                 });
@@ -135,9 +138,13 @@ jQuery(function ($) {
                 var listItem = $("<li></li>").attr("id", itemId).addClass(itemClass).append(listLink);
 
                 $(noteList).find(".category-" + note.category).find("ul").append(listItem);
-                cache.push({
-                    element: listItem,
-                    content: $(listItem).html()
+                cache.push({ // Add an object to the cache array
+                  element: listItem, // This row
+                  title: note.title,
+                  category: note.category,
+                  introduction: note.introduction,
+                  syntax: note.syntax,
+                  description: note.description
                 });
             },
             fetchDetail: function (target) {

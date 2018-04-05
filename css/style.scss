@@ -88,6 +88,9 @@ a {
         text-decoration: none;
     }
 }
+svg {
+    pointer-events: none;
+}
 .wrap { 
     width: 1100px; 
     max-width: 100%; 
@@ -133,9 +136,6 @@ a {
     font-size: 24px;
     &:hover {
         color: #28a745;
-    }
-    svg {
-        pointer-events: none; 
     }
 }
 form {
@@ -277,7 +277,7 @@ button, input[type=submit], .btn {
             letter-spacing: 2px;
             text-transform: uppercase;
             &:hover {
-                color: $color_secondary;
+                color: #ccc;
             }
         }
     }
@@ -415,6 +415,7 @@ button, input[type=submit], .btn {
 #note-list {
     p.list-group-item {
         padding: 5px 10px;
+        border-top: solid 1px #555;
         background-color: $color_primary;
         color: #fff;
         text-transform: uppercase;

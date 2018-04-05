@@ -93,17 +93,15 @@ jQuery(function($){
                 $("#filter-search").on("input", function () {
                     var search = $(this).val().trim().toUpperCase();
                     cache.forEach(function (note) {
-                        if (note.content.trim().toUpperCase().indexOf(search) > -1) {
+                        note.element.hide();
+                        if (
+                             note.title.trim().toUpperCase().indexOf(search) > -1 
+                          || note.category.trim().toUpperCase().indexOf(search) > -1
+                          || note.introduction.trim().toUpperCase().indexOf(search) > -1
+                          || note.syntax.trim().toUpperCase().indexOf(search) > -1
+                          || note.description.trim().toUpperCase().indexOf(search) > -1
+                        ) {
                             $(note.element).show();
-                        } else {
-                            $(note.element).hide();
-                        }
-                    });
-                    $(noteList).find("p.list-group-item").each(function () {
-                        if ($(this).html().toUpperCase().indexOf(search) > -1) {
-                            $(this).show();
-                        } else {
-                            $(this).hide();
                         }
                     });
                 });
@@ -117,16 +115,11 @@ jQuery(function($){
             },
             goFilter: function () {
                 $("#filter-category").change(function () {
-                    var filterCategory = $(this).val();
-                    $(noteList).find(".category").each(function () {
-                        if (filterCategory === "all") {
-                            cache.forEach(function(cache) {
-                                cache.element.show();
-                            });
-                        } else if ($(this).find("p.list-group-item").html().toUpperCase() === filterCategory.toUpperCase()) {
-                            $(this).show();
-                        } else {
-                            $(this).hide();
+                    var filterCategory = $(this).val().trim().toUpperCase();
+                    cache.forEach(function(note) {
+                        note.element.hide();
+                        if(note.category.trim().toUpperCase() === filterCategory || filterCategory === "ALL" ) {
+                            note.element.show();
                         }
                     });
                 });
@@ -172,9 +165,13 @@ jQuery(function($){
                     editBtn = $("<td></td>").append($(temEdit).append(itemEditBtn)),
                     deleteBtn = $("<td></td>").append($(itemDelete).append(itemDeleteBtn));
                 var row = $("<tr></tr>").append(id, title, created, category, introduction, editBtn, deleteBtn).appendTo($(noteList).find('tbody'));
-                cache.push({                          // Add an object to the cache array
-                  element: row,                      // This image
-                  content: row.html() // Its alt text (lowercase trimmed)
+                cache.push({ // Add an object to the cache array
+                  element: row, // This row
+                  title: note.title,
+                  category: note.category,
+                  introduction: note.introduction,
+                  syntax: note.syntax,
+                  description: note.description
                 });
             },
             // DELETE A NEW NOTE BASED ON THE ID
@@ -186,29 +183,33 @@ jQuery(function($){
                     notes.splice(index, 1);
                     cache[index].element.remove();
                     cache.splice(index, 1);
+                    dataManager.saveData(notes);
                 } else {
                     return false;
                 }
             },
             sortNote: function(e) {
-                if ($(e).sortable()) {
-                    var oldIndex, newIndex;
-                    $(e).sortable("enable");
-                    $(e).sortable({
-                        start: function (e, ui) {
-                            oldIndex = ui.item.index();
-                            console.table(notes[oldIndex]);
-                        },
-                        update: function (e, ui) {
-                            newIndex = ui.item.index();
-                            notes.splice(newIndex, 0, notes[oldIndex]);
-                            notes.splice(oldIndex, 1);
-                            cache.splice(newIndex, 0, notes[oldIndex]);
-                            cache.splice(oldIndex, 1);
+                var oldIndex, newIndex, note;
+                $(e).sortable({
+                    start: function (e, ui) {
+                        oldIndex = ui.item.index();
+                    },
+                    update: function (e, ui) {
+                        newIndex = ui.item.index();
+                        note = notes[oldIndex];
+                        if( oldIndex < newIndex ) {
+                            newIndex += 1;
+                        } else {
+                            oldIndex += 1;
                         }
-                    });
-                    $(e).disableSelection();
-                }
+                        notes.splice(newIndex, 0, note);
+                        notes.splice(oldIndex, 1);
+                        cache.splice(newIndex, 0, note);
+                        cache.splice(oldIndex, 1);
+                        dataManager.saveData(notes);
+                    }
+                });
+                $(e).disableSelection();
             }
         };
     }());
@@ -217,7 +218,7 @@ jQuery(function($){
 /* FUNCTIONS TO MANAGE THE FORM */   
 /* ============================================================== */
     // TRIGGER THE SUBMIT FUNCTION WHEN FORM SUBMITS
-    var form = (function(){
+    var formManager = (function(){
         var formSyntax,
             formDescription,
             formTitle = $("#form-title"),
@@ -342,7 +343,7 @@ jQuery(function($){
     
     // LOAD DATA FROM JSON FILE
     dataManager.loadData();
-    dataManager.resetData();
+    //dataManager.resetData();
 
     // INITIAL HEADER FILTER
     filterManager.goSearch();
@@ -354,7 +355,7 @@ jQuery(function($){
         if( $(target).hasClass("delete-btn") ) {
             noteManager.deleteNote(e);
         } else if( $(target).hasClass("edit-btn") ) {
-            form.setForm(e);
+            formManager.setForm(e);
             $("#note-form-container").animate({
                 scrollTop: 0
             });
@@ -370,7 +371,7 @@ jQuery(function($){
     $(formEl).on('submit', function(e) {
         e.preventDefault();
         // Update The Current Note
-        noteManager.saveNote(form.getForm());
+        noteManager.saveNote(formManager.getForm());
         
         listToggle.showList();
         formToggle.hideForm();
@@ -386,7 +387,7 @@ jQuery(function($){
             if( $(target).hasClass("add-btn") ) {
                 formToggle.toggleForm();
                 listToggle.toggleList();
-                form.setForm(e);
+                formManager.setForm(e);
                 $("#note-form-container").animate({
                     scrollTop:0
                 }, 300);
@@ -399,10 +400,14 @@ jQuery(function($){
     
     function noteBody() {
         var formCategory;
-        
+
         categories.forEach(function(category) {
             formCategory = $("<option></option>").val(category).text(category);
             $("#form-category").append(formCategory);
+        });
+        
+        $(noteList).find("tbody").each(function() {
+            noteManager.sortNote(this);
         });
     }
 });

@@ -21,6 +21,8 @@ h4 { font: normal 20px/1.5 sans-serif; }
 
 a:hover { text-decoration: none; }
 
+svg { pointer-events: none; }
+
 .wrap { width: 1100px; max-width: 100%; margin: 0 auto; padding: 0 20px; }
 
 .content-main p { margin-bottom: 10px; }
@@ -46,8 +48,6 @@ a:hover { text-decoration: none; }
 .icon-btn { display: inline-block; vertical-align: middle; background-color: transparent; border: 0; color: #000; cursor: pointer; padding: 0; font-size: 24px; }
 
 .icon-btn:hover { color: #28a745; }
-
-.icon-btn svg { pointer-events: none; }
 
 form .form-field { margin-bottom: 20px; }
 
@@ -96,7 +96,7 @@ button, input[type=submit], .btn { text-transform: uppercase; letter-spacing: 0.
 
 #main-menu > li > a { display: block; color: #fff; padding: 5px; letter-spacing: 2px; text-transform: uppercase; }
 
-#main-menu > li > a:hover { color: #007bff; }
+#main-menu > li > a:hover { color: #ccc; }
 
 /* ============================ */
 /* CREATE NEW NOTE FORM
@@ -150,7 +150,7 @@ button, input[type=submit], .btn { text-transform: uppercase; letter-spacing: 0.
 
 #note-table tr td .item-btn.delete-btn:hover { color: #ff2f2f; }
 
-#note-list p.list-group-item { padding: 5px 10px; background-color: #212529; color: #fff; text-transform: uppercase; font-weight: 400; cursor: pointer; }
+#note-list p.list-group-item { padding: 5px 10px; border-top: solid 1px #555; background-color: #212529; color: #fff; text-transform: uppercase; font-weight: 400; cursor: pointer; }
 
 #note-list p.list-group-item::before { content: ''; position: absolute; top: 50%; right: 20px; width: 8px; height: 8px; margin-top: -3px; border-right: solid 2px #fff; border-bottom: solid 2px #fff; -webkit-transform: rotate(-135deg); -ms-transform: rotate(-135deg); transform: rotate(-135deg); }
 

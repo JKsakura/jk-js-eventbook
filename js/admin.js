@@ -188,7 +188,7 @@ jQuery(function($){
                     return false;
                 }
             },
-            sortNote: function(e) {
+            orderNote: function(e) {
                 var oldIndex, newIndex, note;
                 $(e).sortable({
                     start: function (e, ui) {
@@ -210,6 +210,42 @@ jQuery(function($){
                     }
                 });
                 $(e).disableSelection();
+            },
+            sortNote: function() {
+                var thead = $(noteList).find("thead");
+                var tbody = $(noteList).find("tbody");
+                var control = $(thead).find("th");
+                var compare = {
+                    id: function(a, b) {
+                        return a - b;
+                    },
+                    title: function(a, b) {
+                        if( a < b ) {
+                            return -1;
+                        } else {
+                            return a > b ? 1 : 0;
+                        }
+                    },
+                    date: function(a, b) {
+                        a = new Date(a);
+                        b = new Date(b);
+                        return a - b;
+                    }
+                }
+                $(control).on("click", function() {
+                    var order = $(this).data('sort');
+                    var rows = $(tbody).find("tr").toArray();
+                    if( order ) {
+                        var column = control.index(this);
+                        rows.sort(function(a, b){
+                            var a = $(a).find("td").eq(column).text();
+                            var b = $(b).find("td").eq(column).text();
+                            console.log(a);
+                            return compare[order](a, b);
+                        });
+                    $(tbody).append(rows);
+                    }
+                });
             }
         };
     }());
@@ -407,7 +443,8 @@ jQuery(function($){
         });
         
         $(noteList).find("tbody").each(function() {
-            noteManager.sortNote(this);
+            noteManager.orderNote(this);
         });
+        noteManager.sortNote();
     }
 });

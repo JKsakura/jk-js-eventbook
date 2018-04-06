@@ -211,40 +211,53 @@ jQuery(function($){
                 });
                 $(e).disableSelection();
             },
-            sortNote: function() {
-                var thead = $(noteList).find("thead");
-                var tbody = $(noteList).find("tbody");
-                var control = $(thead).find("th");
+            sortNote: function () {
                 var compare = {
-                    id: function(a, b) {
+                    id: function (a, b) {
                         return a - b;
                     },
-                    title: function(a, b) {
-                        if( a < b ) {
+                    title: function (a, b) {
+                        if (a < b) {
                             return -1;
                         } else {
                             return a > b ? 1 : 0;
                         }
                     },
-                    date: function(a, b) {
+                    date: function (a, b) {
                         a = new Date(a);
                         b = new Date(b);
                         return a - b;
                     }
-                }
-                $(control).on("click", function() {
-                    var order = $(this).data('sort');
+                };
+
+                $(noteList).each(function() {
+                    var table = this;
+                    var control = $(table).find("th");
+                    var tbody = $(table).find("tbody");
                     var rows = $(tbody).find("tr").toArray();
-                    if( order ) {
-                        var column = control.index(this);
-                        rows.sort(function(a, b){
-                            var a = $(a).find("td").eq(column).text();
-                            var b = $(b).find("td").eq(column).text();
-                            console.log(a);
-                            return compare[order](a, b);
-                        });
-                    $(tbody).append(rows);
-                    }
+
+                    $(control).on("click", function () {
+                        var header = this;
+                        var order = $(header).data('sort');
+                        var column;
+                        if (order) {
+                            if( header.is(".ascending") || header.is(".descending") ) {
+                                $(tbody).append( rows.reverse() );
+                            } else {
+                                $(control).removeClass("ascending descending");
+                                $(header).addClass("ascending");
+                                if (compare.hasOwnProperty(order)) { 
+                                    column = control.index(this);
+                                    rows.sort(function (a, b) {
+                                        a = $(a).find("td").eq(column).text();
+                                        b = $(b).find("td").eq(column).text();
+                                        return compare[order](a, b);
+                                    });
+                                    $(tbody).append(rows);
+                                }
+                            }
+                        }
+                    });
                 });
             }
         };

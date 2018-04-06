@@ -142,6 +142,12 @@ button, input[type=submit], .btn { text-transform: uppercase; letter-spacing: 0.
 
 #note-table tr th { text-transform: uppercase; }
 
+#note-table tr th.sort { position: relative; cursor: pointer; }
+
+#note-table tr th.sort::after { content: ''; display: inline-block; vertical-align: middle; right: 0; width: 8px; height: 8px; margin-top: -7px; margin-left: 10px; border-right: solid 1px #fff; border-bottom: solid 1px #fff; -webkit-transform: rotate(45deg); -ms-transform: rotate(45deg); transform: rotate(45deg); }
+
+#note-table tr th.sort.ascending::after { margin-top: 0; -webkit-transform: rotate(-135deg); -ms-transform: rotate(-135deg); transform: rotate(-135deg); }
+
 #note-table tr td .item-btn { width: 25px; display: inline-block; vertical-align: middle; padding: 0; background-color: transparent; border: 0; cursor: pointer; color: #000; font-size: 20px; text-align: center; }
 
 #note-table tr td .item-btn svg { pointer-events: none; }

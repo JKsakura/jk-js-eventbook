@@ -231,23 +231,22 @@ jQuery(function($){
                 };
 
                 $(noteList).each(function() {
-                    var table = this;
-                    var control = $(table).find("th");
-                    var tbody = $(table).find("tbody");
-                    var rows = $(tbody).find("tr").toArray();
-
+                    var table = this,
+                        control = $(table).find("th"),
+                        tbody = $(table).find("tbody");
+                    
                     $(control).on("click", function () {
-                        var header = this;
-                        var order = $(header).data('sort');
-                        var column;
-                        if (order) {
-                            if( header.is(".ascending") || header.is(".descending") ) {
-                                $(tbody).append( rows.reverse() );
+                        var header = this,
+                            rows = $(tbody).find("tr").toArray(),
+                            order = $(header).data('sort'),
+                            column = control.index(this);
+                            if ($(header).is(".ascending") || $(header).is(".descending")) {
+                                $(header).toggleClass('ascending descending');
+                                $(tbody).append(rows.reverse());
                             } else {
                                 $(control).removeClass("ascending descending");
                                 $(header).addClass("ascending");
-                                if (compare.hasOwnProperty(order)) { 
-                                    column = control.index(this);
+                                if (compare.hasOwnProperty(order)) {
                                     rows.sort(function (a, b) {
                                         a = $(a).find("td").eq(column).text();
                                         b = $(b).find("td").eq(column).text();
@@ -256,7 +255,6 @@ jQuery(function($){
                                     $(tbody).append(rows);
                                 }
                             }
-                        }
                     });
                 });
             }

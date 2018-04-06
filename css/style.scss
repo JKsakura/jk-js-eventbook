@@ -381,6 +381,29 @@ button, input[type=submit], .btn {
     tr {
         th {
             text-transform: uppercase;
+            &.sort {
+                position: relative;
+                cursor: pointer;
+                &::after {
+                    content: '';
+                    display: inline-block;
+                    vertical-align: middle;
+                    right: 0;
+                    width: 8px;
+                    height: 8px;
+                    margin-top: -7px;
+                    margin-left: 10px;
+                    border-right: solid 1px #fff;
+                    border-bottom: solid 1px #fff;
+                    transform: rotate(45deg);
+                }
+                &.ascending {
+                    &::after {
+                        margin-top: 0;
+                        transform: rotate(-135deg);
+                    }
+                }
+            }
         }
         td {
             .item-btn {

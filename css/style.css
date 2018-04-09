@@ -19,6 +19,8 @@ h1 { font-weight: 300; }
 
 h4 { font: normal 20px/1.5 sans-serif; }
 
+a { text-decoration: none; }
+
 a:hover { text-decoration: none; }
 
 svg { pointer-events: none; }
@@ -162,7 +164,7 @@ button, input[type=submit], .btn { text-transform: uppercase; letter-spacing: 0.
 
 #note-list p.list-group-item.closed::before { margin-top: -5px; -webkit-transform: rotate(45deg); -ms-transform: rotate(45deg); transform: rotate(45deg); }
 
-#note-list .list-group-item { border-radius: 0; }
+#note-list .list-group-item { padding: 10px; border-radius: 0; }
 
 @media screen and (max-width: 480px) { #note-list .list-group-item { padding: 10px; } }
 

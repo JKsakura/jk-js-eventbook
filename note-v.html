@@ -7,74 +7,77 @@
         <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="css/atom-one-light.css">
         <link rel="stylesheet" type="text/css" href="css/style.css">
-        <script src="js/vue.js" type="text/javascript"></script>
-        <script src="ckeditor/ckeditor.js"/></script>
+        <script type="text/javascript" src="js/vue.min.js"></script>
+        <script type="text/javascript" src="js/jquery.js"></script>
     </head>
     <body>
-        <!-- START SITE -->
-        <div class="site">
-            <!-- START HEADER -->
-            <header id="header">
-                <nav>
-                    <span id="menu-toggle"><span></span></span>
-                    <ul id="main-menu">
-                        <li>
-                            <a href="index.html">Home</a>
-                        </li>
-                        <li>
-                            <a href="admin.html">Admin</a>
-                        </li>
-                    </ul>
-                </nav>
-            </header>
-            <!-- END HEADER -->
-            <!-- START WRAPPER -->
-            <main role="main" class="wrapper">
-                <section id="notes-module" class="main-content">
-                    <div class="notes-wrapper">
-                        <div id="note-list-container" class="note-list-container">
-                            <div class="wrap">
-                                <div class="notes-header">
-                                    <div class="search-box form-group">
-                                        <input type="search" class="form-control" id="filter-search" aria-describedby="searchHelp" placeholder="Search..." name="search">
-                                        <button type="submit">
-                                            <i class="fas fa-search"></i>
-                                        </button>
-                                    </div>
-                                    <div class="select-menu form-group">
-                                        <select class="form-control" id="filter-category"></select>
-                                    </div>
-                                </div>
-                                <div class="notes-body">
-                                    <ul id="note-list" class="list-group"></ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="note-detail-container" class="note-detail-container">
-                            <div class="wrap">
-                                <div id="note-detail" class="content-main">
-                                    <a href="#note-list" class="back-to-all">Back To All Notes</a>
-                                    <div class="detail-header">
-                                        <h1 class="h1 detail-title"></h1>
-                                        <h5 class="h5 detail-category"></h5>
-                                    </div>
-                                    <p class="detail-introduction"></p>
-                                    <code class="detail-syntax javascript"></code>
-                                    <div class="detail-description"></div>
-                                </div>
+    <!-- START SITE -->
+    <div class="site" id="app">
+        <!-- START HEADER -->
+        <header id="header" v-bind:class="{ open: showMainMenu }">
+            <nav>
+                <span id="menu-toggle" v-on:click="showMainMenu = !showMainMenu">
+                    <span></span>
+                </span>
+                <main-menu></main-menu>
+            </nav>
+        </header>
+        <!-- END HEADER -->
+        <!-- START WRAPPER -->
+        <main role="main" class="wrapper">
+            <section id="notes-module" class="main-content">
+                <div class="notes-wrapper">
+                    <div id="note-list-container" class="note-list-container" v-bind:class="{ hide: hideNoteList }">
+                        <div class="wrap">
+                            <div class="notes-body">
+                                <ul id="note-list">
+                                    <li v-for="category in categories" v-bind:class="'category category-'+category">
+                                        <p class='list-group-item'>{{ category }}</p>
+                                        <ul>
+                                            <li v-for="note in notes" v-if="note.category === category" class="list-item list-group-item list-group-item-action">
+                                                <a v-bind:href="'#'+note.id" v-on:click="displayNoteDetail(note, $event)">
+                                                    <div class="item-top">
+                                                        <div class="item-header">
+                                                            <p class="item-title note-field-text">{{ note.title }}</p>
+                                                            <h5 class="item-category note-field-select">{{ note.category }}</h5>
+                                                        </div>
+                                                        <p class="item-introduction note-field-area">{{ note.introduction }}</p>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    
+                                </ul>
                             </div>
                         </div>
                     </div>
-                </section>
-            </main
-            ><!-- END WRAPPER -->
-            <!-- START FOOTER -->
-            <footer></footer>
-            <!-- END FOOTER -->
-        </div>
-        <!-- END SITE -->
+                    <div id="note-detail-container" class="note-detail-container" v-bind:class="{ show: showNoteDetail }">
+                        <div class="wrap">
+                            <div id="note-detail" class="content-main">
+                                <a href="#note-list" class="back-to-all" v-on:click="hideNoteDetail($event)">Back To All Notes</a>
+                                <div class="detail-header">
+                                    <h1 class="h1">{{ detailTitle }}</h1>
+                                    <h5 class="h5">{{ detailCategory }}</h5>
+                                </div>
+                                <p>{{ detailIntroduction }}</p>
+                                <code class="detail-syntax code javascript" v-html="detailSyntax"></code>
+                                <div v-html="detailDescription"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+        <!-- END WRAPPER -->
+        <!-- START FOOTER -->
+        <footer></footer>
+        <!-- END FOOTER -->
+    </div>
+    <!-- END SITE -->
     <script type="text/javascript" defer src="js/fontawesome-all.min.js"></script>
-    <script type="text/javascript" defer src="js/plugins.js"></script>
-    <script type="text/javascript" src="js/script.js"></script>
-    </body>
+    <script type="text/javascript" src="js/plugins.js"></script>
+    <script type="text/javascript" src="js/note-v.js"></script>
+</body>
+
 </html>

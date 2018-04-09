@@ -84,6 +84,7 @@ h4 {
 h5 {}
 h6 {}
 a {
+    text-decoration: none;
     &:hover {
         text-decoration: none;
     }
@@ -464,6 +465,7 @@ button, input[type=submit], .btn {
         }
     }
     .list-group-item {
+        padding: 10px;
         border-radius: 0;
         @include max(480px) {
             padding: 10px;

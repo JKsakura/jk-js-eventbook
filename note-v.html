@@ -29,6 +29,22 @@
                 <div class="notes-wrapper">
                     <div id="note-list-container" class="note-list-container" v-bind:class="{ hide: hideNoteList }">
                         <div class="wrap">
+                            <div class="notes-header">
+                                <div class="search-box form-group">
+                                    <input type="search" class="form-control" id="filter-search" aria-describedby="searchHelp" placeholder="Search..." name="search">
+                                    <button type="submit">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                                <div class="select-menu form-group">
+                                    <select class="form-control" id="filter-category">
+                                        <option value="" disabled selected>Category</option>
+                                        <option v-for="category in categories" v-bind:value="category">
+                                            {{ category }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
                             <div class="notes-body">
                                 <ul id="note-list">
                                     <li v-for="category in categories" v-bind:class="'category category-'+category">

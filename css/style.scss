@@ -338,11 +338,14 @@ button, input[type=submit], .btn {
             left: 0;
             width: 100%;
             height: 100vh;
-            padding: 70px 0 50px;
+            padding-top: 70px;
             transition: left 0.3s;
             overflow-y: auto;
             &.hide{
                 left: -100vw;
+            }
+            .wrap {
+                margin-bottom: 50px;
             }
         }
         .note-form-container {
@@ -350,7 +353,7 @@ button, input[type=submit], .btn {
             left: 100vw;
             width: 100%;
             height: 100vh;
-            padding: 70px 0 50px;
+            padding-top: 70px;
             transform: scale(0);
             transition: left 0.3s 0s, transform 0s 0.3s;
             overflow-y: auto;
@@ -359,13 +362,16 @@ button, input[type=submit], .btn {
                 transform: scale(1);
                 transition: left 0.3s 0s, transform 0s 0s;
             }
+            .wrap {
+                margin-bottom: 50px;
+            }
         }
         .note-detail-container {
             position: absolute;
             left: 100vw;
             width: 100%;
             height: 100vh;
-            padding: 70px 0 30px;
+            padding-top: 70px;
             transform: scale(0);
             transition: left 0.3s 0s, transform 0s 0.3s;
             overflow-y: auto;
@@ -373,6 +379,9 @@ button, input[type=submit], .btn {
                 left: 0;
                 transform: scale(1);
                 transition: left 0.3s 0s, transform 0s 0s;
+            }
+            .wrap {
+                margin-bottom: 30px;
             }
         }
     }

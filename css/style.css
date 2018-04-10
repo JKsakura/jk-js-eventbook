@@ -128,7 +128,7 @@ button, input[type=submit], .btn { text-transform: uppercase; letter-spacing: 0.
 
 #notes-module .notes-wrapper .notes-header #note-done-btn { display: none; }
 
-#notes-module .notes-wrapper .notes-body { position: relative; width: 100%; overflow-x: auto; }
+#notes-module .notes-wrapper .notes-body { position: relative; width: 100%; }
 
 #notes-module .notes-wrapper .note-list-container { position: absolute; left: 0; width: 100%; height: 100vh; padding: 70px 0 50px; -webkit-transition: left 0.3s; -o-transition: left 0.3s; transition: left 0.3s; overflow-y: auto; }
 

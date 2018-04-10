@@ -32,7 +32,7 @@
                             <div class="notes-body">
                                 <ul id="note-list">
                                     <li v-for="category in categories" v-bind:class="'category category-'+category">
-                                        <p class='list-group-item'>{{ category }}</p>
+                                        <p class="list-group-item">{{ category }}</p>
                                         <ul>
                                             <li v-for="note in notes" v-if="note.category === category" class="list-item list-group-item list-group-item-action">
                                                 <a v-bind:href="'#'+note.id" v-on:click="displayNoteDetail(note, $event)">
@@ -47,7 +47,6 @@
                                             </li>
                                         </ul>
                                     </li>
-                                    
                                 </ul>
                             </div>
                         </div>

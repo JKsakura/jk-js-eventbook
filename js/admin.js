@@ -19,15 +19,10 @@ jQuery(function($){
             $(".notes-header").on("click", function (e) {
                 var target = e.target;
                 if ($(target).hasClass("add-btn")) {
-                    formToggle.toggleForm();
-                    listToggle.toggleList();
+                    pageToggle.pageForward(".page1", ".page2");
                     formManager.setForm(e);
-                    $("#note-form-container").animate({
-                        scrollTop: 0
-                    }, 300);
                 } else if ($(target).hasClass("cancel-btn")) {
-                    formToggle.hideForm();
-                    listToggle.showList();
+                    pageToggle.pageBackward(".page1", ".page2");
                 }
             });
         },
@@ -254,8 +249,7 @@ jQuery(function($){
 
                 $(formSubmitBtn).text(btnTxt);
                 // SHOW THE FORM AFTER IT HAS BEEN ASSIGNED VALUES
-                listToggle.hideList();
-                formToggle.showForm();
+                pageToggle.pageForward(".page1", ".page2");
             },
             getForm: function() {
                 // fetch form data
@@ -342,21 +336,21 @@ jQuery(function($){
     filterManager.goFilter();
 
     // INITIAL NOTE BODY EVENTS
-    $(noteList).on("click", function(e) {
-        var target = e.target;
-        if( $(target).hasClass("delete-btn") ) {
-            noteManager.deleteNote(e);
-        } else if( $(target).hasClass("edit-btn") ) {
-            formManager.setForm(e);
-            $("#note-form-container").animate({
-                scrollTop: 0
-            });
-        } else if( $(target).is("p.list-group-item") ) {
-            $(target).each(function() {
-                $(this).next("ul").stop().slideToggle(300);
-                $(this).stop().toggleClass("closed");
-            });
-        }
+    $(".page").each(function() {
+        var page = this;
+        $(page).on("click", function(e) {
+            var target = e.target;
+            if( $(target).is(".delete-btn") ) {
+                noteManager.deleteNote(e);
+            } else if( $(target).is(".edit-btn") ) {
+                formManager.setForm(e);
+            } else if( $(target).is("p.list-group-item") ) {
+                $(target).each(function() {
+                    $(this).next("ul").stop().slideToggle(300);
+                    $(this).stop().toggleClass("closed");
+                });
+            }
+        });
     });
     
     // INITIAL FORM EVENTS
@@ -365,7 +359,6 @@ jQuery(function($){
         // Update The Current Note
         noteManager.saveNote(formManager.getForm());
         
-        listToggle.showList();
-        formToggle.hideForm();
+        pageToggle.pageBackward(".page1", ".page2");
     });
 });

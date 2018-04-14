@@ -16,36 +16,23 @@ var headerToggle = (function () {
     };
 }());
 
-// TOGGLE FOR NOTE FORM
-var formToggle = (function () {
-    var formContainer = $("#note-form-container");
-    return {
-        showForm: function () {
-            $(formContainer).addClass("show");
-        },
-        hideForm: function () {
-            $(formContainer).removeClass("show");
-        },
-        toggleForm: function () {
-            $(formContainer).toggleClass("show");
-        }
-    };
-}());
-
-var listToggle = (function () {
-    var listContainer = $("#note-list-container");
-    return {
-        showList: function () {
-            $(listContainer).removeClass("hide");
-        },
-        hideList: function () {
-            $(listContainer).addClass("hide");
-        },
-        toggleList: function () {
-            $(listContainer).toggleClass("hide");
-        }
-    };
-}());
+// TOGGLE FOR Page
+var pageToggle = {
+    pageForward: function(page1, page2) {
+        $(page1).addClass("hide");
+        $(page2).addClass("active");
+        $(page2).animate({
+            scrollTop: 0
+        }, 0);
+    },
+    pageBackward: function(page1, page2) {
+        $(page1).removeClass("hide");
+        $(page2).removeClass("active");
+        $(page1).animate({
+            scrollTop: 0
+        }, 0);
+    }
+}
 
 // TOGGLE FOR ADD BUTTON
 var addBtnToggle = (function () {
@@ -69,21 +56,6 @@ var cancelBtnToggle = (function () {
         },
         hideBtn: function () {
             $(cancelBtn).hide();
-        }
-    };
-}());
-
-var detailToggle = (function () {
-    var formContainer = $("#note-detail-container");
-    return {
-        showDetail: function () {
-            $(formContainer).addClass("show");
-        },
-        hideDetail: function () {
-            $(formContainer).removeClass("show");
-        },
-        toggleDetail: function () {
-            $(formContainer).toggleClass("show");
         }
     };
 }());

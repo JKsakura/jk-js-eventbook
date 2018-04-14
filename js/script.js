@@ -2,7 +2,6 @@ jQuery(function ($) {
     // Declare Global Note Vars
     var noteID, notes;
     var noteList = $("#note-list"),
-        noteDetail = $("#note-detail-container"),
         categories = ["array", "booleans", "date", "error", "global"],
         cache = [];
 
@@ -92,7 +91,8 @@ jQuery(function ($) {
                 topClass = "item-top",
                 TitleClass = "item-title note-field-text",
                 categoryClass = "item-category note-field-select",
-                introductionClass = "item-introduction note-field-area";
+                introductionClass = "item-introduction note-field-area",
+                linkClass = "detail-trigger";
 
             /* =========== Item Top ============ */
             // Item Header
@@ -106,7 +106,7 @@ jQuery(function ($) {
             var itemTop = $("<div></div>").addClass(topClass).append(itemHeader, itemIntroduction);
 
             /* =========== List Item ============ */
-            var listLink = $("<a></a>").attr("href", "#" + itemId).append(itemTop);
+            var listLink = $("<a></a>").attr("href", "#" + itemId).addClass(linkClass).append(itemTop);
             var listItem = $("<li></li>").attr("id", itemId).addClass(itemClass).append(listLink);
 
             $(noteList).find(".category-" + note.category).find("ul").append(listItem);
@@ -158,8 +158,7 @@ jQuery(function ($) {
                 }
                 if(location.hash) {
                     noteManager.fetchDetail(location);
-                    listToggle.hideList();
-                    detailToggle.showDetail();
+                    pageToggle.pageForward(".page1", ".page2");
                 }
             })
             .fail(function (d, textStatus, error) {
@@ -171,6 +170,27 @@ jQuery(function ($) {
         }
     };
 
+    $(".page").each(function() {
+        var page = this;
+        var page1 = $(".page1");
+        $(this).on("click", function (e) {
+            var target = e.target;
+            if( $(target).is(".detail-trigger") ) {
+                e.preventDefault();
+                noteManager.fetchDetail(target);
+                pageToggle.pageForward(".page1", ".page2");
+            } else if( $(target).is("p.list-group-item") ) {
+                $(target).each(function() {
+                    $(this).next("ul").stop().slideToggle(300);
+                    $(this).stop().toggleClass("closed");
+                });
+            } else if( $(target).hasClass("back-to-all") ) {
+                e.preventDefault();
+                pageToggle.pageBackward(".page1", ".page2");
+            }
+        });
+    });
+    
     DOMManager.noteHeader();
     DOMManager.noteBody();
 
@@ -180,28 +200,4 @@ jQuery(function ($) {
     // INITIAL HEADER FILTER
     filterManager.goSearch();
     filterManager.goFilter();
-
-    $(noteList).on("click", function (e) {
-        var target = e.target;
-        if( $(target).is("a") ) {
-            e.preventDefault();
-            noteManager.fetchDetail(target);
-            listToggle.hideList();
-            detailToggle.showDetail();
-        } else if( $(target).is("p.list-group-item") ) {
-            $(target).each(function() {
-                $(this).next("ul").stop().slideToggle(300);
-                $(this).stop().toggleClass("closed");
-            });
-        }
-    });
-
-    $(noteDetail).on("click", function(e) {
-        var target = e.target;
-        if( $(target).hasClass("back-to-all") ) {
-            e.preventDefault();
-            detailToggle.hideDetail();
-            listToggle.showList();
-        }
-    });
 });

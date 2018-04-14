@@ -317,72 +317,65 @@ button, input[type=submit], .btn {
 /* NOTES MODUKE
 /* ============================ */
 #notes-module {
-    .notes-wrapper {
+    .notes-header {
+        .btn-sm {
+            margin-bottom: 20px;
+            svg {
+                margin-right: 5px;
+            }
+        }
+        #note-done-btn { display: none; }
+    }
+    .notes-body {
         position: relative;
-        margin: 0 auto;
-        .notes-header {
-            .btn-sm {
-                margin-bottom: 20px;
-                svg {
-                    margin-right: 5px;
-                }
-            }
-            #note-done-btn { display: none; }
+        width: 100%;
+    }
+    .note-list-container {
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        transition: left 0.3s;
+        overflow-y: auto;
+        &.hide{
+            left: -100vw;
         }
-        .notes-body {
-            position: relative;
-            width: 100%;
+        .wrap {
+            margin-bottom: 50px;
         }
-        .note-list-container {
-            position: absolute;
+    }
+    .note-form-container {
+        position: absolute;
+        left: 100vw;
+        width: 100%;
+        height: 100vh;
+        transform: scale(0);
+        transition: left 0.3s 0s, transform 0s 0.3s;
+        overflow-y: auto;
+        &.show{
             left: 0;
-            width: 100%;
-            height: 100vh;
-            padding-top: 70px;
-            transition: left 0.3s;
-            overflow-y: auto;
-            &.hide{
-                left: -100vw;
-            }
-            .wrap {
-                margin-bottom: 50px;
-            }
+            transform: scale(1);
+            transition: left 0.3s 0s, transform 0s 0s;
         }
-        .note-form-container {
-            position: absolute;
-            left: 100vw;
-            width: 100%;
-            height: 100vh;
-            padding-top: 70px;
-            transform: scale(0);
-            transition: left 0.3s 0s, transform 0s 0.3s;
-            overflow-y: auto;
-            &.show{
-                left: 0;
-                transform: scale(1);
-                transition: left 0.3s 0s, transform 0s 0s;
-            }
-            .wrap {
-                margin-bottom: 50px;
-            }
+        .wrap {
+            margin-bottom: 50px;
         }
-        .note-detail-container {
-            position: absolute;
-            left: 100vw;
-            width: 100%;
-            height: 100vh;
-            padding-top: 70px;
-            transform: scale(0);
-            transition: left 0.3s 0s, transform 0s 0.3s;
-            overflow-y: auto;
-            &.show {
-                left: 0;
-                transform: scale(1);
-                transition: left 0.3s 0s, transform 0s 0s;
-            }
-            .wrap {
-                margin-bottom: 30px;
-            }
+    }
+    .note-detail-container {
+        position: absolute;
+        left: 100vw;
+        width: 100%;
+        height: 100vh;
+        transform: scale(0);
+        transition: left 0.3s 0s, transform 0s 0.3s;
+        overflow-y: auto;
+        &.show {
+            left: 0;
+            transform: scale(1);
+            transition: left 0.3s 0s, transform 0s 0s;
+        }
+        .wrap {
+            margin-bottom: 30px;
         }
     }
 }
@@ -443,7 +436,6 @@ button, input[type=submit], .btn {
         }
     }
 }
-
 #note-list {
     p.list-group-item {
         padding: 5px 10px;
@@ -535,7 +527,6 @@ button, input[type=submit], .btn {
         }
     }
 }
-
 #note-detail {
     h1 {
         font-weight: 300;

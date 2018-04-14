@@ -239,11 +239,13 @@ jQuery(function($){
             setForm: function(e) {
                 var target = e.target,
                     index = $(target).closest("tr").index();
+
                 formSyntax = syntaxEditor.activeFilter.editor;
                 formDescription = descriptionEditor.activeFilter.editor;
             
                 if( index > -1 ) {
                     var note = notes[index];
+                    id = note.id;
                     $(formTitle).val(note.title);
                     $(formCategory).val(note.category);
                     $(formIntroduction).val(note.introduction);

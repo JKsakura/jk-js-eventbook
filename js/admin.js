@@ -87,13 +87,21 @@ jQuery(function($){
 /* ============================================================== */
     var noteManager = {
         saveNote: function(obj) {
+            var noteObj;
             if(obj.id) {
-                var index = notes.filter(function() {
-                    return notes.id === obj.id;
-                });
-                console.log(index);
+                var targetID = obj.id;
+                var index = notes.map(function (element) { return element.id }).indexOf(targetID);
+                notes[index] = {
+                    title: obj.title,
+                    created: obj.created ? obj.created : Date.now(),
+                    category: obj.category,
+                    introduction: obj.introduction,
+                    syntax: obj.syntax,
+                    description: obj.description
+                }
+                noteObj = notes[index];
+                noteManager.displayNote(noteObj, true);
             } else {
-                var noteObj;
                 var newNote = {
                     id: noteID,
                     title: obj.title,
@@ -108,12 +116,12 @@ jQuery(function($){
                 noteObj = newNote;
 
                 // console.table(noteObj);
-                noteManager.displayNote(noteObj);
+                noteManager.displayNote(noteObj, false);
             }
             dataManager.saveData(notes);
         },
         // DISPLAY THE ELEMENT WITH NEW DOM STRUCTURE
-        displayNote: function(note) {
+        displayNote: function(note, update) {
             var id = $("<td></td>").text(note.id),
                 title = $("<td></td>").text(note.title),
                 created = $("<td></td>").text(note.created),
@@ -125,16 +133,29 @@ jQuery(function($){
                 itemDeleteBtn = $("<i></i>").addClass("far fa-trash-alt"),
                 editBtn = $("<td></td>").append($(temEdit).append(itemEditBtn)),
                 deleteBtn = $("<td></td>").append($(itemDelete).append(itemDeleteBtn));
-            var row = $("<tr></tr>").append(id, title, created, category, introduction, editBtn, deleteBtn).appendTo($(noteList).find('tbody'));
-            cache.push({ // Add an object to the cache array
-                element: row, // This row
-                id: note.id,
-                title: note.title,
-                category: note.category,
-                introduction: note.introduction,
-                syntax: note.syntax,
-                description: note.description
-            });
+            if(update===true) {
+                var row = $("<tr></tr>").append(id, title, created, category, introduction, editBtn, deleteBtn);
+                var index = notes.map(function(element){ return element.id }).indexOf(note.id);
+                cache[index] = { // Add an object to the cache array
+                    element: row, // This row
+                    title: note.title,
+                    category: note.category,
+                    introduction: note.introduction,
+                    syntax: note.syntax,
+                    description: note.description
+                };
+                $(noteList).find('tbody').append(cache);
+            } else {
+                var row = $("<tr></tr>").append(id, title, created, category, introduction, editBtn, deleteBtn).appendTo($(noteList).find('tbody'));
+                cache.push({ // Add an object to the cache array
+                    element: row, // This row
+                    title: note.title,
+                    category: note.category,
+                    introduction: note.introduction,
+                    syntax: note.syntax,
+                    description: note.description
+                });
+            }
         },
         // DELETE A NEW NOTE BASED ON THE ID
         deleteNote: function(e) {

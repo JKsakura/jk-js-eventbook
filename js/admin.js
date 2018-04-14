@@ -18,7 +18,7 @@ jQuery(function($){
             filterManager.iniCategory();
             $(".notes-header").on("click", function (e) {
                 var target = e.target;
-                if ($(target).hasClass("add-btn")) {
+                if ($(target).is(".add-btn")) {
                     pageToggle.pageForward(".page1", ".page2");
                     formManager.setForm(e);
                 } else if ($(target).hasClass("cancel-btn")) {
@@ -87,22 +87,29 @@ jQuery(function($){
 /* ============================================================== */
     var noteManager = {
         saveNote: function(obj) {
-            var noteObj;
-            var newNote = {
-                id: noteID,
-                title: obj.title,
-                created: Date.now(),
-                category: obj.category,
-                introduction: obj.introduction,
-                syntax: obj.syntax,
-                description: obj.description
-            };
-            notes.push(newNote);
-            noteID++;
-            noteObj = newNote;
+            if(obj.id) {
+                var index = notes.filter(function() {
+                    return notes.id === obj.id;
+                });
+                console.log(index);
+            } else {
+                var noteObj;
+                var newNote = {
+                    id: noteID,
+                    title: obj.title,
+                    created: Date.now(),
+                    category: obj.category,
+                    introduction: obj.introduction,
+                    syntax: obj.syntax,
+                    description: obj.description
+                };
+                notes.push(newNote);
+                noteID++;
+                noteObj = newNote;
 
-            // console.table(noteObj);
-            noteManager.displayNote(noteObj);
+                // console.table(noteObj);
+                noteManager.displayNote(noteObj);
+            }
             dataManager.saveData(notes);
         },
         // DISPLAY THE ELEMENT WITH NEW DOM STRUCTURE
@@ -121,6 +128,7 @@ jQuery(function($){
             var row = $("<tr></tr>").append(id, title, created, category, introduction, editBtn, deleteBtn).appendTo($(noteList).find('tbody'));
             cache.push({ // Add an object to the cache array
                 element: row, // This row
+                id: note.id,
                 title: note.title,
                 category: note.category,
                 introduction: note.introduction,
@@ -244,6 +252,8 @@ jQuery(function($){
                     btnTxt = "Update Note";
                 } else {
                     $(formEl)[0].reset();
+                    formSyntax.setData("");
+                    formDescription.setData("");
                     btnTxt = "Add Note";
                 }
 

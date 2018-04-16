@@ -2,11 +2,17 @@ jQuery(function($){
     // Declare Global Note Vars
     var noteID, notes;
     // Declare Global CKEditor WYSIWYG Fields
-    var syntaxEditor = CKEDITOR.replace('form-syntax'),
-        descriptionEditor = CKEDITOR.replace('form-description'),
+    var syntaxEditor = CKEDITOR.replace("form-syntax"),
+        descriptionEditor = CKEDITOR.replace("form-description"),
         formEl = $("#note-form"),
         noteList = $("#note-table"),
-        categories = ["array", "booleans", "date", "error", "global"],
+        categories = {
+            array: ["array", "booleans", "date", "error", "global"],
+            booleans: ["array", "booleans", "date", "error", "global"],
+            date: ["array", "booleans", "date", "error", "global"],
+            error: ["array", "booleans", "date", "error", "global"],
+            global: ["array", "booleans", "date", "error", "global"]
+        },
         cache = [];
 
 /* ============================================================== */
@@ -28,11 +34,17 @@ jQuery(function($){
         },
         noteBody: function () {
             var formCategory;
-            categories.forEach(function (category) {
+            for( var category in categories ) {
                 formCategory = $("<option></option>").val(category).text(category);
-                $("#form-category").append(formCategory);
-            });
-
+                $("#form-category").append(formCategory).on('change', function () {
+                    if ( categories[category].length > 0 ) {
+                        var formSubCategory;
+                        categories[category].forEach(function(term) {
+                            console.log(term);
+                        });
+                    }
+                });
+            }
             $(noteList).find("tbody").each(function () {
                 noteManager.orderNote(this);
             });
@@ -65,9 +77,9 @@ jQuery(function($){
         iniCategory: function () {
             var defaultVal = '<option value="" disabled selected>Category</option>';
             var filterCategory = $("#filter-category").append(defaultVal, "<option value='all'>All</option>");
-            categories.forEach(function (category) {
+            for( var category in categories ) {
                 var newCategory = $("<option></option>").text(category).val(category).appendTo(filterCategory);
-            });
+            }
         },
         goFilter: function () {
             $("#filter-category").change(function () {

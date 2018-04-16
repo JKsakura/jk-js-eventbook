@@ -92,6 +92,7 @@ jQuery(function($){
                 var targetID = obj.id;
                 var index = notes.map(function (element) { return element.id }).indexOf(targetID);
                 notes[index] = {
+                    id: targetID,
                     title: obj.title,
                     created: obj.created ? obj.created : Date.now(),
                     category: obj.category,
@@ -136,15 +137,16 @@ jQuery(function($){
             if(update===true) {
                 var row = $("<tr></tr>").append(id, title, created, category, introduction, editBtn, deleteBtn);
                 var index = notes.map(function(element){ return element.id }).indexOf(note.id);
+                cache[index].element.replaceWith(row);
                 cache[index] = { // Add an object to the cache array
                     element: row, // This row
+                    id: note.id,
                     title: note.title,
                     category: note.category,
                     introduction: note.introduction,
                     syntax: note.syntax,
                     description: note.description
                 };
-                $(noteList).find('tbody').append(cache);
             } else {
                 var row = $("<tr></tr>").append(id, title, created, category, introduction, editBtn, deleteBtn).appendTo($(noteList).find('tbody'));
                 cache.push({ // Add an object to the cache array

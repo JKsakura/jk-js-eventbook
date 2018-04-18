@@ -6,13 +6,33 @@ jQuery(function($){
         descriptionEditor = CKEDITOR.replace("form-description"),
         formEl = $("#note-form"),
         noteList = $("#note-table"),
-        categories = {
-            array: ["array", "booleans", "date", "error", "global"],
-            booleans: ["array", "booleans", "date", "error", "global"],
-            date: ["array", "booleans", "date", "error", "global"],
-            error: ["array", "booleans", "date", "error", "global"],
-            global: ["array", "booleans", "date", "error", "global"]
-        },
+        categories = [
+            {
+                slug: 'chapter-1',
+                name: 'Capter 1',
+                children: ["array", "booleans", "date", "error", "global"]
+            },
+            {
+                slug: 'chapter-2',
+                name: 'Capter 2',
+                children: ["array", "booleans", "date", "error", "global"]
+            },
+            {
+                slug: 'chapter-3',
+                name: 'Capter 3',
+                children: ["array", "booleans", "date", "error", "global"]
+            },
+            {
+                slug: 'chapter-4',
+                name: 'Capter 4',
+                children: ["array", "booleans", "date", "error", "global"]
+            },
+            {
+                slug: 'chapter-5',
+                name: 'Capter 5',
+                children: ["array", "booleans", "date", "error", "global"]
+            },
+        ];
         cache = [];
 
 /* ============================================================== */
@@ -33,18 +53,27 @@ jQuery(function($){
             });
         },
         noteBody: function () {
-            var formCategory;
-            for( var category in categories ) {
-                formCategory = $("<option></option>").val(category).text(category);
-                $("#form-category").append(formCategory).on('change', function () {
-                    if ( categories[category].length > 0 ) {
-                        var formSubCategory;
-                        categories[category].forEach(function(term) {
-                            console.log(term);
-                        });
-                    }
+            var selectCategory = $("#form-category"),
+                selectSubCategory = $("#form-sub-category"),
+                formCategory,
+                formSubCategory;
+                // console.log(categories);
+            categories.forEach(function(category) {
+                // console.log(category);
+                formCategory = $("<option></option>").val(category.slug).text(category.name);
+                $(selectCategory).append(formCategory);
+            });
+            $(selectCategory).on('change', function () {
+                $(selectSubCategory).empty();
+                var term = $(this).val();
+                var subCategories = categories.filter(function(category) {
+                    return category.slug === term;
+                })[0].children;
+                subCategories.forEach(function(subCategory) {
+                    formSubCategory = $("<option></option>").val(subCategory).text(subCategory);
+                    $(selectSubCategory).append(formSubCategory);
                 });
-            }
+            });
             $(noteList).find("tbody").each(function () {
                 noteManager.orderNote(this);
             });

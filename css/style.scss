@@ -325,13 +325,14 @@ button, input[type=submit], .btn {
     }
     .form-field {
         text-align: center;
-        &:first-child {
-            width: 49%;
-            float: left;
-        }
         &:nth-of-type(2) {
             width: 49%;
-            float: right;
+            display: inline-block;
+        }
+        &:nth-of-type(3) {
+            width: 49%;
+            display: inline-block;
+            margin-left: calc(2% - 5px);
         }
     }
     #add-syntax {
@@ -340,8 +341,8 @@ button, input[type=submit], .btn {
     #add-description {
         height: 150;
     }
-    .btn { 
-        width: 200px; 
+    .btn {
+        width: 200px;
         margin: 0 auto;
     }
 }
@@ -361,6 +362,7 @@ button, input[type=submit], .btn {
     .notes-body {
         position: relative;
         width: 100%;
+        overflow-x: auto;
     }
 }
 #note-table {

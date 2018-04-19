@@ -117,9 +117,9 @@ button, input[type=submit], .btn { text-transform: uppercase; letter-spacing: 0.
 
 #note-form .form-field { text-align: center; }
 
-#note-form .form-field:first-child { width: 49%; float: left; }
+#note-form .form-field:nth-of-type(2) { width: 49%; display: inline-block; }
 
-#note-form .form-field:nth-of-type(2) { width: 49%; float: right; }
+#note-form .form-field:nth-of-type(3) { width: 49%; display: inline-block; margin-left: calc(2% - 5px); }
 
 #note-form #add-syntax { height: 100px; }
 
@@ -136,7 +136,7 @@ button, input[type=submit], .btn { text-transform: uppercase; letter-spacing: 0.
 
 #notes-module .notes-header #note-done-btn { display: none; }
 
-#notes-module .notes-body { position: relative; width: 100%; }
+#notes-module .notes-body { position: relative; width: 100%; overflow-x: auto; }
 
 #note-table tr th { text-transform: uppercase; }
 

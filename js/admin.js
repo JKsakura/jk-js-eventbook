@@ -131,24 +131,26 @@ jQuery(function($){
             var noteObj;
             if(obj.id) {
                 var targetID = obj.id;
-                var index = notes.map(function (element) { return element.id }).indexOf(targetID);
+                var index = notes.map(function (element) { return element.id; }).indexOf(targetID);
                 notes[index] = {
                     id: targetID,
                     title: obj.title,
-                    created: obj.created ? obj.created : Date.now(),
+                    created: obj.created ? obj.created : new Date(),
                     category: obj.category,
+                    subcategory: obj.subcategory,
                     introduction: obj.introduction,
                     syntax: obj.syntax,
                     description: obj.description
-                }
+                };
                 noteObj = notes[index];
                 noteManager.displayNote(noteObj, true);
             } else {
                 var newNote = {
                     id: noteID,
                     title: obj.title,
-                    created: Date.now(),
+                    created: new Date(),
                     category: obj.category,
+                    subcategory: obj.subcategory,
                     introduction: obj.introduction,
                     syntax: obj.syntax,
                     description: obj.description
@@ -164,10 +166,16 @@ jQuery(function($){
         },
         // DISPLAY THE ELEMENT WITH NEW DOM STRUCTURE
         displayNote: function(note, update) {
+            var row;
+            var date = new Date(note.created);
+            var day = date.getDate();
+            var month = date.getMonth();
+            var year = date.getFullYear();
             var id = $("<td></td>").text(note.id),
                 title = $("<td></td>").text(note.title),
-                created = $("<td></td>").text(note.created),
+                created = $("<td></td>").text(month + '/' + day + '/' + year),
                 category = $("<td></td>").text(note.category),
+                subcategory = $("<td></td>").text(note.subcategory),
                 introduction = $("<td></td>").text(note.introduction),
                 temEdit = $("<button></button>").addClass("item-btn edit-btn"),
                 itemEditBtn = $("<i></i>").addClass("far fa-edit"),
@@ -176,24 +184,26 @@ jQuery(function($){
                 editBtn = $("<td></td>").append($(temEdit).append(itemEditBtn)),
                 deleteBtn = $("<td></td>").append($(itemDelete).append(itemDeleteBtn));
             if(update===true) {
-                var row = $("<tr></tr>").append(id, title, created, category, introduction, editBtn, deleteBtn);
-                var index = notes.map(function(element){ return element.id }).indexOf(note.id);
+                row = $("<tr></tr>").append(id, title, created, subcategory, category, introduction, editBtn, deleteBtn);
+                var index = notes.map(function(element){ return element.id; }).indexOf(note.id);
                 cache[index].element.replaceWith(row);
                 cache[index] = { // Add an object to the cache array
                     element: row, // This row
                     id: note.id,
                     title: note.title,
                     category: note.category,
+                    subcategory: note.subcategory,
                     introduction: note.introduction,
                     syntax: note.syntax,
                     description: note.description
                 };
             } else {
-                var row = $("<tr></tr>").append(id, title, created, category, introduction, editBtn, deleteBtn).appendTo($(noteList).find('tbody'));
+                row = $("<tr></tr>").append(id, title, created, category, subcategory, introduction, editBtn, deleteBtn).appendTo($(noteList).find('tbody'));
                 cache.push({ // Add an object to the cache array
                     element: row, // This row
                     title: note.title,
                     category: note.category,
+                    subcategory: note.subcategory,
                     introduction: note.introduction,
                     syntax: note.syntax,
                     description: note.description
@@ -266,19 +276,21 @@ jQuery(function($){
                         rows = $(tbody).find("tr").toArray(),
                         order = $(header).data('sort'),
                         column = control.index(this);
-                        if ($(header).is(".ascending") || $(header).is(".descending")) {
-                            $(header).toggleClass('ascending descending');
-                            $(tbody).append(rows.reverse());
-                        } else {
-                            $(control).removeClass("ascending descending");
-                            $(header).addClass("ascending");
-                            if (compare.hasOwnProperty(order)) {
-                                rows.sort(function (a, b) {
-                                    a = $(a).find("td").eq(column).text();
-                                    b = $(b).find("td").eq(column).text();
-                                    return compare[order](a, b);
-                                });
-                                $(tbody).append(rows);
+                        if (order) {
+                            if ($(header).is(".ascending") || $(header).is(".descending")) {
+                                $(header).toggleClass('ascending descending');
+                                $(tbody).append(rows.reverse());
+                            } else {
+                                $(control).removeClass("ascending descending");
+                                $(header).addClass("ascending");
+                                if (compare.hasOwnProperty(order)) {
+                                    rows.sort(function (a, b) {
+                                        a = $(a).find("td").eq(column).text();
+                                        b = $(b).find("td").eq(column).text();
+                                        return compare[order](a, b);
+                                    });
+                                    $(tbody).append(rows);
+                                }
                             }
                         }
                 });
@@ -295,9 +307,10 @@ jQuery(function($){
             formDescription,
             formTitle = $("#form-title"),
             formCategory = $("#form-category"),
+            formSubCategory = $("#form-sub-category"),
             formIntroduction = $("#form-introduction"),
             formSubmitBtn = $("#form-submit");
-        var id, title, category, introduction, syntax, description, btnTxt;
+        var id, title, category, subcategory, introduction, syntax, description, btnTxt;
         
         return {
             setForm: function(e) {
@@ -312,6 +325,7 @@ jQuery(function($){
                     id = note.id;
                     $(formTitle).val(note.title);
                     $(formCategory).val(note.category);
+                    $(formSubCategory).val(note.subcategory);
                     $(formIntroduction).val(note.introduction);
                     formSyntax.setData(note.syntax);
                     formDescription.setData(note.description);
@@ -331,6 +345,7 @@ jQuery(function($){
                 // fetch form data
                 title = $(formTitle).val();
                 category = $(formCategory).val();
+                subcategory = $(formSubCategory).val();
                 introduction = $(formIntroduction).val();
                 syntax =formSyntax.getData();
                 description = formDescription.getData();
@@ -340,6 +355,7 @@ jQuery(function($){
                     id: "",
                     title: title,
                     category: category,
+                    subcategory: subcategory,
                     introduction: introduction,
                     syntax: syntax,
                     description: description

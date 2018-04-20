@@ -2,7 +2,33 @@ jQuery(function ($) {
     // Declare Global Note Vars
     var noteID, notes;
     var noteList = $("#note-list"),
-        categories = ["array", "booleans", "date", "error", "global"],
+        categories = [
+            {
+                slug: 'chapter-1',
+                name: 'Capter 1',
+                children: ["array", "booleans", "date", "error", "global"]
+            },
+            {
+                slug: 'chapter-2',
+                name: 'Capter 2',
+                children: ["array", "booleans", "date", "error", "global"]
+            },
+            {
+                slug: 'chapter-3',
+                name: 'Capter 3',
+                children: ["array", "booleans", "date", "error", "global"]
+            },
+            {
+                slug: 'chapter-4',
+                name: 'Capter 4',
+                children: ["array", "booleans", "date", "error", "global"]
+            },
+            {
+                slug: 'chapter-5',
+                name: 'Capter 5',
+                children: ["array", "booleans", "date", "error", "global"]
+            },
+        ],
         cache = [];
 
 /* ============================================================== */
@@ -19,9 +45,17 @@ jQuery(function ($) {
                 listClass,
                 formCategory;
             categories.forEach(function (category) {
-                listClass = "category category-" + category;
-                listTitle = $("<p class='list-group-item'></p>").text(category);
+                listClass = "category category-" + category.slug;
+                listTitle = $("<p class='list-group-item'></p>").text(category.name);
                 listCategory = $("<li></li>").addClass(listClass).data("category", category).append(listTitle, "<ul></ul>");
+                category.children.forEach(function (subCategory) {
+                    formSubCategory = $("<option></option>").val(subCategory).text(subCategory);
+                    var itemClass = "list-item list-group-item list-group-item-action",
+                        linkClass = "detail-trigger";
+                    var listLink = $("<a></a>").attr("href", "#" + category.slug).addClass(linkClass).append(subCategory);
+                    var listItem = $("<li></li>").attr("id", category.slug).addClass(itemClass).append(listLink);
+                    $(listCategory).append(listItem);
+                });
                 $("#note-list").append(listCategory);
             });
         }

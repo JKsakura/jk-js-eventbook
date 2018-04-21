@@ -1,7 +1,8 @@
 jQuery(function ($) {
     // Declare Global Note Vars
     var noteID, notes;
-    var noteList = $("#note-list"),
+    var categoryList = $("#category-list"),
+        noteList = $("#note-list"),
         categories = [
             {
                 slug: 'chapter-1',
@@ -56,7 +57,7 @@ jQuery(function ($) {
                     var listItem = $("<li></li>").attr("id", category.slug).addClass(itemClass).append(listLink);
                     $(listCategory).append(listItem);
                 });
-                $("#note-list").append(listCategory);
+                $(categoryList).append(listCategory);
             });
         }
     };
@@ -66,7 +67,7 @@ jQuery(function ($) {
     // INITIAL NOTE BODY EVENTS
     var filterManager = {
         goSearch: function () {
-            $("#filter-search").on("input", function () {
+            $(".filter-search").on("input", function () {
                 var search = $(this).val().trim().toUpperCase();
                 cache.forEach( function(note){
                     note.element.hide();
@@ -80,7 +81,7 @@ jQuery(function ($) {
                         $(note.element).show();
                     }
                 });
-                $(noteList).find("p.list-group-item").each(function () {
+                $(categoryList).find("p.list-group-item").each(function () {
                     $(this).hide();
                     if ($(this).html().toUpperCase().indexOf(search) > -1) {
                         $(this).show();
@@ -98,10 +99,10 @@ jQuery(function ($) {
         goFilter: function () {
             $("#filter-category").change(function() {
                 var filterCategory = $(this).val().trim().toUpperCase();
-                $(noteList).find(".category").hide();
-                $(noteList).find(".category").each(function () {
+                $(categoryList).find(".category").hide();
+                $(categoryList).find(".category").each(function () {
                     if( filterCategory === "ALL") {
-                        $(noteList).find(".category").show();
+                        $(categoryList).find(".category").show();
                     } else if ($(this).find("p.list-group-item").text().trim().toUpperCase() === filterCategory.toUpperCase()) {
                         $(this).show();
                     }

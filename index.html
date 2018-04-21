@@ -34,21 +34,39 @@
                         <div class="wrap">
                             <div class="notes-header">
                                 <div class="search-box form-group">
-                                    <input type="search" class="form-control" id="filter-search" aria-describedby="searchHelp" placeholder="Search..." name="search">
+                                    <input type="search" class="form-control filter-search" aria-describedby="searchHelp" placeholder="Search..." name="search">
                                     <button type="submit">
                                         <i class="fas fa-search"></i>
                                     </button>
                                 </div>
                                 <div class="select-menu form-group">
-                                    <select class="form-control" id="filter-category"></select>
+                                    <select class="form-control filter-category"></select>
                                 </div>
                             </div>
                             <div class="notes-body">
-                                <ul id="note-list" class="list-group"></ul>
+                                <ul id="category-list" class="list-group"></ul>
                             </div>
                         </div>
                     </div>
-                    <div class="note-detail-container main-content page page2">
+                    <div class="note-list-container main-content page page2">
+                        <div class="wrap">
+                            <div class="notes-header">
+                                <div class="search-box form-group">
+                                    <input type="search" class="form-control filter-search" aria-describedby="searchHelp" placeholder="Search..." name="search">
+                                    <button type="submit">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                                <div class="select-menu form-group">
+                                    <select class="form-control filter-category"></select>
+                                </div>
+                            </div>
+                            <div class="notes-body">
+                                <ul id="notes-list" class="list-group"></ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="note-detail-container main-content page page3">
                         <div class="wrap">
                             <div id="note-detail" class="content-main">
                                 <a href="#note-list" class="back-to-all">Back To All Notes</a>

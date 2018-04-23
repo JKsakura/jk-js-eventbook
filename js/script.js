@@ -7,27 +7,157 @@ jQuery(function ($) {
             {
                 slug: 'chapter-1',
                 name: 'Capter 1',
-                children: ["array", "booleans", "date", "error", "global"]
+                children: [
+                    {
+                        slug: 'array',
+                        name: 'Array',
+                        notes: []
+                    },
+                    {
+                        slug: 'booleans',
+                        name: 'Booleans',
+                        notes: []
+                    },
+                    {
+                        slug: 'date',
+                        name: 'Date',
+                        notes: []
+                    },
+                    {
+                        slug: 'error',
+                        name: 'Error',
+                        notes: []
+                    },
+                    {
+                        slug: 'global',
+                        name: 'Global',
+                        notes: []
+                    }
+                ]
             },
             {
                 slug: 'chapter-2',
                 name: 'Capter 2',
-                children: ["array", "booleans", "date", "error", "global"]
+                children: [
+                    {
+                        slug: 'array',
+                        name: 'Array',
+                        notes: []
+                    },
+                    {
+                        slug: 'booleans',
+                        name: 'Booleans',
+                        notes: []
+                    },
+                    {
+                        slug: 'date',
+                        name: 'Date',
+                        notes: []
+                    },
+                    {
+                        slug: 'error',
+                        name: 'Error',
+                        notes: []
+                    },
+                    {
+                        slug: 'global',
+                        name: 'Global',
+                        notes: []
+                    }
+                ]
             },
             {
-                slug: 'chapter-3',
-                name: 'Capter 3',
-                children: ["array", "booleans", "date", "error", "global"]
+                slug: 'chapter-1',
+                name: 'Capter 1',
+                children: [
+                    {
+                        slug: 'array',
+                        name: 'Array',
+                        notes: []
+                    },
+                    {
+                        slug: 'booleans',
+                        name: 'Booleans',
+                        notes: []
+                    },
+                    {
+                        slug: 'date',
+                        name: 'Date',
+                        notes: []
+                    },
+                    {
+                        slug: 'error',
+                        name: 'Error',
+                        notes: []
+                    },
+                    {
+                        slug: 'global',
+                        name: 'Global',
+                        notes: []
+                    }
+                ]
             },
             {
-                slug: 'chapter-4',
-                name: 'Capter 4',
-                children: ["array", "booleans", "date", "error", "global"]
+                slug: 'chapter-1',
+                name: 'Capter 1',
+                children: [
+                    {
+                        slug: 'array',
+                        name: 'Array',
+                        notes: []
+                    },
+                    {
+                        slug: 'booleans',
+                        name: 'Booleans',
+                        notes: []
+                    },
+                    {
+                        slug: 'date',
+                        name: 'Date',
+                        notes: []
+                    },
+                    {
+                        slug: 'error',
+                        name: 'Error',
+                        notes: []
+                    },
+                    {
+                        slug: 'global',
+                        name: 'Global',
+                        notes: []
+                    }
+                ]
             },
             {
-                slug: 'chapter-5',
-                name: 'Capter 5',
-                children: ["array", "booleans", "date", "error", "global"]
+                slug: 'chapter-1',
+                name: 'Capter 1',
+                children: [
+                    {
+                        slug: 'array',
+                        name: 'Array',
+                        notes: []
+                    },
+                    {
+                        slug: 'booleans',
+                        name: 'Booleans',
+                        notes: []
+                    },
+                    {
+                        slug: 'date',
+                        name: 'Date',
+                        notes: []
+                    },
+                    {
+                        slug: 'error',
+                        name: 'Error',
+                        notes: []
+                    },
+                    {
+                        slug: 'global',
+                        name: 'Global',
+                        notes: []
+                    }
+                ]
             },
         ],
         cache = [];

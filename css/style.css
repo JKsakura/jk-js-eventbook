@@ -154,35 +154,35 @@ button, input[type=submit], .btn { text-transform: uppercase; letter-spacing: 0.
 
 #note-table tr td .item-btn.delete-btn:hover { color: #ff2f2f; }
 
-#note-list p.list-group-item { padding: 5px 10px; border-top: solid 1px #555; background-color: #212529; color: #fff; text-transform: uppercase; font-weight: 400; cursor: pointer; }
+.notes-body p.list-group-item { padding: 5px 10px; border-top: solid 1px #555; background-color: #212529; color: #fff; text-transform: uppercase; font-weight: 400; cursor: pointer; }
 
-#note-list p.list-group-item::before { content: ''; position: absolute; top: 50%; right: 20px; width: 8px; height: 8px; margin-top: -3px; border-right: solid 2px #fff; border-bottom: solid 2px #fff; -webkit-transform: rotate(-135deg); -ms-transform: rotate(-135deg); transform: rotate(-135deg); }
+.notes-body p.list-group-item::before { content: ''; position: absolute; top: 50%; right: 20px; width: 8px; height: 8px; margin-top: -3px; border-right: solid 2px #fff; border-bottom: solid 2px #fff; -webkit-transform: rotate(-135deg); -ms-transform: rotate(-135deg); transform: rotate(-135deg); }
 
-#note-list p.list-group-item.closed::before { margin-top: -5px; -webkit-transform: rotate(45deg); -ms-transform: rotate(45deg); transform: rotate(45deg); }
+.notes-body p.list-group-item.closed::before { margin-top: -5px; -webkit-transform: rotate(45deg); -ms-transform: rotate(45deg); transform: rotate(45deg); }
 
-#note-list .list-group-item { padding: 10px; border-radius: 0; }
+.notes-body .list-group-item { padding: 10px; border-radius: 0; }
 
-@media screen and (max-width: 480px) { #note-list .list-group-item { padding: 10px; } }
+@media screen and (max-width: 480px) { .notes-body .list-group-item { padding: 10px; } }
 
-#note-list .list-item { position: relative; border: solid 1px #eee; overflow: hidden; }
+.notes-body .list-item { position: relative; border: solid 1px #eee; overflow: hidden; }
 
-#note-list .list-item a { display: block; text-decoration: none; color: #333; }
+.notes-body .list-item a { display: block; text-decoration: none; color: #333; }
 
-#note-list .list-item .item-top { pointer-events: none; }
+.notes-body .list-item .item-top { pointer-events: none; }
 
-#note-list .list-item .item-top .item-header { display: inline-block; vertical-align: middle; width: 20%; margin-right: 20px; pointer-events: none; }
+.notes-body .list-item .item-top .item-header { display: inline-block; vertical-align: middle; width: 20%; margin-right: 20px; pointer-events: none; }
 
-#note-list .list-item .item-top .item-header .item-title { letter-spacing: 0.5px; font-weight: 300; margin-bottom: 5px; pointer-events: none; }
+.notes-body .list-item .item-top .item-header .item-title { letter-spacing: 0.5px; font-weight: 300; margin-bottom: 5px; pointer-events: none; }
 
-#note-list .list-item .item-top .item-header .item-category { color: #999; font-size: 11px; font-weight: 500; text-transform: uppercase; pointer-events: none; letter-spacing: 1px; margin-bottom: 5px; }
+.notes-body .list-item .item-top .item-header .item-category { color: #999; font-size: 11px; font-weight: 500; text-transform: uppercase; pointer-events: none; letter-spacing: 1px; margin-bottom: 5px; }
 
-@media screen and (max-width: 480px) { #note-list .list-item .item-top .item-header .item-category { font-size: 10px; } }
+@media screen and (max-width: 480px) { .notes-body .list-item .item-top .item-header .item-category { font-size: 10px; } }
 
-@media screen and (max-width: 768px) { #note-list .list-item .item-top .item-header { display: block; width: 100%; margin-right: 0; } }
+@media screen and (max-width: 768px) { .notes-body .list-item .item-top .item-header { display: block; width: 100%; margin-right: 0; } }
 
-#note-list .list-item .item-top .item-introduction { display: inline-block; vertical-align: middle; width: calc(80% - 74px); overflow-x: auto; pointer-events: none; }
+.notes-body .list-item .item-top .item-introduction { display: inline-block; vertical-align: middle; width: calc(80% - 74px); overflow-x: auto; pointer-events: none; }
 
-@media screen and (max-width: 768px) { #note-list .list-item .item-top .item-introduction { display: block; width: 100%; margin-left: 0; } }
+@media screen and (max-width: 768px) { .notes-body .list-item .item-top .item-introduction { display: block; width: 100%; margin-left: 0; } }
 
 #note-detail h1 { font-weight: 300; }
 

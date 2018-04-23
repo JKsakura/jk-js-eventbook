@@ -10,31 +10,160 @@ jQuery(function($){
             {
                 slug: 'chapter-1',
                 name: 'Capter 1',
-                children: ["array", "booleans", "date", "error", "global"]
+                children: [
+                    {
+                        slug: 'array',
+                        name: 'Array',
+                        notes: []
+                    },
+                    {
+                        slug: 'booleans',
+                        name: 'Booleans',
+                        notes: []
+                    },
+                    {
+                        slug: 'date',
+                        name: 'Date',
+                        notes: []
+                    },
+                    {
+                        slug: 'error',
+                        name: 'Error',
+                        notes: []
+                    },
+                    {
+                        slug: 'global',
+                        name: 'Global',
+                        notes: []
+                    }
+                ]
             },
             {
                 slug: 'chapter-2',
                 name: 'Capter 2',
-                children: ["array", "booleans", "date", "error", "global"]
+                children: [
+                    {
+                        slug: 'array',
+                        name: 'Array',
+                        notes: []
+                    },
+                    {
+                        slug: 'booleans',
+                        name: 'Booleans',
+                        notes: []
+                    },
+                    {
+                        slug: 'date',
+                        name: 'Date',
+                        notes: []
+                    },
+                    {
+                        slug: 'error',
+                        name: 'Error',
+                        notes: []
+                    },
+                    {
+                        slug: 'global',
+                        name: 'Global',
+                        notes: []
+                    }
+                ]
             },
             {
                 slug: 'chapter-3',
                 name: 'Capter 3',
-                children: ["array", "booleans", "date", "error", "global"]
+                children: [
+                    {
+                        slug: 'array',
+                        name: 'Array',
+                        notes: []
+                    },
+                    {
+                        slug: 'booleans',
+                        name: 'Booleans',
+                        notes: []
+                    },
+                    {
+                        slug: 'date',
+                        name: 'Date',
+                        notes: []
+                    },
+                    {
+                        slug: 'error',
+                        name: 'Error',
+                        notes: []
+                    },
+                    {
+                        slug: 'global',
+                        name: 'Global',
+                        notes: []
+                    }
+                ]
             },
             {
                 slug: 'chapter-4',
                 name: 'Capter 4',
-                children: ["array", "booleans", "date", "error", "global"]
+                children: [
+                    {
+                        slug: 'array',
+                        name: 'Array',
+                        notes: []
+                    },
+                    {
+                        slug: 'booleans',
+                        name: 'Booleans',
+                        notes: []
+                    },
+                    {
+                        slug: 'date',
+                        name: 'Date',
+                        notes: []
+                    },
+                    {
+                        slug: 'error',
+                        name: 'Error',
+                        notes: []
+                    },
+                    {
+                        slug: 'global',
+                        name: 'Global',
+                        notes: []
+                    }
+                ]
             },
             {
                 slug: 'chapter-5',
                 name: 'Capter 5',
-                children: ["array", "booleans", "date", "error", "global"]
-            },
-        ];
+                children: [
+                    {
+                        slug: 'array',
+                        name: 'Array',
+                        notes: []
+                    },
+                    {
+                        slug: 'booleans',
+                        name: 'Booleans',
+                        notes: []
+                    },
+                    {
+                        slug: 'date',
+                        name: 'Date',
+                        notes: []
+                    },
+                    {
+                        slug: 'error',
+                        name: 'Error',
+                        notes: []
+                    },
+                    {
+                        slug: 'global',
+                        name: 'Global',
+                        notes: []
+                    }
+                ]
+            }
+        ],
         cache = [];
-
 /* ============================================================== */
 /*    EVENT FOR ALL NOTE HEADING BUTTONS */
 /* ============================================================== */
@@ -58,19 +187,17 @@ jQuery(function($){
                 formCategory,
                 formSubCategory;
                 // console.log(categories);
-            categories.forEach(function(category) {
+            categories.forEach(function(category, index){
                 // console.log(category);
-                formCategory = $("<option></option>").val(category.slug).text(category.name);
+                formCategory = $("<option></option>").val(index).text(category.name);
                 $(selectCategory).append(formCategory);
             });
             $(selectCategory).on('change', function () {
                 $(selectSubCategory).empty();
-                var term = $(this).val();
-                var subCategories = categories.filter(function(category) {
-                    return category.slug === term;
-                })[0].children;
-                subCategories.forEach(function(subCategory) {
-                    formSubCategory = $("<option></option>").val(subCategory).text(subCategory);
+                var index = $(this).index();
+                var subCategories = categories[index].children;
+                subCategories.forEach(function(subCategory, index) {
+                    formSubCategory = $("<option></option>").val(index).text(subCategory.name);
                     $(selectSubCategory).append(formSubCategory);
                 });
             });
@@ -106,9 +233,9 @@ jQuery(function($){
         iniCategory: function () {
             var defaultVal = '<option value="" disabled selected>Category</option>';
             var filterCategory = $("#filter-category").append(defaultVal, "<option value='all'>All</option>");
-            for( var category in categories ) {
-                var newCategory = $("<option></option>").text(category).val(category).appendTo(filterCategory);
-            }
+            categories.forEach(function(category){
+                var newCategory = $("<option></option>").val(category.slug).text(category.name).appendTo(filterCategory);
+            });
         },
         goFilter: function () {
             $("#filter-category").change(function () {
@@ -158,6 +285,8 @@ jQuery(function($){
                 notes.push(newNote);
                 noteID++;
                 noteObj = newNote;
+                categories[obj.category].children[obj.subcategory].notes.push(noteObj);
+                console.log(categories[obj.category].children);
 
                 // console.table(noteObj);
                 noteManager.displayNote(noteObj, false);
@@ -174,8 +303,8 @@ jQuery(function($){
             var id = $("<td></td>").text(note.id),
                 title = $("<td></td>").text(note.title),
                 created = $("<td></td>").text(month + '/' + day + '/' + year),
-                category = $("<td></td>").text(note.category),
-                subcategory = $("<td></td>").text(note.subcategory),
+                category = $("<td></td>").text(categories[note.category].name),
+                subcategory = $("<td></td>").text(categories[note.category].children[note.subcategory].name),
                 introduction = $("<td></td>").text(note.introduction),
                 temEdit = $("<button></button>").addClass("item-btn edit-btn"),
                 itemEditBtn = $("<i></i>").addClass("far fa-edit"),
@@ -354,8 +483,8 @@ jQuery(function($){
                 var resObj = {
                     id: "",
                     title: title,
-                    category: category,
-                    subcategory: subcategory,
+                    category: Number(category),
+                    subcategory: Number(subcategory),
                     introduction: introduction,
                     syntax: syntax,
                     description: description
@@ -421,7 +550,7 @@ jQuery(function($){
     
     // LOAD DATA FROM JSON FILE
     dataManager.loadData();
-    //dataManager.resetData();
+    dataManager.resetData();
 
     // INITIAL HEADER FILTER
     filterManager.goSearch();

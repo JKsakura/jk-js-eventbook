@@ -256,44 +256,29 @@ jQuery(function($){
     var noteManager = {
         saveNote: function(obj) {
             var noteObj;
+
             if (obj.id >= 0 && obj.id!== '') {
                 var targetID = obj.id,
                     index = notes.map(function (element) { return element.id; }).indexOf(targetID);
 
                 // If the current category or subcategory is updated, then remove the current note from category or subcategory
-                noteManager.removeFromCategory(obj, notes[index], targetID);
+                this.removeFromCategory(obj, notes[index], targetID);
+                // Push the updated note object into the categories array
+                this.insertToCategory(obj, notes[index], true);
 
                 // Update the current note into the notes array
-                notes[index] = {
-                    id: targetID,
-                    title: obj.title,
-                    created: obj.created ? obj.created : new Date(),
-                    category: obj.category,
-                    subcategory: obj.subcategory,
-                    introduction: obj.introduction,
-                    syntax: obj.syntax,
-                    description: obj.description
-                };
+                notes[index] = obj;
+                notes[index].id = targetID;
+                notes[index].created = obj.created ? obj.created : new Date();
                 noteObj = notes[index];
-
-                // Push the updated note object into the categories array
-                this.insertToCategory(obj, noteObj, true);
 
                 // Display the updated current note
                 noteManager.displayNote(noteObj, true);
-                console.table(categories);
             } else {
                 // Create a new note object and push it into notes array
-                var newNote = {
-                    id: noteID,
-                    title: obj.title,
-                    created: new Date(),
-                    category: obj.category,
-                    subcategory: obj.subcategory,
-                    introduction: obj.introduction,
-                    syntax: obj.syntax,
-                    description: obj.description
-                };
+                newNote = obj;
+                newNote.id = noteID;
+                newNote.created = new Date();
                 notes.push(newNote);
                 // Update global note ID
                 noteID++;
@@ -305,16 +290,21 @@ jQuery(function($){
                 // Display the new note
                 noteManager.displayNote(noteObj, false);
             }
+
             dataManager.saveData(notes);
+            // console.log(notes);
+            // console.log(categories);
         },
         // DISPLAY THE ELEMENT WITH NEW DOM STRUCTURE
         displayNote: function(note, update) {
-            var row;
-            var date = new Date(note.created);
-            var day = date.getDate();
-            var month = date.getMonth();
-            var year = date.getFullYear();
-            var id = $("<td></td>").text(note.id),
+            var row,
+                // Format Date into mm/dd/yyyy
+                date = new Date(note.created),
+                day = date.getDate(),
+                month = date.getMonth(),
+                year = date.getFullYear(),
+                // Create new note elements into DOM
+                id = $("<td></td>").text(note.id),
                 title = $("<td></td>").text(note.title),
                 created = $("<td></td>").text(month + '/' + day + '/' + year),
                 category = $("<td></td>").text(categories[note.category].name),
@@ -326,31 +316,28 @@ jQuery(function($){
                 itemDeleteBtn = $("<i></i>").addClass("far fa-trash-alt"),
                 editBtn = $("<td></td>").append($(temEdit).append(itemEditBtn)),
                 deleteBtn = $("<td></td>").append($(itemDelete).append(itemDeleteBtn));
+            // Cache note object
+            var obj = {
+                id: note.id,
+                title: note.title,
+                category: note.category,
+                subcategory: note.subcategory,
+                introduction: note.introduction,
+                syntax: note.syntax,
+                description: note.description
+            };
             if (update === true) {
-                row = $("<tr></tr>").append(id, title, created, subcategory, category, introduction, editBtn, deleteBtn);
+                // Append all elements into DOM
+                row = $("<tr></tr>").append(id, title, created, category, subcategory, introduction, editBtn, deleteBtn);
                 var index = notes.map(function(element){ return element.id; }).indexOf(note.id);
+                obj.element = row;
+                obj.id = note.id;
+                cache[index] = obj;
                 cache[index].element.replaceWith(row);
-                cache[index] = { // Add an object to the cache array
-                    element: row, // This row
-                    id: note.id,
-                    title: note.title,
-                    category: note.category,
-                    subcategory: note.subcategory,
-                    introduction: note.introduction,
-                    syntax: note.syntax,
-                    description: note.description
-                };
             } else {
                 row = $("<tr></tr>").append(id, title, created, category, subcategory, introduction, editBtn, deleteBtn).appendTo($(noteList).find('tbody'));
-                cache.push({ // Add an object to the cache array
-                    element: row, // This row
-                    title: note.title,
-                    category: note.category,
-                    subcategory: note.subcategory,
-                    introduction: note.introduction,
-                    syntax: note.syntax,
-                    description: note.description
-                });
+                obj.element = row;
+                cache.push(obj);
             }
         },
         // DELETE A NEW NOTE BASED ON THE ID
@@ -360,7 +347,7 @@ jQuery(function($){
             var r = confirm("Are You Sure You Want to Delete This Item?");
             if (r === true) {
                 // Remove the current note from categories array
-                removeFromCategory(null, notes[index], notes[index].id);
+                this.removeFromCategory('', notes[index], notes[index].id);
                 // Remove the current note from notes array
                 notes.splice(index, 1);
                 // Remove the DOM element
@@ -373,7 +360,8 @@ jQuery(function($){
                 // Do nothing if user cancels deleting
                 return false;
             }
-            console.table(categories);
+            // console.log(notes);
+            // console.log(categories);
         },
         orderNote: function(e) {
             var oldIndex, newIndex, note;
@@ -449,25 +437,29 @@ jQuery(function($){
         },
         removeFromCategory: function(obj, refObj, id) {
             //If the current note's category or subcategory is changed
-            if (obj.category !== refObj.category || obj.subcategory !== refObj.subcategory) {
+            if (obj === '' || (obj.category !== refObj.category || obj.subcategory !== refObj.subcategory)) {
                 // Remove it from the category or subcategory
                 var catNote = categories[refObj.category].children[refObj.subcategory].notes;
-                var catIndex = catNote.map(function (element) { return element.id; }).indexOf(id);
+                var catIndex = catNote.indexOf(id);
                 catNote.splice(catIndex, 1);
+            } else {
+                return;
             }
         },
-        insertToCategory: function (obj, note, update) {
+        insertToCategory: function (obj, refObj, update) {
             if (update === true) {
                 // If editing note, then check if category or subcategory is changed, if so, push current note into category
                 if (obj.category !== refObj.category || obj.subcategory !== refObj.subcategory) {
                     // Push it to the updated category or subcategory
-                    categories[obj.category].children[obj.subcategory].notes.push(note);
+                    categories[obj.category].children[obj.subcategory].notes.push(refObj.id);
                     // console.log(categories[obj.category].children[obj.subcategory].notes);
+                } else {
+                    return;
                 }
             } else {
                 // If adding new note, then just push new note into category
                 // Push it to the updated category or subcategory
-                categories[obj.category].children[obj.subcategory].notes.push(note);
+                categories[obj.category].children[obj.subcategory].notes.push(refObj.id);
             }
         }
     };

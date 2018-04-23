@@ -256,9 +256,14 @@ jQuery(function($){
     var noteManager = {
         saveNote: function(obj) {
             var noteObj;
-            if(obj.id) {
-                var targetID = obj.id;
-                var index = notes.map(function (element) { return element.id; }).indexOf(targetID);
+            if (obj.id >= 0 && obj.id!== '') {
+                var targetID = obj.id,
+                    index = notes.map(function (element) { return element.id; }).indexOf(targetID);
+
+                // If the current category or subcategory is updated, then remove the current note from category or subcategory
+                noteManager.removeFromCategory(obj, notes[index], targetID);
+
+                // Update the current note into the notes array
                 notes[index] = {
                     id: targetID,
                     title: obj.title,
@@ -270,8 +275,15 @@ jQuery(function($){
                     description: obj.description
                 };
                 noteObj = notes[index];
+
+                // Push the updated note object into the categories array
+                this.insertToCategory(obj, noteObj, true);
+
+                // Display the updated current note
                 noteManager.displayNote(noteObj, true);
+                console.table(categories);
             } else {
+                // Create a new note object and push it into notes array
                 var newNote = {
                     id: noteID,
                     title: obj.title,
@@ -283,12 +295,14 @@ jQuery(function($){
                     description: obj.description
                 };
                 notes.push(newNote);
+                // Update global note ID
                 noteID++;
                 noteObj = newNote;
-                categories[obj.category].children[obj.subcategory].notes.push(noteObj);
-                console.log(categories[obj.category].children);
 
-                // console.table(noteObj);
+                // Push the new note object into the categories array
+                this.insertToCategory(obj, noteObj, false);
+
+                // Display the new note
                 noteManager.displayNote(noteObj, false);
             }
             dataManager.saveData(notes);
@@ -312,7 +326,7 @@ jQuery(function($){
                 itemDeleteBtn = $("<i></i>").addClass("far fa-trash-alt"),
                 editBtn = $("<td></td>").append($(temEdit).append(itemEditBtn)),
                 deleteBtn = $("<td></td>").append($(itemDelete).append(itemDeleteBtn));
-            if(update===true) {
+            if (update === true) {
                 row = $("<tr></tr>").append(id, title, created, subcategory, category, introduction, editBtn, deleteBtn);
                 var index = notes.map(function(element){ return element.id; }).indexOf(note.id);
                 cache[index].element.replaceWith(row);
@@ -344,14 +358,22 @@ jQuery(function($){
             var target = e.target;
             var index = $(target).closest("tr").index();
             var r = confirm("Are You Sure You Want to Delete This Item?");
-            if(r === true) {
+            if (r === true) {
+                // Remove the current note from categories array
+                removeFromCategory(null, notes[index], notes[index].id);
+                // Remove the current note from notes array
                 notes.splice(index, 1);
+                // Remove the DOM element
                 cache[index].element.remove();
+                // Remove the current note from cache
                 cache.splice(index, 1);
+                // Save back the notes array into data
                 dataManager.saveData(notes);
             } else {
+                // Do nothing if user cancels deleting
                 return false;
             }
+            console.table(categories);
         },
         orderNote: function(e) {
             var oldIndex, newIndex, note;
@@ -424,6 +446,29 @@ jQuery(function($){
                         }
                 });
             });
+        },
+        removeFromCategory: function(obj, refObj, id) {
+            //If the current note's category or subcategory is changed
+            if (obj.category !== refObj.category || obj.subcategory !== refObj.subcategory) {
+                // Remove it from the category or subcategory
+                var catNote = categories[refObj.category].children[refObj.subcategory].notes;
+                var catIndex = catNote.map(function (element) { return element.id; }).indexOf(id);
+                catNote.splice(catIndex, 1);
+            }
+        },
+        insertToCategory: function (obj, note, update) {
+            if (update === true) {
+                // If editing note, then check if category or subcategory is changed, if so, push current note into category
+                if (obj.category !== refObj.category || obj.subcategory !== refObj.subcategory) {
+                    // Push it to the updated category or subcategory
+                    categories[obj.category].children[obj.subcategory].notes.push(note);
+                    // console.log(categories[obj.category].children[obj.subcategory].notes);
+                }
+            } else {
+                // If adding new note, then just push new note into category
+                // Push it to the updated category or subcategory
+                categories[obj.category].children[obj.subcategory].notes.push(note);
+            }
         }
     };
     
@@ -489,11 +534,9 @@ jQuery(function($){
                     syntax: syntax,
                     description: description
                 };
-
-                if (id) {
+                if (id || id>=0) {
                     resObj.id = id;
                 }
-
                 return resObj;
             }
         };

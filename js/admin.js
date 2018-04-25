@@ -8,157 +8,98 @@ jQuery(function($){
         noteList = $("#note-table"),
         categories = [
             {
-                slug: 'chapter-1',
-                name: 'Capter 1',
+                slug: 'javascript',
+                name: 'JavaScript',
                 children: [
                     {
                         slug: 'array',
-                        name: 'Array',
-                        notes: []
+                        name: 'Array'
                     },
                     {
                         slug: 'booleans',
-                        name: 'Booleans',
-                        notes: []
+                        name: 'Booleans'
                     },
                     {
                         slug: 'date',
-                        name: 'Date',
-                        notes: []
+                        name: 'Date'
                     },
                     {
                         slug: 'error',
-                        name: 'Error',
-                        notes: []
+                        name: 'Error'
                     },
                     {
                         slug: 'global',
-                        name: 'Global',
-                        notes: []
+                        name: 'Global'
                     }
                 ]
             },
             {
-                slug: 'chapter-2',
-                name: 'Capter 2',
+                slug: 'html-dom',
+                name: 'HTML DOM',
                 children: [
                     {
-                        slug: 'array',
-                        name: 'Array',
-                        notes: []
+                        slug: 'attribute',
+                        name: 'Attribute'
                     },
                     {
-                        slug: 'booleans',
-                        name: 'Booleans',
-                        notes: []
+                        slug: 'console',
+                        name: 'Console'
                     },
                     {
-                        slug: 'date',
-                        name: 'Date',
-                        notes: []
+                        slug: 'document',
+                        name: 'Document'
                     },
                     {
-                        slug: 'error',
-                        name: 'Error',
-                        notes: []
+                        slug: 'element',
+                        name: 'Element'
                     },
                     {
-                        slug: 'global',
-                        name: 'Global',
-                        notes: []
+                        slug: 'events',
+                        name: 'Events'
                     }
                 ]
             },
             {
-                slug: 'chapter-3',
-                name: 'Capter 3',
+                slug: 'html-objects',
+                name: 'HTML Objects',
                 children: [
                     {
-                        slug: 'array',
-                        name: 'Array',
-                        notes: []
+                        slug: 'anchor',
+                        name: 'Anchor'
                     },
                     {
-                        slug: 'booleans',
-                        name: 'Booleans',
-                        notes: []
+                        slug: 'abbreviation',
+                        name: 'Abbreviation'
                     },
                     {
-                        slug: 'date',
-                        name: 'Date',
-                        notes: []
+                        slug: 'address',
+                        name: 'Address'
                     },
                     {
-                        slug: 'error',
-                        name: 'Error',
-                        notes: []
+                        slug: 'area',
+                        name: 'Area'
                     },
                     {
-                        slug: 'global',
-                        name: 'Global',
-                        notes: []
+                        slug: 'article',
+                        name: 'Article'
                     }
                 ]
             },
             {
-                slug: 'chapter-4',
-                name: 'Capter 4',
+                slug: 'other-objects',
+                name: 'Other Objects',
                 children: [
                     {
-                        slug: 'array',
-                        name: 'Array',
-                        notes: []
+                        slug: 'css-style-declaration',
+                        name: 'CSSStyleDeclaration'
                     },
                     {
-                        slug: 'booleans',
-                        name: 'Booleans',
-                        notes: []
+                        slug: 'type-conversion',
+                        name: 'Type Conversion'
                     },
                     {
-                        slug: 'date',
-                        name: 'Date',
-                        notes: []
-                    },
-                    {
-                        slug: 'error',
-                        name: 'Error',
-                        notes: []
-                    },
-                    {
-                        slug: 'global',
-                        name: 'Global',
-                        notes: []
-                    }
-                ]
-            },
-            {
-                slug: 'chapter-5',
-                name: 'Capter 5',
-                children: [
-                    {
-                        slug: 'array',
-                        name: 'Array',
-                        notes: []
-                    },
-                    {
-                        slug: 'booleans',
-                        name: 'Booleans',
-                        notes: []
-                    },
-                    {
-                        slug: 'date',
-                        name: 'Date',
-                        notes: []
-                    },
-                    {
-                        slug: 'error',
-                        name: 'Error',
-                        notes: []
-                    },
-                    {
-                        slug: 'global',
-                        name: 'Global',
-                        notes: []
+                        slug: 'storage',
+                        name: 'Storage'
                     }
                 ]
             }
@@ -183,9 +124,9 @@ jQuery(function($){
         },
         noteBody: function () {
             var selectCategory = $("#form-category"),
-                selectSubCategory = $("#form-sub-category"),
+                selectSubcategory = $("#form-sub-category"),
                 formCategory,
-                formSubCategory;
+                formSubcategory;
                 // console.log(categories);
             categories.forEach(function(category, index){
                 // console.log(category);
@@ -193,12 +134,13 @@ jQuery(function($){
                 $(selectCategory).append(formCategory);
             });
             $(selectCategory).on('change', function () {
-                $(selectSubCategory).empty();
+                $(selectSubcategory).empty();
+                console.log('works');
                 var index = $(this).index();
                 var subCategories = categories[index].children;
-                subCategories.forEach(function(subCategory, index) {
-                    formSubCategory = $("<option></option>").val(index).text(subCategory.name);
-                    $(selectSubCategory).append(formSubCategory);
+                subCategories.forEach(function (subcategory, index) {
+                    formSubcategory = $("<option></option>").val(index).text(subcategory.name);
+                    $(selectSubcategory).append(formSubcategory);
                 });
             });
             $(noteList).find("tbody").each(function () {
@@ -262,9 +204,9 @@ jQuery(function($){
                     index = notes.map(function (element) { return element.id; }).indexOf(targetID);
 
                 // If the current category or subcategory is updated, then remove the current note from category or subcategory
-                this.removeFromCategory(obj, notes[index], targetID);
+                //this.removeFromCategory(obj, notes[index], targetID);
                 // Push the updated note object into the categories array
-                this.insertToCategory(obj, notes[index], true);
+                //this.insertToCategory(obj, notes[index], true);
 
                 // Update the current note into the notes array
                 notes[index] = obj;
@@ -285,7 +227,7 @@ jQuery(function($){
                 noteObj = newNote;
 
                 // Push the new note object into the categories array
-                this.insertToCategory(obj, noteObj, false);
+                //this.insertToCategory(obj, noteObj, false);
 
                 // Display the new note
                 noteManager.displayNote(noteObj, false);
@@ -347,7 +289,7 @@ jQuery(function($){
             var r = confirm("Are You Sure You Want to Delete This Item?");
             if (r === true) {
                 // Remove the current note from categories array
-                this.removeFromCategory('', notes[index], notes[index].id);
+                //this.removeFromCategory('', notes[index], notes[index].id);
                 // Remove the current note from notes array
                 notes.splice(index, 1);
                 // Remove the DOM element
@@ -435,33 +377,33 @@ jQuery(function($){
                 });
             });
         },
-        removeFromCategory: function(obj, refObj, id) {
-            //If the current note's category or subcategory is changed
-            if (obj === '' || (obj.category !== refObj.category || obj.subcategory !== refObj.subcategory)) {
-                // Remove it from the category or subcategory
-                var catNote = categories[refObj.category].children[refObj.subcategory].notes;
-                var catIndex = catNote.indexOf(id);
-                catNote.splice(catIndex, 1);
-            } else {
-                return;
-            }
-        },
-        insertToCategory: function (obj, refObj, update) {
-            if (update === true) {
-                // If editing note, then check if category or subcategory is changed, if so, push current note into category
-                if (obj.category !== refObj.category || obj.subcategory !== refObj.subcategory) {
-                    // Push it to the updated category or subcategory
-                    categories[obj.category].children[obj.subcategory].notes.push(refObj.id);
-                    // console.log(categories[obj.category].children[obj.subcategory].notes);
-                } else {
-                    return;
-                }
-            } else {
-                // If adding new note, then just push new note into category
-                // Push it to the updated category or subcategory
-                categories[obj.category].children[obj.subcategory].notes.push(refObj.id);
-            }
-        }
+        // removeFromCategory: function(obj, refObj, id) {
+        //     //If the current note's category or subcategory is changed
+        //     if (obj === '' || (obj.category !== refObj.category || obj.subcategory !== refObj.subcategory)) {
+        //         // Remove it from the category or subcategory
+        //         var catNote = categories[refObj.category].children[refObj.subcategory].notes;
+        //         var catIndex = catNote.indexOf(id);
+        //         catNote.splice(catIndex, 1);
+        //     } else {
+        //         return;
+        //     }
+        // },
+        // insertToCategory: function (obj, refObj, update) {
+        //     if (update === true) {
+        //         // If editing note, then check if category or subcategory is changed, if so, push current note into category
+        //         if (obj.category !== refObj.category || obj.subcategory !== refObj.subcategory) {
+        //             // Push it to the updated category or subcategory
+        //             categories[obj.category].children[obj.subcategory].notes.push(refObj.id);
+        //             // console.log(categories[obj.category].children[obj.subcategory].notes);
+        //         } else {
+        //             return;
+        //         }
+        //     } else {
+        //         // If adding new note, then just push new note into category
+        //         // Push it to the updated category or subcategory
+        //         categories[obj.category].children[obj.subcategory].notes.push(refObj.id);
+        //     }
+        // }
     };
     
 /* ============================================================== */

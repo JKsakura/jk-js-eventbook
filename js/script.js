@@ -5,160 +5,101 @@ jQuery(function ($) {
         noteList = $("#note-list"),
         categories = [
             {
-                slug: 'chapter-1',
-                name: 'Capter 1',
+                slug: 'javascript',
+                name: 'JavaScript',
                 children: [
                     {
                         slug: 'array',
-                        name: 'Array',
-                        notes: []
+                        name: 'Array'
                     },
                     {
                         slug: 'booleans',
-                        name: 'Booleans',
-                        notes: []
+                        name: 'Booleans'
                     },
                     {
                         slug: 'date',
-                        name: 'Date',
-                        notes: []
+                        name: 'Date'
                     },
                     {
                         slug: 'error',
-                        name: 'Error',
-                        notes: []
+                        name: 'Error'
                     },
                     {
                         slug: 'global',
-                        name: 'Global',
-                        notes: []
+                        name: 'Global'
                     }
                 ]
             },
             {
-                slug: 'chapter-2',
-                name: 'Capter 2',
+                slug: 'html-dom',
+                name: 'HTML DOM',
                 children: [
                     {
-                        slug: 'array',
-                        name: 'Array',
-                        notes: []
+                        slug: 'attribute',
+                        name: 'Attribute'
                     },
                     {
-                        slug: 'booleans',
-                        name: 'Booleans',
-                        notes: []
+                        slug: 'console',
+                        name: 'Console'
                     },
                     {
-                        slug: 'date',
-                        name: 'Date',
-                        notes: []
+                        slug: 'document',
+                        name: 'Document'
                     },
                     {
-                        slug: 'error',
-                        name: 'Error',
-                        notes: []
+                        slug: 'element',
+                        name: 'Element'
                     },
                     {
-                        slug: 'global',
-                        name: 'Global',
-                        notes: []
+                        slug: 'events',
+                        name: 'Events'
                     }
                 ]
             },
             {
-                slug: 'chapter-1',
-                name: 'Capter 1',
+                slug: 'html-objects',
+                name: 'HTML Objects',
                 children: [
                     {
-                        slug: 'array',
-                        name: 'Array',
-                        notes: []
+                        slug: 'anchor',
+                        name: 'Anchor'
                     },
                     {
-                        slug: 'booleans',
-                        name: 'Booleans',
-                        notes: []
+                        slug: 'abbreviation',
+                        name: 'Abbreviation'
                     },
                     {
-                        slug: 'date',
-                        name: 'Date',
-                        notes: []
+                        slug: 'address',
+                        name: 'Address'
                     },
                     {
-                        slug: 'error',
-                        name: 'Error',
-                        notes: []
+                        slug: 'area',
+                        name: 'Area'
                     },
                     {
-                        slug: 'global',
-                        name: 'Global',
-                        notes: []
+                        slug: 'article',
+                        name: 'Article'
                     }
                 ]
             },
             {
-                slug: 'chapter-1',
-                name: 'Capter 1',
+                slug: 'other-objects',
+                name: 'Other Objects',
                 children: [
                     {
-                        slug: 'array',
-                        name: 'Array',
-                        notes: []
+                        slug: 'css-style-declaration',
+                        name: 'CSSStyleDeclaration'
                     },
                     {
-                        slug: 'booleans',
-                        name: 'Booleans',
-                        notes: []
+                        slug: 'type-conversion',
+                        name: 'Type Conversion'
                     },
                     {
-                        slug: 'date',
-                        name: 'Date',
-                        notes: []
-                    },
-                    {
-                        slug: 'error',
-                        name: 'Error',
-                        notes: []
-                    },
-                    {
-                        slug: 'global',
-                        name: 'Global',
-                        notes: []
+                        slug: 'storage',
+                        name: 'Storage'
                     }
                 ]
-            },
-            {
-                slug: 'chapter-1',
-                name: 'Capter 1',
-                children: [
-                    {
-                        slug: 'array',
-                        name: 'Array',
-                        notes: []
-                    },
-                    {
-                        slug: 'booleans',
-                        name: 'Booleans',
-                        notes: []
-                    },
-                    {
-                        slug: 'date',
-                        name: 'Date',
-                        notes: []
-                    },
-                    {
-                        slug: 'error',
-                        name: 'Error',
-                        notes: []
-                    },
-                    {
-                        slug: 'global',
-                        name: 'Global',
-                        notes: []
-                    }
-                ]
-            },
+            }
         ],
         cache = [];
 
@@ -172,23 +113,7 @@ jQuery(function ($) {
         },
 
         noteBody: function () {
-            var listCategory,
-                listClass,
-                formCategory;
-            categories.forEach(function (category) {
-                listClass = "category category-" + category.slug;
-                listTitle = $("<p class='list-group-item'></p>").text(category.name);
-                listCategory = $("<li></li>").addClass(listClass).data("category", category).append(listTitle, "<ul></ul>");
-                category.children.forEach(function (subCategory) {
-                    formSubCategory = $("<option></option>").val(subCategory).text(subCategory);
-                    var itemClass = "list-item list-group-item list-group-item-action",
-                        linkClass = "detail-trigger";
-                    var listLink = $("<a></a>").attr("href", "#" + category.slug).addClass(linkClass).append(subCategory);
-                    var listItem = $("<li></li>").attr("id", category.slug).addClass(itemClass).append(listLink);
-                    $(listCategory).append(listItem);
-                });
-                $(categoryList).append(listCategory);
-            });
+            categoryManager.displayCategory();
         }
     };
 /* ============================================================== */
@@ -223,17 +148,17 @@ jQuery(function ($) {
             var defaultVal = '<option value="" disabled selected>Category</option>';
             var filterCategory = $("#filter-category").append(defaultVal, "<option value='all'>All</option>");
             categories.forEach(function(category) {
-                var newCategory = $("<option></option>").text(category).val(category).appendTo(filterCategory);
+                var newCategory = $("<option></option>").text(category.name).val(category.slug).appendTo(filterCategory);
             });
         },
         goFilter: function () {
             $("#filter-category").change(function() {
-                var filterCategory = $(this).val().trim().toUpperCase();
+                var filterCategory = $(this).val();
                 $(categoryList).find(".category").hide();
                 $(categoryList).find(".category").each(function () {
-                    if( filterCategory === "ALL") {
+                    if( filterCategory === "all") {
                         $(categoryList).find(".category").show();
-                    } else if ($(this).find("p.list-group-item").text().trim().toUpperCase() === filterCategory.toUpperCase()) {
+                    } else if ($(this).data('category') === filterCategory) {
                         $(this).show();
                     }
                 });
@@ -241,6 +166,28 @@ jQuery(function ($) {
         }
     };
 
+/* ============================================================== */
+/*    FUNCTIONS TO MANAGE THE CATEGORY LIST  */
+/* ============================================================== */
+    var categoryManager = {
+        displayCategory: function() {
+            var listCategory,
+                listClass;
+            categories.forEach(function (category) {
+                listClass = "category";
+                listTitle = $("<p class='list-group-item'></p>").text(category.name);
+                listCategory = $("<li></li>").addClass(listClass).data('category', category.slug).append(listTitle, "<ul></ul>");
+                category.children.forEach(function (subcategory) {
+                    var itemClass = "list-item list-group-item list-group-item-action",
+                        linkClass = "list-trigger";
+                    var listLink = $("<a></a>").attr("href", "#" + category.slug + '&' + subcategory.slug).text(subcategory.name).addClass(linkClass).append(subcategory);
+                    var listItem = $("<li></li>").attr("id", subcategory.slug).addClass(itemClass).append(listLink);
+                    $(listCategory).append(listItem);
+                });
+                $(categoryList).append(listCategory);
+            });
+        }
+    };
 /* ============================================================== */
 /*    FUNCTIONS TO MANAGE THE NOTE LIST  */
 /* ============================================================== */
@@ -274,11 +221,12 @@ jQuery(function ($) {
             var listLink = $("<a></a>").attr("href", "#" + itemId).addClass(linkClass).append(itemTop);
             var listItem = $("<li></li>").attr("id", itemId).addClass(itemClass).append(listLink);
 
-            $(noteList).find(".category-" + note.category).find("ul").append(listItem);
+            //$(noteList).find(".category-" + note.category).find("ul").append(listItem);
             cache.push({ // Add an object to the cache array
                 element: listItem, // This row
                 title: note.title,
                 category: note.category,
+                subcategory: note.subcategory,
                 introduction: note.introduction,
                 syntax: note.syntax,
                 description: note.description
@@ -335,26 +283,46 @@ jQuery(function ($) {
         }
     };
 
-    $(".page").each(function() {
-        var page = this;
-        var page1 = $(".page1");
-        $(this).on("click", function (e) {
-            var target = e.target;
-            if( $(target).is(".detail-trigger") ) {
-                e.preventDefault();
-                noteManager.fetchDetail(target);
-                pageToggle.pageForward(".page1", ".page2");
-            } else if( $(target).is("p.list-group-item") ) {
-                $(target).each(function() {
-                    $(this).next("ul").stop().slideToggle(300);
-                    $(this).stop().toggleClass("closed");
-                });
-            } else if( $(target).hasClass("back-to-all") ) {
-                e.preventDefault();
-                pageToggle.pageBackward(".page1", ".page2");
-            }
+    function pageManager() {
+        $(".page").each(function () {
+            var page = this;
+            var page1 = $(".page1");
+            $(this).on("click", function (e) {
+                var target = e.target;
+                if ($(target).is(".detail-trigger")) {
+                    e.preventDefault();
+                    noteManager.fetchDetail(target);
+                    pageToggle.pageForward(".page1", ".page2");
+                }
+                if ($(target).is("p.list-group-item")) {
+                    $(target).each(function () {
+                        $(this).next("ul").stop().slideToggle(300);
+                        $(this).stop().toggleClass("closed");
+                    });
+                }
+                if ($(target).is(".back-to-all")) {
+                    e.preventDefault();
+                    pageToggle.pageBackward(".page1", ".page2");
+                }
+                if ($(target).is('.list-trigger')) {
+                    e.preventDefault();
+                    var current = target.hash.slice(1).split('&');
+                    currentCat = current[0];
+                    currentSub = current[1];
+                    $(categoryList).hide();
+                    $(noteList).show();
+                    console.log(cache);
+                    cache.forEach(function (note) {
+                        console.log(note);
+                        if (categories[note.category].slug === currentCat) {
+                            console.log('works');
+                            $(noteList).append(cache.element);
+                        }
+                    });
+                }
+            });
         });
-    });
+    }
     
     DOMManager.noteHeader();
     DOMManager.noteBody();
@@ -365,4 +333,6 @@ jQuery(function ($) {
     // INITIAL HEADER FILTER
     filterManager.goSearch();
     filterManager.goFilter();
+
+    pageManager();
 });

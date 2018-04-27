@@ -1,8 +1,8 @@
 jQuery(function ($) {
     // Declare Global Note Vars
     var noteID, notes;
-    var categoryList = $("#category-list"),
-        noteList = $("#note-list"),
+    var categoryList = $("#categories-list"),
+        noteList = $("#notes-list"),
         categories = [
             {
                 id: 0,
@@ -210,60 +210,29 @@ jQuery(function ($) {
         }
     };
 
-    /* ============================================================== */
-    /* FUNCTIONS TO MANAGE THE CATEGORY  */
-    /* ============================================================== */
+/* ============================================================== */
+/*    FUNCTIONS TO MANAGE THE CATEGORY LIST  */
+/* ============================================================== */
     var categoryManager = {
-        displayCategory: function () {
-            var selectCategory = $("#form-category"),
-                formCategory;
-            // console.log(categories);
-            categories.forEach(function (category, index) {
-                // console.log(category);
+        displayCategory: function() {
+            var listCategory,
+                listClass;
+            categories.forEach(function (category) {
                 if (category.children.length > 0) {
-                    formCategory = $("<option></option>").val(index).text(category.name);
-                    $(selectCategory).append(formCategory);
+                    listClass = "category";
+                    listTitle = $("<p class='list-group-item'></p>").text(category.name);
+                    listCategory = $("<li></li>").addClass(listClass).data('category', category.slug).append(listTitle, "<ul></ul>");
+                    category.children.forEach(function (element) {
+                        var subcategory = categoryManager.fetchCategory(element),
+                            itemClass = "list-item list-group-item list-group-item-action",
+                            linkClass = "list-trigger",
+                            listLink = $("<a></a>").attr("href", "#" + subcategory.id).text(subcategory.name).addClass(linkClass).append(subcategory);
+                            listItem = $("<li></li>").addClass(itemClass).append(listLink);
+                            $(listCategory).append(listItem);
+                    });
+                    $(categoryList).append(listCategory);
                 }
             });
-            $(selectCategory).on('change', function () {
-                categoryManager.displaySubcategory($(this).val());
-            });
-        },
-        displaySubcategory: function (index) {
-            var selectSubcategory = $("#form-subcategory"),
-                formSubcategory,
-                category = categories[index];
-            $(selectSubcategory).html('');
-            subcategories = category.children;
-            subcategories.forEach(function (element) {
-                var subcategory = categoryManager.fetchCategory(element);
-                formSubcategory = $("<option></option>").val(subcategory.id).text(subcategory.name);
-                $(selectSubcategory).append(formSubcategory);
-            });
-        },
-        removeFromCategory: function (obj, refObj, id) {
-            //If the current note's category or subcategory is changed
-            if (obj === '' || (obj.category !== refObj.category || obj.subcategory !== refObj.subcategory)) {
-                // Remove it from the category or subcategory
-                var catNote = this.fetchCategory(refObj.subcategory).notes,
-                    catIndex = catNote.indexOf(id);
-                catNote.splice(catIndex, 1);
-            } else {
-                return;
-            }
-        },
-        insertToCategory: function (obj, refObj, update) {
-            if (update === true) {
-                // If editing note, then check if category is changed, if so, push current note into category
-                if (obj.category !== refObj.category || obj.subcategory !== refObj.subcategory) {
-                    this.fetchCategory(obj.subcategory).notes.push(refObj.id); // Push it to the updated category
-                } else {
-                    return;
-                }
-            } else {
-                // If adding new note, then just push new note into category
-                this.fetchCategory(obj.subcategory).notes.push(refObj.id);
-            }
         },
         fetchCategory: function (targetID) {
             // Get 
@@ -309,6 +278,7 @@ jQuery(function ($) {
             //$(noteList).find(".category-" + note.category).find("ul").append(listItem);
             cache.push({ // Add an object to the cache array
                 element: listItem, // This row
+                id: note.id,
                 title: note.title,
                 category: note.category,
                 subcategory: note.subcategory,
@@ -336,6 +306,20 @@ jQuery(function ($) {
             $('.code').each(function (i, block) {
                 hljs.highlightBlock(block);
             });
+        },
+        fetchNote: function(targetID) {
+            // Find the note with the assigned ID
+            var index = notes.map(function (element) {
+                return element.id;
+            }).indexOf(targetID);
+            return notes[index];
+        },
+        fetchCache: function (targetID) {
+            // Find the note with the assigned ID
+            var index = cache.map(function (element) {
+                return element.id;
+            }).indexOf(targetID);
+            return cache[index];
         }
     };
 
@@ -351,6 +335,8 @@ jQuery(function ($) {
                 if (notes.length > 0) {
                     notes.forEach(function(note) {
                         noteManager.displayNote(note);
+                        var category = categoryManager.fetchCategory(note.subcategory);
+                        category.notes.push(note.id);
                         if (note.id >= noteID) { noteID = note.id + 1; }
                     });
                 }
@@ -358,6 +344,8 @@ jQuery(function ($) {
                     noteManager.fetchDetail(location);
                     pageToggle.pageForward(".page1", ".page2");
                 }
+                DOMManager.noteHeader();
+                DOMManager.noteBody();
             })
             .fail(function (d, textStatus, error) {
                 console.error("getJSON failed, status: " + textStatus + ", error: " + error);
@@ -391,27 +379,19 @@ jQuery(function ($) {
                 }
                 if ($(target).is('.list-trigger')) {
                     e.preventDefault();
-                    var current = target.hash.slice(1).split('&');
-                    currentCat = current[0];
-                    currentSub = current[1];
+                    var current = target.hash.slice(1),
+                        category = categoryManager.fetchCategory(Number(current));
                     $(categoryList).hide();
                     $(noteList).show();
-                    console.log(cache);
-                    cache.forEach(function (note) {
-                        console.log(note);
-                        if (categories[note.category].slug === currentCat) {
-                            console.log('works');
-                            $(noteList).append(cache.element);
-                        }
+                    category.notes.forEach(function (note) {
+                        current = noteManager.fetchCache(note);
+                        console.log(current.element);
+                        $(noteList).append(current.element);
                     });
                 }
             });
         });
     }
-    
-    DOMManager.noteHeader();
-    DOMManager.noteBody();
-
     // LOAD DATA FROM JSON FILE
     dataManager.loadData();
 

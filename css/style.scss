@@ -370,6 +370,7 @@ button, input[type=submit], .btn {
         th {
             text-transform: uppercase;
             &.sort {
+                white-space: nowrap;
                 position: relative;
                 cursor: pointer;
                 &::after {

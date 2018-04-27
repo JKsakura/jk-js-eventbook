@@ -140,7 +140,7 @@ button, input[type=submit], .btn { text-transform: uppercase; letter-spacing: 0.
 
 #note-table tr th { text-transform: uppercase; }
 
-#note-table tr th.sort { position: relative; cursor: pointer; }
+#note-table tr th.sort { white-space: nowrap; position: relative; cursor: pointer; }
 
 #note-table tr th.sort::after { content: ''; display: inline-block; vertical-align: middle; right: 0; width: 8px; height: 8px; margin-top: -7px; margin-left: 10px; border-right: solid 1px #fff; border-bottom: solid 1px #fff; -webkit-transform: rotate(45deg); -ms-transform: rotate(45deg); transform: rotate(45deg); }
 

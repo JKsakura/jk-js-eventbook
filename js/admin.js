@@ -216,33 +216,6 @@ jQuery(function($){
             });
         }
     };
-
-    var categoryManager = {
-        displayCategory: function() {
-            var selectCategory = $("#form-category"),
-                selectSubcategory = $("#form-subcategory"),
-                formCategory,
-                formSubcategory;
-            // console.log(categories);
-            categories.forEach(function(category, index){
-                // console.log(category);
-                if (category.children.length > 0) {
-                    formCategory = $("<option></option>").val(index).text(category.name);
-                    $(selectCategory).append(formCategory);
-                }
-            });
-            $(selectCategory).on('change', function () {
-                $("#form-subcategory").html('');
-                var index = $(this).val();
-                    subcategories = categories[index].children;
-                subcategories.forEach(function (subcategory) {
-                    index = categories.map(function(element) { return element.id; }).indexOf(subcategory);
-                    formSubcategory = $("<option></option>").val(index).text(categories[index].name);
-                    $(selectSubcategory).append(formSubcategory);
-                });
-            });
-        }
-    }
 /* ============================================================== */
 /*    FUNCTIONS TO MANAGE THE NOTE LIST  */
 /* ============================================================== */
@@ -254,8 +227,8 @@ jQuery(function($){
                     index = notes.map(function (element) { return element.id; }).indexOf(targetID);
                 
                 // If the current category or subcategory is updated,
-                this.removeFromCategory(obj, notes[index], targetID);   // remove the current note from category
-                this.insertToCategory(obj, notes[index], true);    // Push the updated note into updated category
+                categoryManager.removeFromCategory(obj, notes[index], targetID); // remove the current note from category
+                categoryManager.insertToCategory(obj, notes[index], true); // Push the updated note into updated category
 
                 // Update the note into the notes array
                 notes[index] = obj;
@@ -264,7 +237,7 @@ jQuery(function($){
                 noteObj = notes[index];
 
                 // Display the updated note
-                noteManager.displayNote(noteObj, true);
+                this.displayNote(noteObj, true);
             } else {
                 // Create a new note object and push it into notes array
                 newNote = obj;
@@ -277,10 +250,10 @@ jQuery(function($){
                 noteObj = newNote;
 
                 // Push the new note object into the categories array
-                this.insertToCategory(obj, noteObj, false);
+                categoryManager.insertToCategory(obj, noteObj, false);
 
                 // Display the new note
-                noteManager.displayNote(noteObj, false);
+                this.displayNote(noteObj, false);
             }
 
             dataManager.saveData(notes);
@@ -297,8 +270,8 @@ jQuery(function($){
                 id = $("<td></td>").text(note.id),
                 title = $("<td></td>").text(note.title),
                 created = $("<td></td>").text(month + '/' + day + '/' + year),
-                category = $("<td></td>").text(this.fetchCategory(note.category).name),
-                subcategory = $("<td></td>").text(this.fetchCategory(note.subcategory).name),
+                category = $("<td></td>").text(categoryManager.fetchCategory(note.category).name),
+                subcategory = $("<td></td>").text(categoryManager.fetchCategory(note.subcategory).name),
                 introduction = $("<td></td>").text(note.introduction),
                 temEdit = $("<button></button>").addClass("item-btn edit-btn"),
                 itemEditBtn = $("<i></i>").addClass("far fa-edit"),
@@ -336,7 +309,7 @@ jQuery(function($){
             var r = confirm("Are You Sure You Want to Delete This Item?");
             if (r === true) {
                 // Remove the current note from categories array
-                this.removeFromCategory('', notes[index], notes[index].id);
+                categoryManager.removeFromCategory('', notes[index], notes[index].id);
                 
                 notes.splice(index, 1); // Remove the current note from notes array
                 cache[index].element.remove(); // Remove the DOM element
@@ -418,8 +391,40 @@ jQuery(function($){
                         }
                 });
             });
+        }
+    };
+/* ============================================================== */
+/* FUNCTIONS TO MANAGE THE CATEGORY  */
+/* ============================================================== */
+    var categoryManager = {
+        displayCategory: function () {
+            var selectCategory = $("#form-category"),
+                formCategory;
+            // console.log(categories);
+            categories.forEach(function (category, index) {
+                // console.log(category);
+                if (category.children.length > 0) {
+                    formCategory = $("<option></option>").val(index).text(category.name);
+                    $(selectCategory).append(formCategory);
+                }
+            });
+            $(selectCategory).on('change', function() {
+                categoryManager.displaySubcategory($(this).val());
+            });
         },
-        removeFromCategory: function(obj, refObj, id) {
+        displaySubcategory: function(index) {
+            var selectSubcategory = $("#form-subcategory"),
+                formSubcategory,
+                category = categories[index];
+            $(selectSubcategory).html('');
+            subcategories = category.children;
+            subcategories.forEach(function (element) {
+                var subcategory = categoryManager.fetchCategory(element);
+                formSubcategory = $("<option></option>").val(subcategory.id).text(subcategory.name);
+                $(selectSubcategory).append(formSubcategory);
+            });
+        },
+        removeFromCategory: function (obj, refObj, id) {
             //If the current note's category or subcategory is changed
             if (obj === '' || (obj.category !== refObj.category || obj.subcategory !== refObj.subcategory)) {
                 // Remove it from the category or subcategory
@@ -445,13 +450,12 @@ jQuery(function($){
         },
         fetchCategory: function (targetID) {
             // Get 
-            var index = categories.map(function(element) {
+            var index = categories.map(function (element) {
                 return element.id;
             }).indexOf(targetID);
             return categories[index];
         }
     };
-    
 /* ============================================================== */
 /* FUNCTIONS TO MANAGE THE FORM */   
 /* ============================================================== */
@@ -476,6 +480,7 @@ jQuery(function($){
             
                 if( index > -1 ) {
                     var note = notes[index];
+                    categoryManager.displaySubcategory(note.category);
                     id = note.id;
                     $(formTitle).val(note.title);
                     $(formCategory).val(note.category);

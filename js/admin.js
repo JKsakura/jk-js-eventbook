@@ -8,101 +8,145 @@ jQuery(function($){
         noteList = $("#note-table"),
         categories = [
             {
+                id: 0,
                 slug: 'javascript',
                 name: 'JavaScript',
-                children: [
-                    {
-                        slug: 'array',
-                        name: 'Array'
-                    },
-                    {
-                        slug: 'booleans',
-                        name: 'Booleans'
-                    },
-                    {
-                        slug: 'date',
-                        name: 'Date'
-                    },
-                    {
-                        slug: 'error',
-                        name: 'Error'
-                    },
-                    {
-                        slug: 'global',
-                        name: 'Global'
-                    }
-                ]
+                children: [4,5,6,7,8],
+                notes: []
             },
             {
+                id: 1,
                 slug: 'html-dom',
                 name: 'HTML DOM',
-                children: [
-                    {
-                        slug: 'attribute',
-                        name: 'Attribute'
-                    },
-                    {
-                        slug: 'console',
-                        name: 'Console'
-                    },
-                    {
-                        slug: 'document',
-                        name: 'Document'
-                    },
-                    {
-                        slug: 'element',
-                        name: 'Element'
-                    },
-                    {
-                        slug: 'events',
-                        name: 'Events'
-                    }
-                ]
+                children: [9,10,11,12],
+                notes: []
             },
             {
+                id: 2,
                 slug: 'html-objects',
                 name: 'HTML Objects',
-                children: [
-                    {
-                        slug: 'anchor',
-                        name: 'Anchor'
-                    },
-                    {
-                        slug: 'abbreviation',
-                        name: 'Abbreviation'
-                    },
-                    {
-                        slug: 'address',
-                        name: 'Address'
-                    },
-                    {
-                        slug: 'area',
-                        name: 'Area'
-                    },
-                    {
-                        slug: 'article',
-                        name: 'Article'
-                    }
-                ]
+                children: [13,14,15,16],
+                notes: []
             },
             {
+                id: 3,
                 slug: 'other-objects',
                 name: 'Other Objects',
-                children: [
-                    {
-                        slug: 'css-style-declaration',
-                        name: 'CSSStyleDeclaration'
-                    },
-                    {
-                        slug: 'type-conversion',
-                        name: 'Type Conversion'
-                    },
-                    {
-                        slug: 'storage',
-                        name: 'Storage'
-                    }
-                ]
-            }
+                children: [17,18,19],
+                notes: []
+            },
+            {
+                id: 4,
+                slug: 'array',
+                name: 'Array',
+                children: [],
+                notes: []
+            },
+            {
+                id: 6,
+                slug: 'date',
+                name: 'Date',
+                children: [],
+                notes: []
+            },
+            {
+                id: 7,
+                slug: 'error',
+                name: 'Error',
+                children: [],
+                notes: []
+            },
+            {
+                id: 5,
+                slug: 'boolean',
+                name: 'Boolean',
+                children: [],
+                notes: []
+            },
+            {
+                id: 8,
+                slug: 'global',
+                name: 'Global',
+                children: [],
+                notes: []
+            },
+            {
+                id: 9,
+                slug: 'attribute',
+                name: 'Attribute',
+                children: [],
+                notes: []
+            },
+            {
+                id: 10,
+                slug: 'console',
+                name: 'Console',
+                children: [],
+                notes: []
+            },
+            {
+                id: 11,
+                slug: 'document',
+                name: 'Document',
+                children: [],
+                notes: []
+            },
+            {
+                id: 12,
+                slug: 'element',
+                name: 'Element',
+                children: [],
+                notes: []
+            },
+            {
+                id: 13,
+                slug: 'anchor',
+                name: 'Anchor',
+                children: [],
+                notes: []
+            },
+            {
+                id: 14,
+                slug: 'abbreviation',
+                name: 'Abbreviation',
+                children: [],
+                notes: []
+            },
+            {
+                id: 15,
+                slug: 'address',
+                name: 'Address',
+                children: [],
+                notes: []
+            },
+            {
+                id: 16,
+                slug: 'area',
+                name: 'Area',
+                children: [],
+                notes: []
+            },
+            {
+                id: 17,
+                slug: 'cssstyledeclaration',
+                name: 'CSSStyleDeclaration',
+                children: [],
+                notes: []
+            },
+            {
+                id: 18,
+                slug: 'conversion',
+                name: 'Conversion',
+                children: [],
+                notes: []
+            },
+            {
+                id: 19,
+                slug: 'storage',
+                name: 'Storage',
+                children: [],
+                notes: []
+            },
         ],
         cache = [];
 /* ============================================================== */
@@ -123,26 +167,7 @@ jQuery(function($){
             });
         },
         noteBody: function () {
-            var selectCategory = $("#form-category"),
-                selectSubcategory = $("#form-sub-category"),
-                formCategory,
-                formSubcategory;
-                // console.log(categories);
-            categories.forEach(function(category, index){
-                // console.log(category);
-                formCategory = $("<option></option>").val(index).text(category.name);
-                $(selectCategory).append(formCategory);
-            });
-            $(selectCategory).on('change', function () {
-                $(selectSubcategory).empty();
-                console.log('works');
-                var index = $(this).index();
-                var subCategories = categories[index].children;
-                subCategories.forEach(function (subcategory, index) {
-                    formSubcategory = $("<option></option>").val(index).text(subcategory.name);
-                    $(selectSubcategory).append(formSubcategory);
-                });
-            });
+            categoryManager.displayCategory();
             $(noteList).find("tbody").each(function () {
                 noteManager.orderNote(this);
             });
@@ -161,11 +186,11 @@ jQuery(function($){
                 cache.forEach(function (note) {
                     note.element.hide();
                     if (
-                            note.title.trim().toUpperCase().indexOf(search) > -1 || 
-                            note.category.trim().toUpperCase().indexOf(search) > -1 || 
-                            note.introduction.trim().toUpperCase().indexOf(search) > -1 || 
-                            note.syntax.trim().toUpperCase().indexOf(search) > -1 || 
-                            note.description.trim().toUpperCase().indexOf(search) > -1
+                        note.title.trim().toUpperCase().indexOf(search) > -1 || 
+                        note.category.trim().toUpperCase().indexOf(search) > -1 || 
+                        note.introduction.trim().toUpperCase().indexOf(search) > -1 || 
+                        note.syntax.trim().toUpperCase().indexOf(search) > -1 || 
+                        note.description.trim().toUpperCase().indexOf(search) > -1
                     ) {
                         $(note.element).show();
                     }
@@ -192,29 +217,53 @@ jQuery(function($){
         }
     };
 
+    var categoryManager = {
+        displayCategory: function() {
+            var selectCategory = $("#form-category"),
+                selectSubcategory = $("#form-subcategory"),
+                formCategory,
+                formSubcategory;
+            // console.log(categories);
+            categories.forEach(function(category, index){
+                // console.log(category);
+                if (category.children.length > 0) {
+                    formCategory = $("<option></option>").val(index).text(category.name);
+                    $(selectCategory).append(formCategory);
+                }
+            });
+            $(selectCategory).on('change', function () {
+                $("#form-subcategory").html('');
+                var index = $(this).val();
+                    subcategories = categories[index].children;
+                subcategories.forEach(function (subcategory) {
+                    index = categories.map(function(element) { return element.id; }).indexOf(subcategory);
+                    formSubcategory = $("<option></option>").val(index).text(categories[index].name);
+                    $(selectSubcategory).append(formSubcategory);
+                });
+            });
+        }
+    }
 /* ============================================================== */
 /*    FUNCTIONS TO MANAGE THE NOTE LIST  */
 /* ============================================================== */
     var noteManager = {
         saveNote: function(obj) {
             var noteObj;
-
             if (obj.id >= 0 && obj.id!== '') {
                 var targetID = obj.id,
                     index = notes.map(function (element) { return element.id; }).indexOf(targetID);
+                
+                // If the current category or subcategory is updated,
+                this.removeFromCategory(obj, notes[index], targetID);   // remove the current note from category
+                this.insertToCategory(obj, notes[index], true);    // Push the updated note into updated category
 
-                // If the current category or subcategory is updated, then remove the current note from category or subcategory
-                //this.removeFromCategory(obj, notes[index], targetID);
-                // Push the updated note object into the categories array
-                //this.insertToCategory(obj, notes[index], true);
-
-                // Update the current note into the notes array
+                // Update the note into the notes array
                 notes[index] = obj;
                 notes[index].id = targetID;
                 notes[index].created = obj.created ? obj.created : new Date();
                 noteObj = notes[index];
 
-                // Display the updated current note
+                // Display the updated note
                 noteManager.displayNote(noteObj, true);
             } else {
                 // Create a new note object and push it into notes array
@@ -222,20 +271,19 @@ jQuery(function($){
                 newNote.id = noteID;
                 newNote.created = new Date();
                 notes.push(newNote);
+
                 // Update global note ID
                 noteID++;
                 noteObj = newNote;
 
                 // Push the new note object into the categories array
-                //this.insertToCategory(obj, noteObj, false);
+                this.insertToCategory(obj, noteObj, false);
 
                 // Display the new note
                 noteManager.displayNote(noteObj, false);
             }
 
             dataManager.saveData(notes);
-            // console.log(notes);
-            // console.log(categories);
         },
         // DISPLAY THE ELEMENT WITH NEW DOM STRUCTURE
         displayNote: function(note, update) {
@@ -249,8 +297,8 @@ jQuery(function($){
                 id = $("<td></td>").text(note.id),
                 title = $("<td></td>").text(note.title),
                 created = $("<td></td>").text(month + '/' + day + '/' + year),
-                category = $("<td></td>").text(categories[note.category].name),
-                subcategory = $("<td></td>").text(categories[note.category].children[note.subcategory].name),
+                category = $("<td></td>").text(this.fetchCategory(note.category).name),
+                subcategory = $("<td></td>").text(this.fetchCategory(note.subcategory).name),
                 introduction = $("<td></td>").text(note.introduction),
                 temEdit = $("<button></button>").addClass("item-btn edit-btn"),
                 itemEditBtn = $("<i></i>").addClass("far fa-edit"),
@@ -273,7 +321,6 @@ jQuery(function($){
                 row = $("<tr></tr>").append(id, title, created, category, subcategory, introduction, editBtn, deleteBtn);
                 var index = notes.map(function(element){ return element.id; }).indexOf(note.id);
                 obj.element = row;
-                obj.id = note.id;
                 cache[index] = obj;
                 cache[index].element.replaceWith(row);
             } else {
@@ -289,21 +336,16 @@ jQuery(function($){
             var r = confirm("Are You Sure You Want to Delete This Item?");
             if (r === true) {
                 // Remove the current note from categories array
-                //this.removeFromCategory('', notes[index], notes[index].id);
-                // Remove the current note from notes array
-                notes.splice(index, 1);
-                // Remove the DOM element
-                cache[index].element.remove();
-                // Remove the current note from cache
-                cache.splice(index, 1);
-                // Save back the notes array into data
-                dataManager.saveData(notes);
+                this.removeFromCategory('', notes[index], notes[index].id);
+                
+                notes.splice(index, 1); // Remove the current note from notes array
+                cache[index].element.remove(); // Remove the DOM element
+                cache.splice(index, 1); // Remove the current note from cache
+                dataManager.saveData(notes); // Save back the notes array into data
+
             } else {
-                // Do nothing if user cancels deleting
-                return false;
+                return; // Do nothing if user cancels deleting
             }
-            // console.log(notes);
-            // console.log(categories);
         },
         orderNote: function(e) {
             var oldIndex, newIndex, note;
@@ -377,33 +419,37 @@ jQuery(function($){
                 });
             });
         },
-        // removeFromCategory: function(obj, refObj, id) {
-        //     //If the current note's category or subcategory is changed
-        //     if (obj === '' || (obj.category !== refObj.category || obj.subcategory !== refObj.subcategory)) {
-        //         // Remove it from the category or subcategory
-        //         var catNote = categories[refObj.category].children[refObj.subcategory].notes;
-        //         var catIndex = catNote.indexOf(id);
-        //         catNote.splice(catIndex, 1);
-        //     } else {
-        //         return;
-        //     }
-        // },
-        // insertToCategory: function (obj, refObj, update) {
-        //     if (update === true) {
-        //         // If editing note, then check if category or subcategory is changed, if so, push current note into category
-        //         if (obj.category !== refObj.category || obj.subcategory !== refObj.subcategory) {
-        //             // Push it to the updated category or subcategory
-        //             categories[obj.category].children[obj.subcategory].notes.push(refObj.id);
-        //             // console.log(categories[obj.category].children[obj.subcategory].notes);
-        //         } else {
-        //             return;
-        //         }
-        //     } else {
-        //         // If adding new note, then just push new note into category
-        //         // Push it to the updated category or subcategory
-        //         categories[obj.category].children[obj.subcategory].notes.push(refObj.id);
-        //     }
-        // }
+        removeFromCategory: function(obj, refObj, id) {
+            //If the current note's category or subcategory is changed
+            if (obj === '' || (obj.category !== refObj.category || obj.subcategory !== refObj.subcategory)) {
+                // Remove it from the category or subcategory
+                var catNote = this.fetchCategory(refObj.subcategory).notes,
+                    catIndex = catNote.indexOf(id);
+                catNote.splice(catIndex, 1);
+            } else {
+                return;
+            }
+        },
+        insertToCategory: function (obj, refObj, update) {
+            if (update === true) {
+                // If editing note, then check if category is changed, if so, push current note into category
+                if (obj.category !== refObj.category || obj.subcategory !== refObj.subcategory) {
+                    this.fetchCategory(obj.subcategory).notes.push(refObj.id); // Push it to the updated category
+                } else {
+                    return;
+                }
+            } else {
+                // If adding new note, then just push new note into category
+                this.fetchCategory(obj.subcategory).notes.push(refObj.id);
+            }
+        },
+        fetchCategory: function (targetID) {
+            // Get 
+            var index = categories.map(function(element) {
+                return element.id;
+            }).indexOf(targetID);
+            return categories[index];
+        }
     };
     
 /* ============================================================== */
@@ -415,7 +461,7 @@ jQuery(function($){
             formDescription,
             formTitle = $("#form-title"),
             formCategory = $("#form-category"),
-            formSubCategory = $("#form-sub-category"),
+            formSubCategory = $("#form-subcategory"),
             formIntroduction = $("#form-introduction"),
             formSubmitBtn = $("#form-submit");
         var id, title, category, subcategory, introduction, syntax, description, btnTxt;
@@ -452,18 +498,18 @@ jQuery(function($){
             getForm: function() {
                 // fetch form data
                 title = $(formTitle).val();
-                category = $(formCategory).val();
-                subcategory = $(formSubCategory).val();
+                category = categories[Number( $(formCategory).val() )].id;
+                subcategory = categories[Number( $(formSubCategory).val() )].id;
                 introduction = $(formIntroduction).val();
                 syntax =formSyntax.getData();
                 description = formDescription.getData();
-                
+
                 // format obj
                 var resObj = {
                     id: "",
                     title: title,
-                    category: Number(category),
-                    subcategory: Number(subcategory),
+                    category: category,
+                    subcategory: subcategory,
                     introduction: introduction,
                     syntax: syntax,
                     description: description

@@ -300,13 +300,7 @@ button, input[type=submit], .btn {
         transition: left 0.3s 0s, transform 0s 0s;
         overflow-y: auto;
     }
-    &.page1 {
-        left: 0;
-        transform: scale(1);
-        transition: left 0.3s 0s, transform 0s 0s;
-        overflow-y: auto;
-    }
-    &.page.hide {
+    &.active.forward {
         left: -100vw;
         transform: scale(0);
         transition: left 0.3s 0s, transform 0s 0.3s;
@@ -314,6 +308,19 @@ button, input[type=submit], .btn {
     }
     .wrap {
         margin-bottom: 50px;
+    }
+    .back-to-all {
+        position: relative;
+        display: inline-block;
+        margin-block-end: 20px;
+        text-decoration: none;
+        &::before {
+            content: '\003c';
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 8px;
+            margin-top: -5px;
+        }
     }
 }
 /* ============================ */
@@ -517,19 +524,6 @@ button, input[type=submit], .btn {
 #note-detail {
     h1 {
         font-weight: 300;
-    }
-    .back-to-all {
-        position: relative;
-        display: inline-block;
-        margin-block-end: 20px;
-        text-decoration: none;
-        &::before {
-            content: '\003c';
-            display: inline-block;
-            vertical-align: middle;
-            margin-right: 8px;
-            margin-top: -5px;
-        }
     }
     .detail-header {
         margin-bottom: 20px;

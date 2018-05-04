@@ -263,8 +263,7 @@ jQuery(function ($) {
             /* =========== Item Top ============ */
             // Item Header
             var itemTitle = $("<p></p>").addClass(TitleClass).text(note.title);
-            var itemCategory = $("<h5></h5>").addClass(categoryClass).text(note.category);
-
+            var itemCategory = $("<h5></h5>").addClass(categoryClass).text(categoryManager.fetchCategory(note.subcategory).name);
             var itemHeader = $("<div></div>").addClass(headerClass).append(itemTitle, itemCategory);
 
             // Item Introduction
@@ -357,15 +356,14 @@ jQuery(function ($) {
     };
 
     function pageManager() {
+        pageToggle.pageInit("1");
         $(".page").each(function () {
-            var page = this;
-            var page1 = $(".page1");
             $(this).on("click", function (e) {
                 var target = e.target;
                 if ($(target).is(".detail-trigger")) {
                     e.preventDefault();
                     noteManager.fetchDetail(target);
-                    pageToggle.pageForward(".page1", ".page2");
+                    pageToggle.pageForward("2", "3");
                 }
                 if ($(target).is("p.list-group-item")) {
                     $(target).each(function () {
@@ -375,19 +373,17 @@ jQuery(function ($) {
                 }
                 if ($(target).is(".back-to-all")) {
                     e.preventDefault();
-                    pageToggle.pageBackward(".page1", ".page2");
+                    pageToggle.pageBackward("3", "2");
                 }
                 if ($(target).is('.list-trigger')) {
                     e.preventDefault();
                     var current = target.hash.slice(1),
                         category = categoryManager.fetchCategory(Number(current));
-                    $(categoryList).hide();
-                    $(noteList).show();
                     category.notes.forEach(function (note) {
                         current = noteManager.fetchCache(note);
-                        console.log(current.element);
                         $(noteList).append(current.element);
                     });
+                    pageToggle.pageForward("1", "2");
                 }
             });
         });

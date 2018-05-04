@@ -30,7 +30,7 @@
             <!-- START WRAPPER -->
             <main role="main" class="wrapper">
                 <section id="notes-module">
-                    <div class="note-list-container main-content page page1">
+                    <div class="note-list-container main-content page active" data-page="1">
                         <div class="wrap">
                             <div class="notes-header">
                                 <div class="search-box form-group">
@@ -45,15 +45,23 @@
                             </div>
                             <div class="notes-body">
                                 <ul id="categories-list" class="list-group"></ul>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="note-list-container main-content page" data-page="2">
+                        <div class="wrap">
+                            <div class="notes-body">
+                                <a href="#note-list" class="back-to-all">Back</a>
                                 <ul id="notes-list" class="list-group">
                                 </ul>
                             </div>
                         </div>
                     </div>
-                    <div class="note-detail-container main-content page page3">
+                    <div class="note-detail-container main-content page" data-page="3">
                         <div class="wrap">
                             <div id="note-detail" class="content-main">
-                                <a href="#note-list" class="back-to-all">Back To All Notes</a>
+                                <a href="#note-list" class="back-to-all">Back</a>
                                 <div class="detail-header">
                                     <h1 class="h1 detail-title"></h1>
                                     <h5 class="h5 detail-category"></h5>

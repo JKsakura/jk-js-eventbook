@@ -104,11 +104,13 @@ button, input[type=submit], .btn { text-transform: uppercase; letter-spacing: 0.
 
 .page.active { left: 0; -webkit-transform: scale(1); -ms-transform: scale(1); transform: scale(1); -webkit-transition: left 0.3s 0s, -webkit-transform 0s 0s; transition: left 0.3s 0s, -webkit-transform 0s 0s; -o-transition: left 0.3s 0s, transform 0s 0s; transition: left 0.3s 0s, transform 0s 0s; transition: left 0.3s 0s, transform 0s 0s, -webkit-transform 0s 0s; overflow-y: auto; }
 
-.page.page1 { left: 0; -webkit-transform: scale(1); -ms-transform: scale(1); transform: scale(1); -webkit-transition: left 0.3s 0s, -webkit-transform 0s 0s; transition: left 0.3s 0s, -webkit-transform 0s 0s; -o-transition: left 0.3s 0s, transform 0s 0s; transition: left 0.3s 0s, transform 0s 0s; transition: left 0.3s 0s, transform 0s 0s, -webkit-transform 0s 0s; overflow-y: auto; }
-
-.page.page.hide { left: -100vw; -webkit-transform: scale(0); -ms-transform: scale(0); transform: scale(0); -webkit-transition: left 0.3s 0s, -webkit-transform 0s 0.3s; transition: left 0.3s 0s, -webkit-transform 0s 0.3s; -o-transition: left 0.3s 0s, transform 0s 0.3s; transition: left 0.3s 0s, transform 0s 0.3s; transition: left 0.3s 0s, transform 0s 0.3s, -webkit-transform 0s 0.3s; overflow-y: hidden; }
+.page.active.forward { left: -100vw; -webkit-transform: scale(0); -ms-transform: scale(0); transform: scale(0); -webkit-transition: left 0.3s 0s, -webkit-transform 0s 0.3s; transition: left 0.3s 0s, -webkit-transform 0s 0.3s; -o-transition: left 0.3s 0s, transform 0s 0.3s; transition: left 0.3s 0s, transform 0s 0.3s; transition: left 0.3s 0s, transform 0s 0.3s, -webkit-transform 0s 0.3s; overflow-y: hidden; }
 
 .page .wrap { margin-bottom: 50px; }
+
+.page .back-to-all { position: relative; display: inline-block; -webkit-margin-after: 20px; margin-block-end: 20px; text-decoration: none; }
+
+.page .back-to-all::before { content: '\003c'; display: inline-block; vertical-align: middle; margin-right: 8px; margin-top: -5px; }
 
 /* ============================ */
 /* CREATE NEW NOTE FORM
@@ -185,10 +187,6 @@ button, input[type=submit], .btn { text-transform: uppercase; letter-spacing: 0.
 @media screen and (max-width: 768px) { .notes-body .list-item .item-top .item-introduction { display: block; width: 100%; margin-left: 0; } }
 
 #note-detail h1 { font-weight: 300; }
-
-#note-detail .back-to-all { position: relative; display: inline-block; -webkit-margin-after: 20px; margin-block-end: 20px; text-decoration: none; }
-
-#note-detail .back-to-all::before { content: '\003c'; display: inline-block; vertical-align: middle; margin-right: 8px; margin-top: -5px; }
 
 #note-detail .detail-header { margin-bottom: 20px; }
 

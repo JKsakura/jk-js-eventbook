@@ -296,7 +296,7 @@ jQuery(function ($) {
         },
         displayDetail: function(note) {
             var detailTitle = $(".detail-title").html(note.title),
-                detailCategory = $(".detail-category").html(note.category),
+                detailCategory = $(".detail-category").html(categoryManager.fetchCategory(note.subcategory).name),
                 detailIntroduction = $(".detail-introduction").html(note.introduction),
                 detailSyntax = $(".detail-syntax").addClass("code").html(note.syntax),
                 detailDescription = $(".detail-description").html(note.description);

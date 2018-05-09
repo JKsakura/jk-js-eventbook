@@ -40,7 +40,7 @@ jQuery(function($){
                 slug: 'array',
                 name: 'Array',
                 children: [],
-                notes: []
+                notes: [0,1,2]
             },
             {
                 id: 6,
@@ -61,7 +61,7 @@ jQuery(function($){
                 slug: 'boolean',
                 name: 'Boolean',
                 children: [],
-                notes: []
+                notes: [3,4]
             },
             {
                 id: 8,
@@ -314,29 +314,52 @@ jQuery(function($){
                 cache[index].element.remove(); // Remove the DOM element
                 cache.splice(index, 1); // Remove the current note from cache
                 dataManager.saveData(notes); // Save back the notes array into data
-
             } else {
                 return; // Do nothing if user cancels deleting
             }
         },
-        orderNote: function(e) {
-            var oldIndex, newIndex, note;
+        orderNote: function (e) {
+            var oldIndex;
+            var newIndex;
+            var note;
+            var oldNum=0;
+            var newNum=0;
+            var current;
+            var currentNote;
+
             $(e).sortable({
                 start: function (e, ui) {
                     oldIndex = ui.item.index();
                 },
                 update: function (e, ui) {
                     newIndex = ui.item.index();
+                    current = notes[oldIndex].subcategory;
                     note = notes[oldIndex];
+                    // for (var i = 0; i < oldIndex; i++) {
+                    //     if (current === notes[i].subcategory) {
+                    //         oldNum++;
+                    //     }
+                    // }
                     if( oldIndex < newIndex ) {
                         newIndex += 1;
                     } else {
                         oldIndex += 1;
                     }
+                    //fetchCategory(current).notes;
+                    currentNote = categoryManager.fetchCategory(current).notes;
+                    console.log(currentNote);
                     notes.splice(newIndex, 0, note);
                     notes.splice(oldIndex, 1);
                     cache.splice(newIndex, 0, note);
                     cache.splice(oldIndex, 1);
+                    // for (var i = 0; i < newIndex; i++) {
+                    //     if (current === notes[i].subcategory) {
+                    //         newNum++;
+                    //     }
+                    // }
+                    // currentNote.splice(oldNum - 1, 1);
+                    // currentNote.splice(newNum - 1, 0, note.id);
+                    // console.log(currentNote);
                     dataManager.saveData(notes);
                 }
             });

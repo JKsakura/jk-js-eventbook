@@ -333,33 +333,37 @@ jQuery(function($){
                 },
                 update: function (e, ui) {
                     newIndex = ui.item.index();
+                    newCat = ui.item.index();
                     current = notes[oldIndex].subcategory;
                     note = notes[oldIndex];
-                    // for (var i = 0; i < oldIndex; i++) {
-                    //     if (current === notes[i].subcategory) {
-                    //         oldNum++;
-                    //     }
-                    // }
+                    for (var i = 0; i < oldIndex; i++) {
+                        if (current === notes[i].subcategory) {
+                            oldNum++;
+                        }
+                    }
                     if( oldIndex < newIndex ) {
                         newIndex += 1;
                     } else {
                         oldIndex += 1;
                     }
-                    //fetchCategory(current).notes;
-                    currentNote = categoryManager.fetchCategory(current).notes;
-                    console.log(currentNote);
                     notes.splice(newIndex, 0, note);
                     notes.splice(oldIndex, 1);
                     cache.splice(newIndex, 0, note);
                     cache.splice(oldIndex, 1);
-                    // for (var i = 0; i < newIndex; i++) {
-                    //     if (current === notes[i].subcategory) {
-                    //         newNum++;
-                    //     }
-                    // }
-                    // currentNote.splice(oldNum - 1, 1);
-                    // currentNote.splice(newNum - 1, 0, note.id);
-                    // console.log(currentNote);
+                    if (oldIndex > newIndex-1) {
+                        oldNum += 1;
+                    }
+                    for (var i = 0; i < newIndex; i++) {
+                        if (current === notes[i].subcategory) {
+                            newNum++;
+                        }
+                    }
+                    currentNote = categoryManager.fetchCategory(current).notes;
+                    console.log(currentNote);
+                    currentNote.splice(newNum, 0, note.id);
+                    console.log(currentNote);
+                    currentNote.splice(oldNum, 1);
+                    console.log(currentNote);
                     dataManager.saveData(notes);
                 }
             });

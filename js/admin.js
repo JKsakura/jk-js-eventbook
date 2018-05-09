@@ -159,10 +159,9 @@ jQuery(function($){
             $(".notes-header").on("click", function (e) {
                 var target = e.target;
                 if ($(target).is(".add-btn")) {
-                    pageToggle.pageForward(".page1", ".page2");
                     formManager.setForm(e);
                 } else if ($(target).hasClass("cancel-btn")) {
-                    pageToggle.pageBackward(".page1", ".page2");
+                    pageToggle.pageBackward();
                 }
             });
         },
@@ -498,7 +497,7 @@ jQuery(function($){
 
                 $(formSubmitBtn).text(btnTxt);
                 // SHOW THE FORM AFTER IT HAS BEEN ASSIGNED VALUES
-                pageToggle.pageForward(".page1", ".page2");
+                pageToggle.pageForward("1", "2");
             },
             getForm: function() {
                 // fetch form data
@@ -571,6 +570,29 @@ jQuery(function($){
             });
         }
     };
+/* ============================================================== */
+/* FUNCTIONS TO MANAGE THE PAGE EVENT */
+/* ============================================================== */
+    function pageManager() {
+        pageToggle.pageInit("1");
+        // INITIAL NOTE BODY EVENTS
+        $(".page").each(function () {
+            var page = this;
+            $(page).on("click", function (e) {
+                var target = e.target;
+                if ($(target).is(".delete-btn")) {
+                    noteManager.deleteNote(e);
+                } else if ($(target).is(".edit-btn")) {
+                    formManager.setForm(e);
+                } else if ($(target).is("p.list-group-item")) {
+                    $(target).each(function () {
+                        $(this).next("ul").stop().slideToggle(300);
+                        $(this).stop().toggleClass("closed");
+                    });
+                }
+            });
+        });
+    }
 
     // INITIAL NOTE HEADER VISUAL 
     DOMManager.noteHeader();
@@ -584,23 +606,7 @@ jQuery(function($){
     filterManager.goSearch();
     filterManager.goFilter();
 
-    // INITIAL NOTE BODY EVENTS
-    $(".page").each(function() {
-        var page = this;
-        $(page).on("click", function(e) {
-            var target = e.target;
-            if( $(target).is(".delete-btn") ) {
-                noteManager.deleteNote(e);
-            } else if( $(target).is(".edit-btn") ) {
-                formManager.setForm(e);
-            } else if( $(target).is("p.list-group-item") ) {
-                $(target).each(function() {
-                    $(this).next("ul").stop().slideToggle(300);
-                    $(this).stop().toggleClass("closed");
-                });
-            }
-        });
-    });
+    pageManager();
     
     // INITIAL FORM EVENTS
     $(formEl).on('submit', function(e) {
@@ -608,6 +614,6 @@ jQuery(function($){
         // Update The Current Note
         noteManager.saveNote(formManager.getForm());
         
-        pageToggle.pageBackward(".page1", ".page2");
+        pageToggle.pageBackward();
     });
 });

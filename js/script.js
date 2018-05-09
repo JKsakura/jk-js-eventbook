@@ -354,7 +354,9 @@ jQuery(function ($) {
             });
         }
     };
-
+/* ============================================================== */
+/* FUNCTIONS TO MANAGE THE PAGE EVENT */
+/* ============================================================== */
     function pageManager() {
         pageToggle.pageInit("1");
         $(".page").each(function () {
@@ -373,7 +375,7 @@ jQuery(function ($) {
                 }
                 if ($(target).is(".back-to-all")) {
                     e.preventDefault();
-                    pageToggle.pageBackward("3", "2");
+                    pageToggle.pageBackward();
                 }
                 if ($(target).is('.list-trigger')) {
                     e.preventDefault();

@@ -32,7 +32,7 @@ pageToggle = (function() {
                 scrollTop: 0
             }, 0);
             pages.push(p2);
-            console.log(pages);
+            // console.log(pages);
         },
         pageBackward: function () {
             var page1 = $('.page[data-page="' + pages[pages.length - 2] + '"]');
@@ -43,7 +43,7 @@ pageToggle = (function() {
                 scrollTop: 0
             }, 0);
             pages.pop();
-            console.log(pages);
+            // console.log(pages);
         }
     };
 }());

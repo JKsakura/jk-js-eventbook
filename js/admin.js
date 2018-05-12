@@ -186,7 +186,7 @@ jQuery(function($){
                     note.element.hide();
                     if (
                         note.title.trim().toUpperCase().indexOf(search) > -1 || 
-                        note.category.trim().toUpperCase().indexOf(search) > -1 || 
+                        categoryManager.fetchCategory(note.category).name.trim().toUpperCase().indexOf(search) > -1 || 
                         note.introduction.trim().toUpperCase().indexOf(search) > -1 || 
                         note.syntax.trim().toUpperCase().indexOf(search) > -1 || 
                         note.description.trim().toUpperCase().indexOf(search) > -1
@@ -201,16 +201,16 @@ jQuery(function($){
             var filterCategory = $("#filter-category").append(defaultVal, "<option value='all'>All</option>");
             categories.forEach(function(category){
                 if(category.children.length>0) {
-                    var newCategory = $("<option></option>").val(category.slug).text(category.name).appendTo(filterCategory);
+                    var newCategory = $("<option></option>").val(category.id).text(category.name).appendTo(filterCategory);
                 }
             });
         },
         goFilter: function () {
             $("#filter-category").change(function () {
-                var filterCategory = $(this).val().trim().toUpperCase();
+                var filterCategory = $(this).val();
                 cache.forEach(function(note) {
                     note.element.hide();
-                    if(note.category.trim().toUpperCase() === filterCategory || filterCategory === "ALL" ) {
+                    if(note.category.toString() === filterCategory || filterCategory === "ALL" ) {
                         note.element.show();
                     }
                 });

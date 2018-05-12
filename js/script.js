@@ -172,7 +172,7 @@ jQuery(function ($) {
                     note.element.hide();
                     if (
                             note.title.trim().toUpperCase().indexOf(search) > -1 || 
-                            note.category.trim().toUpperCase().indexOf(search) > -1 || 
+                            categoryManager.fetchCategory(note.category).name.trim().toUpperCase().indexOf(search) > -1 || 
                             note.introduction.trim().toUpperCase().indexOf(search) > -1 || 
                             note.syntax.trim().toUpperCase().indexOf(search) > -1 || 
                             note.description.trim().toUpperCase().indexOf(search) > -1

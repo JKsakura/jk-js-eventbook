@@ -192,7 +192,9 @@ jQuery(function ($) {
             var defaultVal = '<option value="" disabled selected>Category</option>';
             var filterCategory = $("#filter-category").append(defaultVal, "<option value='all'>All</option>");
             categories.forEach(function(category) {
-                var newCategory = $("<option></option>").text(category.name).val(category.slug).appendTo(filterCategory);
+                if (category.children.length > 0) {
+                    var newCategory = $("<option></option>").text(category.name).val(category.slug).appendTo(filterCategory);
+                }
             });
         },
         goFilter: function () {

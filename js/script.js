@@ -167,25 +167,31 @@ jQuery(function ($) {
     var filterManager = {
         goSearch: function () {
             $(".filter-search").on("input", function () {
+                var result = false;
                 var search = $(this).val().trim().toUpperCase();
                 cache.forEach( function(note){
                     note.element.hide();
                     if (
-                            note.title.trim().toUpperCase().indexOf(search) > -1 || 
-                            categoryManager.fetchCategory(note.category).name.trim().toUpperCase().indexOf(search) > -1 || 
-                            note.introduction.trim().toUpperCase().indexOf(search) > -1 || 
-                            note.syntax.trim().toUpperCase().indexOf(search) > -1 || 
-                            note.description.trim().toUpperCase().indexOf(search) > -1
+                        note.title.trim().toUpperCase().indexOf(search) > -1 || 
+                        categoryManager.fetchCategory(note.category).name.trim().toUpperCase().indexOf(search) > -1 || 
+                        note.introduction.trim().toUpperCase().indexOf(search) > -1 || 
+                        note.syntax.trim().toUpperCase().indexOf(search) > -1 || 
+                        note.description.trim().toUpperCase().indexOf(search) > -1
                     ) {
                         $(note.element).show();
+                        result = true;
                     }
                 });
                 $(categoryList).find("p.list-group-item").each(function () {
                     $(this).hide();
                     if ($(this).html().toUpperCase().indexOf(search) > -1) {
                         $(this).show();
+                        result = true;
                     }
                 });
+                if (result === false) {
+                    $('.no-result').show();
+                }
             });
         },
         iniCategory: function () {
@@ -199,15 +205,21 @@ jQuery(function ($) {
         },
         goFilter: function () {
             $("#filter-category").change(function() {
+                var result = false;
                 var filterCategory = $(this).val();
                 $(categoryList).find(".category").hide();
                 $(categoryList).find(".category").each(function () {
                     if( filterCategory === "all") {
                         $(categoryList).find(".category").show();
+                        result = true;
                     } else if ($(this).data('category') === filterCategory) {
                         $(this).show();
+                        result = true;
                     }
                 });
+                if (result === false) {
+                    $('.no-result').show();
+                }
             });
         }
     };
@@ -335,7 +347,7 @@ jQuery(function ($) {
                 noteID = 0;
                 if (notes.length > 0) {
                     notes.forEach(function(note) {
-                        noteManager.displayNote(note);
+                        // noteManager.displayNote(note);
                         var category = categoryManager.fetchCategory(note.subcategory);
                         category.notes.push(note.id);
                         if (note.id >= noteID) { noteID = note.id + 1; }
@@ -385,6 +397,7 @@ jQuery(function ($) {
                         category = categoryManager.fetchCategory(Number(current));
                     category.notes.forEach(function (note) {
                         current = noteManager.fetchCache(note);
+                        console.log(cache);
                         $(noteList).append(current.element);
                     });
                     pageToggle.pageForward("1", "2");

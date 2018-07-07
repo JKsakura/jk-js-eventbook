@@ -77,7 +77,9 @@ h1 {
     font-weight: 300;
 }
 h2 {}
-h3 {}
+h3 {
+    font: normal 30px/1.5 sans-serif;
+}
 h4 { 
     font: normal 20px/1.5 sans-serif; 
 }
@@ -186,6 +188,11 @@ button, input[type=submit], .btn {
     margin-bottom: 20px;
     text-align: center;
     text-transform: uppercase;
+}
+.no-result {
+    display: none;
+    padding: 40px 0;
+    text-align: center;
 }
 /* ============================ */
 /* MAIN MODULES

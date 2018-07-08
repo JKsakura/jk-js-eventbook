@@ -169,6 +169,7 @@ jQuery(function ($) {
             $(".filter-search").on("input", function () {
                 var result = false;
                 var search = $(this).val().trim().toUpperCase();
+                console.table(cache);
                 cache.forEach( function(note){
                     note.element.hide();
                     if (
@@ -182,13 +183,13 @@ jQuery(function ($) {
                         result = true;
                     }
                 });
-                $(categoryList).find("p.list-group-item").each(function () {
-                    $(this).hide();
-                    if ($(this).html().toUpperCase().indexOf(search) > -1) {
-                        $(this).show();
-                        result = true;
-                    }
-                });
+                // $(categoryList).find("p.list-group-item").each(function () {
+                //     $(this).hide();
+                //     if ($(this).html().toUpperCase().indexOf(search) > -1) {
+                //         $(this).show();
+                //         result = true;
+                //     }
+                // });
                 if (result === false) {
                     $('.no-result').show();
                 }
@@ -347,7 +348,7 @@ jQuery(function ($) {
                 noteID = 0;
                 if (notes.length > 0) {
                     notes.forEach(function(note) {
-                        // noteManager.displayNote(note);
+                        noteManager.displayNote(note);
                         var category = categoryManager.fetchCategory(note.subcategory);
                         category.notes.push(note.id);
                         if (note.id >= noteID) { noteID = note.id + 1; }
@@ -395,9 +396,9 @@ jQuery(function ($) {
                     e.preventDefault();
                     var current = target.hash.slice(1),
                         category = categoryManager.fetchCategory(Number(current));
+                    $(noteList).empty();
                     category.notes.forEach(function (note) {
                         current = noteManager.fetchCache(note);
-                        console.log(cache);
                         $(noteList).append(current.element);
                     });
                     pageToggle.pageForward("1", "2");

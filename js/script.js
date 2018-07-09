@@ -3,6 +3,7 @@ jQuery(function ($) {
     var noteID, notes;
     var categoryList = $("#categories-list"),
         noteList = $("#notes-list"),
+        searchResult = $('#search-result');
         categories = [
             {
                 id: 0,
@@ -169,17 +170,29 @@ jQuery(function ($) {
             $(".filter-search").on("input", function () {
                 var result = false;
                 var search = $(this).val().trim().toUpperCase();
-                console.table(cache);
+                if (search === '') {
+                    $('.no-result').hide();
+                    $(searchResult).hide();
+                    $(searchResult).empty();
+                    $(categoryList).show();
+                    result = true;
+                }
                 cache.forEach( function(note){
-                    note.element.hide();
+                    // if (
+                    //     note.title.trim().toUpperCase().indexOf(search) > -1 || 
+                    //     categoryManager.fetchCategory(note.category).name.trim().toUpperCase().indexOf(search) > -1 || 
+                    //     note.introduction.trim().toUpperCase().indexOf(search) > -1 || 
+                    //     note.syntax.trim().toUpperCase().indexOf(search) > -1 || 
+                    //     note.description.trim().toUpperCase().indexOf(search) > -1
+                    // ) {
                     if (
-                        note.title.trim().toUpperCase().indexOf(search) > -1 || 
-                        categoryManager.fetchCategory(note.category).name.trim().toUpperCase().indexOf(search) > -1 || 
-                        note.introduction.trim().toUpperCase().indexOf(search) > -1 || 
-                        note.syntax.trim().toUpperCase().indexOf(search) > -1 || 
-                        note.description.trim().toUpperCase().indexOf(search) > -1
+                        search !== '' && note.title.trim().toUpperCase().indexOf(search) > -1
                     ) {
-                        $(note.element).show();
+                        $('.no-result').hide();
+                        $(categoryList).hide();
+                        $(searchResult).show();
+                        $(searchResult).append(note.element);
+                        // $(note.element).show();
                         result = true;
                     }
                 });
@@ -191,6 +204,9 @@ jQuery(function ($) {
                 //     }
                 // });
                 if (result === false) {
+                    $(categoryList).hide();
+                    $(searchResult).hide();
+                    $(searchResult).empty();
                     $('.no-result').show();
                 }
             });

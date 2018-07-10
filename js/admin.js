@@ -6,6 +6,7 @@ jQuery(function($){
         descriptionEditor = CKEDITOR.replace("form-description"),
         formEl = $("#note-form"),
         noteList = $("#note-table"),
+        noteBody = $("#note-table tbody"),
         categories = [
             {
                 id: 0,
@@ -182,18 +183,29 @@ jQuery(function($){
         goSearch: function () {
             $("#filter-search").on("input", function () {
                 var search = $(this).val().trim().toUpperCase();
+                var result = false;
                 cache.forEach(function (note) {
                     note.element.hide();
+                    // if (
+                    //     note.title.trim().toUpperCase().indexOf(search) > -1 || 
+                    //     categoryManager.fetchCategory(note.category).name.trim().toUpperCase().indexOf(search) > -1 || 
+                    //     note.introduction.trim().toUpperCase().indexOf(search) > -1 || 
+                    //     note.syntax.trim().toUpperCase().indexOf(search) > -1 || 
+                    //     note.description.trim().toUpperCase().indexOf(search) > -1
+                    // ) {
                     if (
-                        note.title.trim().toUpperCase().indexOf(search) > -1 || 
-                        categoryManager.fetchCategory(note.category).name.trim().toUpperCase().indexOf(search) > -1 || 
-                        note.introduction.trim().toUpperCase().indexOf(search) > -1 || 
-                        note.syntax.trim().toUpperCase().indexOf(search) > -1 || 
-                        note.description.trim().toUpperCase().indexOf(search) > -1
+                        search === '' || note.title.trim().toUpperCase().indexOf(search) > -1
                     ) {
+                        $('.no-result').hide();
+                        $(noteBody).show();
                         $(note.element).show();
+                        result = true;
                     }
                 });
+                if (result === false) {
+                    $(noteBody).hide();
+                    $('.no-result').show();
+                }
             });
         },
         iniCategory: function () {
@@ -210,7 +222,7 @@ jQuery(function($){
                 var filterCategory = $(this).val();
                 cache.forEach(function(note) {
                     note.element.hide();
-                    if(note.category.toString() === filterCategory || filterCategory === "ALL" ) {
+                    if(note.category.toString() === filterCategory || filterCategory === "all" ) {
                         note.element.show();
                     }
                 });

@@ -259,7 +259,7 @@ jQuery(function ($) {
                             linkClass = "list-trigger",
                             listLink = $("<a></a>").attr("href", "#" + subcategory.id).text(subcategory.name).addClass(linkClass).append(subcategory);
                             listItem = $("<li></li>").addClass(itemClass).append(listLink);
-                            $(listCategory).append(listItem);
+                            $(listCategory).find('ul').append(listItem);
                     });
                     $(categoryList).append(listCategory);
                 }
@@ -400,6 +400,7 @@ jQuery(function ($) {
                 }
                 if ($(target).is("p.list-group-item")) {
                     $(target).each(function () {
+                        console.log($(this).next("ul"));
                         $(this).next("ul").stop().slideToggle(300);
                         $(this).stop().toggleClass("closed");
                     });

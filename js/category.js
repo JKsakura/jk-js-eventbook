@@ -178,13 +178,6 @@ jQuery(function ($) {
                     result = true;
                 }
                 cache.forEach( function(note){
-                    // if (
-                    //     note.title.trim().toUpperCase().indexOf(search) > -1 || 
-                    //     categoryManager.fetchCategory(note.category).name.trim().toUpperCase().indexOf(search) > -1 || 
-                    //     note.introduction.trim().toUpperCase().indexOf(search) > -1 || 
-                    //     note.syntax.trim().toUpperCase().indexOf(search) > -1 || 
-                    //     note.description.trim().toUpperCase().indexOf(search) > -1
-                    // ) {
                     if (
                         search !== '' && note.title.trim().toUpperCase().indexOf(search) > -1
                     ) {
@@ -196,13 +189,6 @@ jQuery(function ($) {
                         result = true;
                     }
                 });
-                // $(categoryList).find("p.list-group-item").each(function () {
-                //     $(this).hide();
-                //     if ($(this).html().toUpperCase().indexOf(search) > -1) {
-                //         $(this).show();
-                //         result = true;
-                //     }
-                // });
                 if (result === false) {
                     $(categoryList).hide();
                     $(searchResult).hide();
@@ -271,85 +257,6 @@ jQuery(function ($) {
                 return element.id;
             }).indexOf(targetID);
             return categories[index];
-        }
-    };
-/* ============================================================== */
-/*    FUNCTIONS TO MANAGE THE NOTE LIST  */
-/* ============================================================== */
-    var noteManager = {
-        // DISPLAY THE ELEMENT WITH NEW DOM STRUCTURE
-        displayNote: function (note) {
-            // Define ID
-            var itemId = "note" + note.id;
-
-            // Define Classes
-            var itemClass = "list-item list-group-item list-group-item-action",
-                headerClass = "item-header",
-                topClass = "item-top",
-                TitleClass = "item-title note-field-text",
-                categoryClass = "item-category note-field-select",
-                introductionClass = "item-introduction note-field-area",
-                linkClass = "detail-trigger";
-
-            /* =========== Item Top ============ */
-            // Item Header
-            var itemTitle = $("<p></p>").addClass(TitleClass).text(note.title);
-            var itemCategory = $("<h5></h5>").addClass(categoryClass).text(categoryManager.fetchCategory(note.subcategory).name);
-            var itemHeader = $("<div></div>").addClass(headerClass).append(itemTitle, itemCategory);
-
-            // Item Introduction
-            var itemIntroduction = $("<p></p>").addClass(introductionClass).text(note.introduction);
-            var itemTop = $("<div></div>").addClass(topClass).append(itemHeader, itemIntroduction);
-
-            /* =========== List Item ============ */
-            var listLink = $("<a></a>").attr("href", "#" + itemId).addClass(linkClass).append(itemTop);
-            var listItem = $("<li></li>").attr("id", itemId).addClass(itemClass).append(listLink);
-
-            //$(noteList).find(".category-" + note.category).find("ul").append(listItem);
-            cache.push({ // Add an object to the cache array
-                element: listItem, // This row
-                id: note.id,
-                title: note.title,
-                category: note.category,
-                subcategory: note.subcategory,
-                introduction: note.introduction,
-                syntax: note.syntax,
-                description: note.description
-            });
-        },
-        fetchDetail: function (target) {
-            var id = target.hash.slice(5);
-            var index = notes.map(function (element) {
-                return element.id.toString();
-            }).indexOf(id);
-            note = notes[index];
-            noteManager.displayDetail(note);
-        },
-        displayDetail: function(note) {
-            var detailTitle = $(".detail-title").html(note.title),
-                detailCategory = $(".detail-category").html(categoryManager.fetchCategory(note.subcategory).name),
-                detailIntroduction = $(".detail-introduction").html(note.introduction),
-                detailSyntax = $(".detail-syntax").addClass("code").html(note.syntax),
-                detailDescription = $(".detail-description").html(note.description);
-            hljs.initHighlightingOnLoad();
-            hljs.configure({ useBR: true });
-            $('.code').each(function (i, block) {
-                hljs.highlightBlock(block);
-            });
-        },
-        fetchNote: function(targetID) {
-            // Find the note with the assigned ID
-            var index = notes.map(function (element) {
-                return element.id;
-            }).indexOf(targetID);
-            return notes[index];
-        },
-        fetchCache: function (targetID) {
-            // Find the note with the assigned ID
-            var index = cache.map(function (element) {
-                return element.id;
-            }).indexOf(targetID);
-            return cache[index];
         }
     };
 

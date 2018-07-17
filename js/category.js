@@ -178,6 +178,13 @@ jQuery(function ($) {
                     result = true;
                 }
                 cache.forEach( function(note){
+                    // if (
+                    //     note.title.trim().toUpperCase().indexOf(search) > -1 || 
+                    //     categoryManager.fetchCategory(note.category).name.trim().toUpperCase().indexOf(search) > -1 || 
+                    //     note.introduction.trim().toUpperCase().indexOf(search) > -1 || 
+                    //     note.syntax.trim().toUpperCase().indexOf(search) > -1 || 
+                    //     note.description.trim().toUpperCase().indexOf(search) > -1
+                    // ) {
                     if (
                         search !== '' && note.title.trim().toUpperCase().indexOf(search) > -1
                     ) {
@@ -189,6 +196,13 @@ jQuery(function ($) {
                         result = true;
                     }
                 });
+                // $(categoryList).find("p.list-group-item").each(function () {
+                //     $(this).hide();
+                //     if ($(this).html().toUpperCase().indexOf(search) > -1) {
+                //         $(this).show();
+                //         result = true;
+                //     }
+                // });
                 if (result === false) {
                     $(categoryList).hide();
                     $(searchResult).hide();
@@ -267,20 +281,20 @@ jQuery(function ($) {
         loadData: function () {
             $.getJSON("notes.json")
             .done(function (data) {
-                notes = data.notes ? data.notes : [];
-                noteID = 0;
-                if (notes.length > 0) {
-                    notes.forEach(function(note) {
-                        noteManager.displayNote(note);
-                        var category = categoryManager.fetchCategory(note.subcategory);
-                        category.notes.push(note.id);
-                        if (note.id >= noteID) { noteID = note.id + 1; }
-                    });
-                }
-                if(location.hash) {
-                    noteManager.fetchDetail(location);
-                    pageToggle.pageForward(".page1", ".page2");
-                }
+                // notes = data.notes ? data.notes : [];
+                // noteID = 0;
+                // if (notes.length > 0) {
+                //     notes.forEach(function(note) {
+                //         noteManager.displayNote(note);
+                //         var category = categoryManager.fetchCategory(note.subcategory);
+                //         category.notes.push(note.id);
+                //         if (note.id >= noteID) { noteID = note.id + 1; }
+                //     });
+                // }
+                // if(location.hash) {
+                //     noteManager.fetchDetail(location);
+                //     pageToggle.pageForward(".page1", ".page2");
+                // }
                 DOMManager.noteHeader();
                 DOMManager.noteBody();
             })

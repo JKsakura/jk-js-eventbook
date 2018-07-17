@@ -377,6 +377,7 @@ button, input[type=submit], .btn {
         position: relative;
         width: 100%;
         overflow-x: auto;
+        overflow-y: hidden;
     }
 }
 #note-table {
@@ -550,7 +551,37 @@ button, input[type=submit], .btn {
         padding: 10px 20px;
     }
 }
-
+#categories-module {
+    .notes-header {
+        .btn-sm {
+            margin-bottom: 20px;
+            svg {
+                margin-right: 5px;
+            }
+        }
+        #note-done-btn { display: none; }
+    }
+    .notes-body {
+        position: relative;
+        width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+    .category {
+        p.list-group-item {
+            padding: 10px;
+            border-top: solid 1px #555;
+            background-color: $color_primary;
+            color: #fff;
+            text-transform: uppercase;
+            font-weight: 400;
+            cursor: pointer;
+        }
+        & + .category {
+            margin-top: 5px;
+        }
+    }
+}
 @media screen and (max-width: 768px) {
     html, body {
         font-size: 15px;

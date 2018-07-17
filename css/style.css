@@ -142,7 +142,7 @@ button, input[type=submit], .btn { text-transform: uppercase; letter-spacing: 0.
 
 #notes-module .notes-header #note-done-btn { display: none; }
 
-#notes-module .notes-body { position: relative; width: 100%; overflow-x: auto; }
+#notes-module .notes-body { position: relative; width: 100%; overflow-x: auto; overflow-y: hidden; }
 
 #note-table tr th { text-transform: uppercase; }
 
@@ -199,6 +199,18 @@ button, input[type=submit], .btn { text-transform: uppercase; letter-spacing: 0.
 #note-detail .detail-introduction { margin-bottom: 20px; }
 
 #note-detail .detail-syntax { margin-bottom: 20px; padding: 10px 20px; }
+
+#categories-module .notes-header .btn-sm { margin-bottom: 20px; }
+
+#categories-module .notes-header .btn-sm svg { margin-right: 5px; }
+
+#categories-module .notes-header #note-done-btn { display: none; }
+
+#categories-module .notes-body { position: relative; width: 100%; overflow-x: auto; overflow-y: hidden; }
+
+#categories-module .category p.list-group-item { padding: 10px; border-top: solid 1px #555; background-color: #212529; color: #fff; text-transform: uppercase; font-weight: 400; cursor: pointer; }
+
+#categories-module .category + .category { margin-top: 5px; }
 
 @media screen and (max-width: 768px) { html, body { font-size: 15px; }
   a { font-size: 15px; } }

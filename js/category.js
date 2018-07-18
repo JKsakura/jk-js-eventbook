@@ -1,9 +1,11 @@
 jQuery(function ($) {
     // Declare Global Note Vars
     var noteID, notes;
-    var categoryList = $("#categories-list"),
-        noteList = $("#notes-list"),
-        searchResult = $('#search-result'),
+    // Declare Global CKEditor WYSIWYG Fields
+    var formEl = $("#note-form"),
+        noteList = $("#note-table"),
+        noteBody = $("#note-table tbody"),
+        categoryList = $("#categories-list"),
         categories = [
         {
             id: 0,
@@ -155,10 +157,21 @@ jQuery(function ($) {
         noteHeader: function () {
             headerToggle.menuToggle();
             filterManager.iniCategory();
+            $(".notes-header").on("click", function (e) {
+                var target = e.target;
+                if ($(target).is(".add-btn")) {
+                    formManager.setForm(e);
+                } else if ($(target).hasClass("cancel-btn")) {
+                    pageToggle.pageBackward();
+                }
+            });
         },
-
         noteBody: function () {
             categoryManager.displayCategory();
+            $(noteList).find("tbody").each(function () {
+                //noteManager.orderNote(this);
+            });
+            //noteManager.sortNote();
         }
     };
 /* ============================================================== */
@@ -178,13 +191,6 @@ jQuery(function ($) {
                     result = true;
                 }
                 cache.forEach( function(note){
-                    // if (
-                    //     note.title.trim().toUpperCase().indexOf(search) > -1 || 
-                    //     categoryManager.fetchCategory(note.category).name.trim().toUpperCase().indexOf(search) > -1 || 
-                    //     note.introduction.trim().toUpperCase().indexOf(search) > -1 || 
-                    //     note.syntax.trim().toUpperCase().indexOf(search) > -1 || 
-                    //     note.description.trim().toUpperCase().indexOf(search) > -1
-                    // ) {
                     if (
                         search !== '' && note.title.trim().toUpperCase().indexOf(search) > -1
                     ) {
@@ -196,13 +202,6 @@ jQuery(function ($) {
                         result = true;
                     }
                 });
-                // $(categoryList).find("p.list-group-item").each(function () {
-                //     $(this).hide();
-                //     if ($(this).html().toUpperCase().indexOf(search) > -1) {
-                //         $(this).show();
-                //         result = true;
-                //     }
-                // });
                 if (result === false) {
                     $(categoryList).hide();
                     $(searchResult).hide();
@@ -278,6 +277,10 @@ jQuery(function ($) {
 /* FUNCTIONS TO LOAD AND SAVE JSON DATA */
 /* ============================================================== */
     var dataManager = {
+        resetData: function() {
+            notes = [];
+            noteID = 0;
+        },
         loadData: function () {
             $.getJSON("notes.json")
             .done(function (data) {
@@ -344,6 +347,28 @@ jQuery(function ($) {
             });
         });
     }
+/* ============================================================== */
+/* FUNCTIONS TO MANAGE THE FORM */   
+/* ============================================================== */
+    // TRIGGER THE SUBMIT FUNCTION WHEN FORM SUBMITS
+    var formManager = (function(){
+        var formSyntax,
+            formDescription,
+            formTitle = $("#form-title"),
+            formCategory = $("#form-category"),
+            formSubCategory = $("#form-subcategory"),
+            formIntroduction = $("#form-introduction"),
+            formSubmitBtn = $("#form-submit");
+        var id, title, category, subcategory, introduction, syntax, description, btnTxt;
+        
+        return {
+            setForm: function(e) {
+                $(formEl)[0].reset();
+                // SHOW THE FORM AFTER IT HAS BEEN ASSIGNED VALUES
+                pageToggle.pageForward("1", "2");
+            },
+        };
+    }());
     // LOAD DATA FROM JSON FILE
     dataManager.loadData();
 

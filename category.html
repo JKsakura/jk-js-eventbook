@@ -37,22 +37,12 @@
                         <div class="wrap">
                             <div class="notes-header">
                                 <button class="add-btn btn-sm btn-primary" id="note-add-btn"><i class="fas fa-plus-circle"></i>Add</button>
-                                <div class="search-box form-group">
-                                    <input type="search" class="form-control filter-search" aria-describedby="searchHelp" placeholder="Search..." name="search">
-                                    <button type="submit">
-                                        <i class="fas fa-search"></i>
-                                    </button>
-                                </div>
                                 <div class="select-menu form-group">
                                     <select id="filter-category" class="form-control filter-category"></select>
                                 </div>
                             </div>
                             <div class="notes-body">
                                 <ul id="categories-list" class="list-group"></ul>
-                                <ul id="search-result"></ul>
-                                <div class="no-result">
-                                    <h3>Sorry, there's no result!</h3>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -67,9 +57,13 @@
                                     <input type="text" class="form-control" placeholder="Title" id="form-title" required>
                                 </div>
                                 <div class="form-field">
-                                    <select id="form-category" class="form-control" required>
-                                        <option value="" selected disabled>Select Parent</option>
-                                    </select>
+                                    <input type="text" class="form-control" placeholder="Slug" id="form-slug" required>
+                                </div>
+                                <div class="form-field">
+                                    <select id="form-category" class="form-control" required></select>
+                                </div>
+                                <div class="form-field">
+                                    <textarea type="text" class="form-control" placeholder="Description" id="form-description" required></textarea>
                                 </div>
                                 <div class="form-field">
                                     <button id="form-submit" type="submit" value="Add Note" class="btn btn-success">Add Category</button>

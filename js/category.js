@@ -168,6 +168,7 @@ jQuery(function ($) {
         },
         noteBody: function () {
             categoryManager.displayCategory();
+            formManager.initForm();
             $(noteList).find("tbody").each(function () {
                 //noteManager.orderNote(this);
             });
@@ -179,43 +180,13 @@ jQuery(function ($) {
 /* ============================================================== */
     // INITIAL NOTE BODY EVENTS
     var filterManager = {
-        goSearch: function () {
-            $(".filter-search").on("input", function () {
-                var result = false;
-                var search = $(this).val().trim().toUpperCase();
-                if (search === '') {
-                    $('.no-result').hide();
-                    $(searchResult).hide();
-                    $(searchResult).empty();
-                    $(categoryList).show();
-                    result = true;
-                }
-                cache.forEach( function(note){
-                    if (
-                        search !== '' && note.title.trim().toUpperCase().indexOf(search) > -1
-                    ) {
-                        $('.no-result').hide();
-                        $(categoryList).hide();
-                        $(searchResult).show();
-                        $(searchResult).append(note.element);
-                        // $(note.element).show();
-                        result = true;
-                    }
-                });
-                if (result === false) {
-                    $(categoryList).hide();
-                    $(searchResult).hide();
-                    $(searchResult).empty();
-                    $('.no-result').show();
-                }
-            });
-        },
         iniCategory: function () {
             var defaultVal = '<option value="" disabled selected>Category</option>';
             var filterCategory = $("#filter-category").append(defaultVal, "<option value='all'>All</option>");
             categories.forEach(function(category) {
                 if (category.children.length > 0) {
-                    var newCategory = $("<option></option>").text(category.name).val(category.slug).appendTo(filterCategory);
+                    var newCategory = $("<option></option>").text(category.name).val(category.slug);
+                    $(newCategory).appendTo(filterCategory);
                 }
             });
         },
@@ -362,18 +333,75 @@ jQuery(function ($) {
         var id, title, category, subcategory, introduction, syntax, description, btnTxt;
         
         return {
+            initForm: function() {
+                var defaultVal = '<option value="" disabled selected>Select Parent</option>';
+                var filterCategory = $("#form-category").append(defaultVal, "<option value='all'>All</option>");
+                categories.forEach(function(category) {
+                    if (category.children.length > 0) {
+                        var newCategory = $("<option></option>").text(category.name).val(category.slug);
+                        $(newCategory).appendTo(filterCategory);
+                    }
+                });
+            },
             setForm: function(e) {
-                $(formEl)[0].reset();
+                // var target = e.target,
+                //     index = $(target).closest("tr").index();
+
+                // formSyntax = syntaxEditor.activeFilter.editor;
+                // formDescription = descriptionEditor.activeFilter.editor;
+            
+                // if( index > -1 ) {
+                //     var note = notes[index];
+                //     categoryManager.displaySubcategory(note.category);
+                //     id = note.id;
+                //     $(formTitle).val(note.title);
+                //     $(formCategory).val(note.category);
+                //     $(formSubCategory).val(note.subcategory);
+                //     $(formIntroduction).val(note.introduction);
+                //     formSyntax.setData(note.syntax);
+                //     formDescription.setData(note.description);
+                //     btnTxt = "Update Note";
+                // } else {
+                //     $(formEl)[0].reset();
+                //     formSyntax.setData("");
+                //     formDescription.setData("");
+                //     btnTxt = "Add Note";
+                // }
+
+                $(formSubmitBtn).text(btnTxt);
                 // SHOW THE FORM AFTER IT HAS BEEN ASSIGNED VALUES
                 pageToggle.pageForward("1", "2");
             },
+            getForm: function() {
+                // fetch form data
+                title = $(formTitle).val();
+                category = categories[Number( $(formCategory).val() )].id;
+                subcategory = categories[Number( $(formSubCategory).val() )].id;
+                introduction = $(formIntroduction).val();
+                syntax =formSyntax.getData();
+                description = formDescription.getData();
+
+                // format obj
+                var resObj = {
+                    id: "",
+                    title: title,
+                    category: category,
+                    subcategory: subcategory,
+                    introduction: introduction,
+                    syntax: syntax,
+                    description: description
+                };
+                if (id || id>=0) {
+                    resObj.id = id;
+                }
+                return resObj;
+            }
         };
     }());
     // LOAD DATA FROM JSON FILE
     dataManager.loadData();
 
     // INITIAL HEADER FILTER
-    filterManager.goSearch();
     filterManager.goFilter();
 
     pageManager();

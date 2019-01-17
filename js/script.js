@@ -178,13 +178,6 @@ jQuery(function ($) {
                     result = true;
                 }
                 cache.forEach( function(note){
-                    // if (
-                    //     note.title.trim().toUpperCase().indexOf(search) > -1 || 
-                    //     categoryManager.fetchCategory(note.category).name.trim().toUpperCase().indexOf(search) > -1 || 
-                    //     note.introduction.trim().toUpperCase().indexOf(search) > -1 || 
-                    //     note.syntax.trim().toUpperCase().indexOf(search) > -1 || 
-                    //     note.description.trim().toUpperCase().indexOf(search) > -1
-                    // ) {
                     if (
                         search !== '' && note.title.trim().toUpperCase().indexOf(search) > -1
                     ) {
@@ -196,13 +189,6 @@ jQuery(function ($) {
                         result = true;
                     }
                 });
-                // $(categoryList).find("p.list-group-item").each(function () {
-                //     $(this).hide();
-                //     if ($(this).html().toUpperCase().indexOf(search) > -1) {
-                //         $(this).show();
-                //         result = true;
-                //     }
-                // });
                 if (result === false) {
                     $(categoryList).hide();
                     $(searchResult).hide();

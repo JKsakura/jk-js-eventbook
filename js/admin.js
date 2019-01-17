@@ -1,8 +1,8 @@
-jQuery(function($){
+jQuery(function($) {
     // Declare Global Note Vars
-    var noteID, notes;
+    var noteID, notes,
     // Declare Global CKEditor WYSIWYG Fields
-    var syntaxEditor = CKEDITOR.replace("form-syntax"),
+		syntaxEditor = CKEDITOR.replace("form-syntax"),
         descriptionEditor = CKEDITOR.replace("form-description"),
         formEl = $("#note-form"),
         noteList = $("#note-table"),
@@ -12,28 +12,28 @@ jQuery(function($){
                 id: 0,
                 slug: 'javascript',
                 name: 'JavaScript',
-                children: [4,5,6,7,8],
+                children: [4, 5, 6, 7, 8],
                 notes: []
             },
             {
                 id: 1,
                 slug: 'html-dom',
                 name: 'HTML DOM',
-                children: [9,10,11,12],
+                children: [9, 10, 11, 12],
                 notes: []
             },
             {
                 id: 2,
                 slug: 'html-objects',
                 name: 'HTML Objects',
-                children: [13,14,15,16],
+                children: [13, 14, 15, 16],
                 notes: []
             },
             {
                 id: 3,
                 slug: 'other-objects',
                 name: 'Other Objects',
-                children: [17,18,19],
+                children: [17, 18, 19],
                 notes: []
             },
             {
@@ -41,7 +41,7 @@ jQuery(function($){
                 slug: 'array',
                 name: 'Array',
                 children: [],
-                notes: [0,1,2]
+                notes: [0, 1, 2]
             },
             {
                 id: 6,
@@ -62,7 +62,7 @@ jQuery(function($){
                 slug: 'boolean',
                 name: 'Boolean',
                 children: [],
-                notes: [3,4]
+                notes: [3, 4]
             },
             {
                 id: 8,
@@ -147,43 +147,23 @@ jQuery(function($){
                 name: 'Storage',
                 children: [],
                 notes: []
-            },
-        ],
-        cache = [];
-/* ============================================================== */
-/*    EVENT FOR ALL NOTE HEADING BUTTONS */
-/* ============================================================== */
-    var DOMManager = {
-        noteHeader: function () {
-            headerToggle.menuToggle();
-            filterManager.iniCategory();
-            $(".notes-header").on("click", function (e) {
-                var target = e.target;
-                if ($(target).is(".add-btn")) {
-                    formManager.setForm(e);
-                } else if ($(target).hasClass("cancel-btn")) {
-                    pageToggle.pageBackward();
-                }
-            });
-        },
-        noteBody: function () {
-            categoryManager.displayCategory();
-            $(noteList).find("tbody").each(function () {
-                noteManager.orderNote(this);
-            });
-            noteManager.sortNote();
-        }
-    };
-    
+            }
+        ], // Initial Global Categories and Sub-categories
+        cache = [], // Initial Cache for DOM Elements
+		DOMManager, // Initial DOM Manager
+		filterManager, // Initial Filter Manager
+		noteManager, // Initial Note Manager
+		categoryManager, // Initial Category Manager
+		formManager, // Initial Form Manager
+		dataManager; // Initial Data Manager
 /* ============================================================== */
 /*    FUNCTIONS TO MANAGE THE NOTE HEADER  */
 /* ============================================================== */
-// INITIAL NOTE BODY EVENTS
-    var filterManager = {
+    filterManager = {
         goSearch: function () {
             $("#filter-search").on("input", function () {
-                var search = $(this).val().trim().toUpperCase();
-                var result = false;
+                var search = $(this).val().trim().toUpperCase(),
+					result = false;
                 cache.forEach(function (note) {
                     note.element.hide();
                     // if (
@@ -209,20 +189,21 @@ jQuery(function($){
             });
         },
         iniCategory: function () {
-            var defaultVal = '<option value="" disabled selected>Category</option>';
-            var filterCategory = $("#filter-category").append(defaultVal, "<option value='all'>All</option>");
-            categories.forEach(function(category){
-                if(category.children.length>0) {
-                    var newCategory = $("<option></option>").val(category.id).text(category.name).appendTo(filterCategory);
+            var defaultVal = '<option value="" disabled selected>Category</option>',
+                filterCategory = $("#filter-category").append(defaultVal, "<option value='all'>All</option>"),
+				newCategory;
+            categories.forEach(function (category) {
+                if (category.children.length > 0) {
+                    newCategory = $("<option></option>").val(category.id).text(category.name).appendTo(filterCategory);
                 }
             });
         },
         goFilter: function () {
             $("#filter-category").change(function () {
                 var filterCategory = $(this).val();
-                cache.forEach(function(note) {
+                cache.forEach(function (note) {
                     note.element.hide();
-                    if(note.category.toString() === filterCategory || filterCategory === "all" ) {
+                    if (note.category.toString() === filterCategory || filterCategory === "all") {
                         note.element.show();
                     }
                 });
@@ -232,12 +213,12 @@ jQuery(function($){
 /* ============================================================== */
 /*    FUNCTIONS TO MANAGE THE NOTE LIST  */
 /* ============================================================== */
-    var noteManager = {
-        saveNote: function(obj) {
-            var noteObj;
-            if (obj.id >= 0 && obj.id!== '') {
-                var targetID = obj.id,
-                    index = notes.map(function (element) { return element.id; }).indexOf(targetID);
+    noteManager = {
+        saveNote: function (obj) {
+            var noteObj, targetID, index, newNote;
+            if (obj.id >= 0 && obj.id !== '') {
+                targetID = obj.id;
+				index = notes.map(function (element) { return element.id; }).indexOf(targetID);
                 
                 // If the current category or subcategory is updated,
                 categoryManager.removeFromCategory(obj, notes[index], targetID); // remove the current note from category
@@ -259,7 +240,7 @@ jQuery(function($){
                 notes.push(newNote);
 
                 // Update global note ID
-                noteID++;
+                noteID += 1;
                 noteObj = newNote;
 
                 // Push the new note object into the categories array
@@ -272,7 +253,7 @@ jQuery(function($){
             dataManager.saveData(notes);
         },
         // DISPLAY THE ELEMENT WITH NEW DOM STRUCTURE
-        displayNote: function(note, update) {
+        displayNote: function (note, update) {
             var row,
                 // Format Date into mm/dd/yyyy
                 date = new Date(note.created),
@@ -291,9 +272,11 @@ jQuery(function($){
                 itemDelete = $("<button></button>").addClass("item-btn delete-btn"),
                 itemDeleteBtn = $("<i></i>").addClass("far fa-trash-alt"),
                 editBtn = $("<td></td>").append($(temEdit).append(itemEditBtn)),
-                deleteBtn = $("<td></td>").append($(itemDelete).append(itemDeleteBtn));
+                deleteBtn = $("<td></td>").append($(itemDelete).append(itemDeleteBtn)),
+				obj,
+				index;
             // Cache note object
-            var obj = {
+			obj = {
                 id: note.id,
                 title: note.title,
                 category: note.category,
@@ -305,7 +288,7 @@ jQuery(function($){
             if (update === true) {
                 // Append all elements into DOM
                 row = $("<tr></tr>").append(id, title, created, category, subcategory, introduction, editBtn, deleteBtn);
-                var index = notes.map(function(element){ return element.id; }).indexOf(note.id);
+                index = notes.map(function (element) { return element.id; }).indexOf(note.id);
                 obj.element = row;
                 cache[index] = obj;
                 cache[index].element.replaceWith(row);
@@ -316,10 +299,10 @@ jQuery(function($){
             }
         },
         // DELETE A NEW NOTE BASED ON THE ID
-        deleteNote: function(e) {
-            var target = e.target;
-            var index = $(target).closest("tr").index();
-            var r = confirm("Are You Sure You Want to Delete This Item?");
+        deleteNote: function (e) {
+            var target = e.target,
+				index = $(target).closest("tr").index(),
+				r = confirm("Are You Sure You Want to Delete This Item?");
             if (r === true) {
                 // Remove the current note from categories array
                 categoryManager.removeFromCategory('', notes[index], notes[index].id);
@@ -333,13 +316,14 @@ jQuery(function($){
             }
         },
         orderNote: function (e) {
-            var oldIndex;
-            var newIndex;
-            var note;
-            var oldNum=0;
-            var newNum=0;
-            var current;
-            var currentNote;
+            var oldIndex,
+				newIndex,
+				newCat,
+				note,
+				oldNum = 0,
+				newNum = 0,
+				current,
+				currentNote;
 
             $(e).sortable({
                 start: function (e, ui) {
@@ -373,11 +357,8 @@ jQuery(function($){
                         }
                     }
                     currentNote = categoryManager.fetchCategory(current).notes;
-                    console.log(currentNote);
                     currentNote.splice(newNum, 0, note.id);
-                    console.log(currentNote);
                     currentNote.splice(oldNum, 1);
-                    console.log(currentNote);
                     dataManager.saveData(notes);
                 }
             });
@@ -436,7 +417,7 @@ jQuery(function($){
 /* ============================================================== */
 /* FUNCTIONS TO MANAGE THE CATEGORY  */
 /* ============================================================== */
-    var categoryManager = {
+    categoryManager = {
         displayCategory: function () {
             var selectCategory = $("#form-category"),
                 formCategory;
@@ -455,7 +436,8 @@ jQuery(function($){
         displaySubcategory: function(index) {
             var selectSubcategory = $("#form-subcategory"),
                 formSubcategory,
-                category = categories[index];
+                category = categories[index],
+				subcategories;
             $(selectSubcategory).html('');
             subcategories = category.children;
             subcategories.forEach(function (element) {
@@ -500,7 +482,7 @@ jQuery(function($){
 /* FUNCTIONS TO MANAGE THE FORM */   
 /* ============================================================== */
     // TRIGGER THE SUBMIT FUNCTION WHEN FORM SUBMITS
-    var formManager = (function(){
+    formManager = (function(){
         var formSyntax,
             formDescription,
             formTitle = $("#form-title"),
@@ -570,7 +552,7 @@ jQuery(function($){
 /* ============================================================== */
 /* FUNCTIONS TO LOAD AND SAVE JSON DATA */   
 /* ============================================================== */
-    var dataManager = {
+    dataManager = {
         resetData: function() {
             notes = [];
             noteID = 0;
@@ -611,6 +593,31 @@ jQuery(function($){
             });
         }
     };
+/* ============================================================== */
+/*    EVENT FOR ALL NOTE HEADING BUTTONS */
+/* ============================================================== */
+    DOMManager = {
+        noteHeader: function () {
+            headerToggle.menuToggle();
+            filterManager.iniCategory();
+            $(".notes-header").on("click", function (e) {
+                var target = e.target;
+                if ($(target).is(".add-btn")) {
+                    formManager.setForm(e);
+                } else if ($(target).hasClass("cancel-btn")) {
+                    pageToggle.pageBackward();
+                }
+            });
+        },
+        noteBody: function () {
+            categoryManager.displayCategory();
+            $(noteList).find("tbody").each(function () {
+                noteManager.orderNote(this);
+            });
+            noteManager.sortNote();
+        }
+    };
+    
 /* ============================================================== */
 /* FUNCTIONS TO MANAGE THE PAGE EVENT */
 /* ============================================================== */
